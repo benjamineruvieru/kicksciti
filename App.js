@@ -13,9 +13,7 @@ const App = () => {
     <GestureHandlerRootView style={{flex: 1}}>
       <NavigationContainer>
         <ProviderContainer>
-          <View style={styles.mainStyle}>
-            <Navigation />
-          </View>
+          <Navigation />
         </ProviderContainer>
       </NavigationContainer>
     </GestureHandlerRootView>
@@ -23,7 +21,3 @@ const App = () => {
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-  mainStyle: {flex: 1, backgroundColor: Colors.bag1Bg},
-});

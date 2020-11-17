@@ -51,7 +51,7 @@ const Details = () => {
   const imgList = [];
   const Sizes = [];
   const {item} = route.params;
-  const STATUSBAR_HEIGHT1 = 30;
+  const STATUSBAR_HEIGHT1 = Platform.OS === 'android' ? 30 : 40;
   const [favorties1, setFavorties1] = useState([item]);
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const scrollY = React.useRef(new Animated.Value(0)).current;
