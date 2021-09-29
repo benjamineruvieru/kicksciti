@@ -1,11 +1,9 @@
-package com.my.ben.kicksciti;
-
-import com.facebook.react.ReactActivity;
+package com.kicksciti.android;
 
 import android.os.Bundle;
-
+import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate; // <- add this necessary import
- import com.facebook.react.ReactRootView;
+import com.facebook.react.ReactRootView;
 import com.zoontek.rnbootsplash.RNBootSplash; // <- add this necessary import
 
 public class MainActivity extends ReactActivity {
@@ -20,19 +18,24 @@ public class MainActivity extends ReactActivity {
   }
 
   @Override
-protected void onCreate(Bundle savedInstanceState) {
-  super.onCreate(null);
-}
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(null);
+  }
 
- /**
+  /**
    * Returns the instance of the {@link ReactActivityDelegate}. There the RootView is created and
    * you can specify the rendered you wish to use (Fabric or the older renderer).
    */
-  
+
   public static class MainActivityDelegate extends ReactActivityDelegate {
-    public MainActivityDelegate(ReactActivity activity, String mainComponentName) {
+
+    public MainActivityDelegate(
+      ReactActivity activity,
+      String mainComponentName
+    ) {
       super(activity, mainComponentName);
     }
+
     @Override
     protected ReactRootView createRootView() {
       ReactRootView reactRootView = new ReactRootView(getContext());
@@ -45,7 +48,6 @@ protected void onCreate(Bundle savedInstanceState) {
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
     return new ReactActivityDelegate(this, getMainComponentName()) {
-
       @Override
       protected void loadApp(String appKey) {
         RNBootSplash.init(MainActivity.this); // <- initialize the splash screen
