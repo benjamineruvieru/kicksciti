@@ -40,23 +40,6 @@ const App = () => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TypeAnimation
-          sequence={[
-            {text: 'Kicks Citi is tuning up for a major upgrade'},
-
-            {
-              text: 'Kicks Citi is undergoing a revamp',
-            },
-            {text: 'Kicks Citi is evolving with cutting-edge enhancements'},
-            {text: 'Kicks Citi is in the process of a visual reimagining'},
-
-            {
-              text: 'Kicks Citi is on the brink of a creative rebirth',
-            },
-          ]}
-          loop
-          cursorStyle={{color: 'red'}}
-        />
         <SafeAreaProvider>
           <Notification {...{goDown, goUp}} />
           <Animated.View
