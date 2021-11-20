@@ -1,109 +1,58 @@
-# Kicks Citi
+# 🎊🎊 Kicks Citi V2 🎊🎊
 
-### An E-Commerce store for Shoe Enthusiasts.
+## 🔊🔊 Important Announcement: Project Rewrite
 
-![App Screens](doc/img/longmockup.png)
+Hello Everyone,
 
-Kicks Citi is designed to be a one-stop destination for individuals who are passionate about footwear. Whether you're a sneakerhead, a fashion-forward trendsetter, or someone simply in need of comfortable and stylish shoes, Kicks Citi has got you covered
+I hope this message finds you well. We wanted to take a moment to share some exciting news about the future of our project. Kicks Citi is getting a rewrite!
 
-## Features
+### Why the Change?
 
-- Add products to cart or favorites
-- Search through a collection of products
-- Complete payments of orders In-App
-- Track the progress of your orders
-- Contact help & support staff
+Kicks Citi being my first react native project, had alot of problems. I've decided to embark on a significant overhaul of our React Native app. This decision stems from my commitment to providing a more robust, maintainable, and scalable application that can better meet the evolving needs of our users.
 
-## Tech Used
+### Background:
 
-- React Native
-- Firebase
-- Flutterwave for handling payments
-- Cloud Functions
-- Redux
-- Axios
-- Sirv - Image Hosting
+This project was initially my first venture into React Native development. As I've gained experience and insights, I've recognized opportunities for improvement. To ensure I deliver the best possible app, I've made the decision to start afresh and apply the lessons learned through out my years to building a worth project.
 
-[![website](./doc/img/en_get.svg)](https://play.google.com/store/apps/details?id=com.kicksciti.android)
+### What's Changing?
 
-## How to build
+#### Code Changes:
 
-Clone this repo to your machine:
+- **Transition to TypeScript (TS):** We're migrating from JavaScript (JS) to TypeScript (TS) for a more efficient and safer development experience.
+- **Backend Migration:** Transitioning from Firebase to AWS for improved scalability, performance, and flexibility in managing our backend infrastructure.
+- **Email Marketing Integration:** Implementing email marketing to keep you informed about exciting updates, promotions, and relevant content.
+- **Push Notifications:** Enhancing user engagement with the introduction of push notifications, ensuring you stay connected with the latest app activities.
 
-```
-$ git clone https://github.com/benjamineruvieru/kicksciti.git
-```
+#### App Changes:
 
-```
-$ cd kicksciti
-```
+- **Design Overhaul:** We are refreshing the app's design to provide a more modern, intuitive, and visually appealing experience.
+- **User-to-User Marketplace:** Introducing a new feature that allows users to post shoes for sale on our platform, fostering a dynamic marketplace within the app.
+- **Pay on Delivery:** A new payment option has been added, allowing users to pay for their purchases upon delivery.
+- **Affiliate Program:** Users can now leverage affiliate links for all products, giving them an opportunity to earn money through the platform.
+- **Revamped Sign-Up Flow:** The sign-up process is being redesigned for a smoother and more user-friendly onboarding experience.
 
-Install dependencies:
+and many more...
 
-```
-$ npm install
-```
+### Find the Old Project Code:
 
-If you are running app on iOS:
+If you're interested in the code of the old project, you can find it in the "v1" branch of this repository.
 
-```
-$ cd ios
-```
+### Note on Current Version:
 
-```
-$ pod install
-```
+The current version available on the Play Store is based on the old app. We will continue to support this version until the new and improved app is ready for release.
 
-Return to the project main directory:
+### Get Involved!
 
-```
-$ cd ..
-```
+We encourage you to stay engaged with the project during this exciting phase. You can:
 
-To run on android:
+- **Follow our Progress:** We'll be providing regular updates on our progress. Stay tuned to this repo for the latest info.
+- **Contribute:** If you're passionate about the project and TypeScript, we welcome contributions from the community. You can reach out to me through any of my social media handles or via email - inbox@benjamineruvieru.com
 
-```
-$ react-native run-android
-```
+### Thank You
 
-To run on iOS:
+We want to express our gratitude to the Kicks Citi community for your ongoing support. This rewrite represents a significant milestone in the evolution of our app, and we're thrilled to have you with us on this journey.
 
-```
-$ react-native run-ios
-```
+Thank you for being a part of the Kicks Citi family.
 
-On Android if you are getting this error<br />
-
-Error: spawn ./gradlew EACCES<br />
-
-To fix:
-
-```
-$ cd android
-```
-
-```
-$ chmod u+x gradlew
-```
-
-Then try running the project again
-
-<p float="left">
-<img src="doc/img/1.png" width="300" height="550">
-<img src="doc/img/2.png" width="300" height="550">
-<img src="doc/img/3.png" width="300" height="550">
-<img src="doc/img/6.png" width="300" height="550">
-<img src="doc/img/4.png" width="300" height="550">
-<img src="doc/img/5.png" width="300" height="550">
-</p>
-
-## Contributing
-
-1.  Create a fork
-2.  Create your feature branch: `git checkout -b my-feature`
-3.  Commit your changes: `git commit -am 'Add some feature'`
-4.  Push to the branch: `git push origin my-new-feature`
-5.  Submit a pull request 🚀
-    <br />
-
-Built by @benjamineruvieru
+Best regards,
+Benjamin
