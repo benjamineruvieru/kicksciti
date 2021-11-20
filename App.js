@@ -5,7 +5,6 @@ import StackNav from './source/navigation/StackNav';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Notification from './source/components/Notification';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {TypeAnimation} from 'react-native-type-animation';
 
 const queryClient = new QueryClient();
 
