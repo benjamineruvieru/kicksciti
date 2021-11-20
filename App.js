@@ -24,7 +24,6 @@ const App = () => {
   };
 
   const goUp = () => {
-    console.log('called up');
     Animated.timing(transY, {
       useNativeDriver: true,
       toValue: 0,
@@ -35,9 +34,6 @@ const App = () => {
       <GestureHandlerRootView
         style={{
           flex: 1,
-          backgroundColor: 'white',
-          justifyContent: 'center',
-          alignItems: 'center',
         }}>
         <SafeAreaProvider>
           <Notification {...{goDown, goUp}} />

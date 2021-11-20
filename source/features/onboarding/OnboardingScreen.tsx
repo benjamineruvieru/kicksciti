@@ -1,11 +1,12 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import React from 'react';
+import Mainbackground from '../../components/Mainbackground';
 
 const OnboardingScreen = () => {
   return (
-    <View>
+    <Mainbackground>
       <Text>OnboardingScreen</Text>
-    </View>
+    </Mainbackground>
   );
 };
 

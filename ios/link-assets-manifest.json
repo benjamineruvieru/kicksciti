@@ -1,0 +1,85 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "source/assets/fonts/Gilroy-Black.ttf",
+      "sha1": "41d7d53d34ae67d9dc54979abee04f3514163740"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-BlackItalic.ttf",
+      "sha1": "3f16053efbb2fba78e7cc3722e2ffd8beddb862d"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-Bold.ttf",
+      "sha1": "7fe4d8cf5325dd47363d0f80fefb40ac7df5d5a6"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-BoldItalic.ttf",
+      "sha1": "9d242712b00aa14b76df6b0526957679a0dd4f13"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-ExtraBold.ttf",
+      "sha1": "eb2b7042895e0fe98ea023f3e45048f9d152127e"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-ExtraBoldItalic.ttf",
+      "sha1": "3fa4b88b9e55088d5a38d8ada83732452951f514"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-Heavy.ttf",
+      "sha1": "3e47b596a6cc4ad3ac4f79353c4bddc987bc84bc"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-HeavyItalic.ttf",
+      "sha1": "71d5083e3895c1857d2e4c73a2e65731061d43f9"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-Light.ttf",
+      "sha1": "510faebaff56ce8b518fc84bdd1aefeefae00b65"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-LightItalic.ttf",
+      "sha1": "1ead29f40523006583d1813c0b2f50c872216ed3"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-Medium.ttf",
+      "sha1": "d7f893124bd4fff78805e69df31385ae113368be"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-MediumItalic.ttf",
+      "sha1": "5993ba5a055534b7b6fe766d063650767e6929ac"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-Regular.ttf",
+      "sha1": "a737c19356e50cb9a50eb64ca7446c80dd3aa3e3"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-RegularItalic.ttf",
+      "sha1": "849c9d5af9b98915b9a2961b92365e793f1b756e"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-SemiBold.ttf",
+      "sha1": "8663a356eb9bc23b77696208f74376daf59687ea"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-SemiBoldItalic.ttf",
+      "sha1": "6eeadaaadf79773e8630aabb17a2b0b8a48b94b5"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-Thin.ttf",
+      "sha1": "af4998778ceb58ef38ff3fe5441eec696cb970dc"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-ThinItalic.ttf",
+      "sha1": "3cfc68dab2b878451f4334981e8d5e2a84fc3698"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-UltraLight.ttf",
+      "sha1": "1cfbfa447c336558c8ab3389bb11015adebf744f"
+    },
+    {
+      "path": "source/assets/fonts/Gilroy-UltraLightItalic.ttf",
+      "sha1": "594654ca331a2b85349e9fe36b87fdf9b86ff4c8"
+    }
+  ]
+}
