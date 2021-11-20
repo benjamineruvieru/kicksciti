@@ -8,11 +8,11 @@ I hope this message finds you well. We wanted to take a moment to share some exc
 
 ### Why the Change?
 
-Kicks Citi being my first react native project, had alot of problems. I've decided to embark on a significant overhaul of our React Native app. This decision stems from my commitment to providing a more robust, maintainable, and scalable application that can better meet the evolving needs of our users.
+Kicks Citi being my first react native project, had alot of problems. I've decided to embark on a significant overhaul of this project. This decision stems from my commitment to providing a more robust, maintainable, and scalable application that can better meet the evolving needs of our users.
 
 ### Background:
 
-This project was initially my first venture into React Native development. As I've gained experience and insights, I've recognized opportunities for improvement. To ensure I deliver the best possible app, I've made the decision to start afresh and apply the lessons learned through out my years to building a worth project.
+This project was initially my first venture into React Native development. As I've gained experience and insights, I've recognized opportunities for improvement. To ensure I deliver the best possible app, I've made the decision to start afresh and apply the lessons learned through out my years to building a worthy project.
 
 ### What's Changing?
 
