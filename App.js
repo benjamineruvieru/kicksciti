@@ -1,10 +1,19 @@
-import {Animated, Platform, StyleSheet, UIManager} from 'react-native';
+import {
+  Animated,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  UIManager,
+} from 'react-native';
 import React, {useRef} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import StackNav from './source/navigation/StackNav';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Notification from './source/components/Notification';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+
+Platform.OS === 'android' && StatusBar.setTranslucent(true);
+Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
 
 const queryClient = new QueryClient();
 

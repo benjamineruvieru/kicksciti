@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React from 'react';
+import React, {ReactNode} from 'react';
 import Animated, {
   Easing,
   FadeInLeft,
@@ -8,19 +8,40 @@ import Animated, {
   FadeOutLeft,
 } from 'react-native-reanimated';
 
-const LayoutAnimationComponent = ({children, delay, leftInOut}) => {
+type LayoutAnimationComponentProps = {
+  children: ReactNode;
+  delay?: number;
+  leftInOut?: boolean;
+  exit?: any;
+  exitDelay?: number;
+};
+
+const LayoutAnimationComponent: React.FC<LayoutAnimationComponentProps> = ({
+  children,
+  delay,
+  leftInOut,
+  exitDelay,
+  exit = leftInOut
+    ? FadeOutLeft.delay(exitDelay ?? 0)
+        .duration(500)
+        .easing(Easing.ease)
+    : FadeOutDown.delay(exitDelay ?? 0)
+        .duration(500)
+        .easing(Easing.ease),
+}) => {
+  exit;
   return (
     <Animated.View
       entering={
         leftInOut
-          ? FadeInLeft.delay(delay).duration(500).easing(Easing.ease)
-          : FadeInUp.delay(delay).duration(500).easing(Easing.ease)
+          ? FadeInLeft.delay(delay ?? 0)
+              .duration(500)
+              .easing(Easing.ease)
+          : FadeInUp.delay(delay ?? 0)
+              .duration(500)
+              .easing(Easing.ease)
       }
-      exiting={
-        leftInOut
-          ? FadeOutLeft.duration(500).easing(Easing.ease)
-          : FadeOutDown.duration(500).easing(Easing.ease)
-      }>
+      exiting={exit}>
       {children}
     </Animated.View>
   );
