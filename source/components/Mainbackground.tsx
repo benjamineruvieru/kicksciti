@@ -18,6 +18,7 @@ interface MainBackgroundProps {
   keyboard?: boolean;
   avoid?: boolean;
   top?: number;
+  padding?: number;
 }
 
 const Mainbackground: React.FC<MainBackgroundProps> = ({
@@ -26,6 +27,7 @@ const Mainbackground: React.FC<MainBackgroundProps> = ({
   keyboard,
   avoid,
   top,
+  padding,
 }) => {
   const insets = useSafeAreaInsets();
   const [noti, setNoti] = useState(false);
@@ -49,6 +51,7 @@ const Mainbackground: React.FC<MainBackgroundProps> = ({
       style={{
         flex: 1,
         backgroundColor: Colors.bg,
+        padding,
       }}>
       <KeyboardAvoidingView
         behavior={avoid && Platform.OS === 'ios' ? 'padding' : undefined}

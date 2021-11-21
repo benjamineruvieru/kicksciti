@@ -2,6 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import OnboardingScreen from '../features/onboarding/OnboardingScreen';
+import CollectEmailScreen from '../features/auth/CollectEmailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +58,10 @@ const StackNav = () => {
           header: () => null,
         }}>
         <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
+        <Stack.Screen
+          name="CollectEmailScreen"
+          component={CollectEmailScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
