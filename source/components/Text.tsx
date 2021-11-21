@@ -31,7 +31,7 @@ const Text: React.FC<TextProps> = ({
 }) => {
   const styles = StyleSheet.create({
     text: {
-      color: dim ? Colors.dim : color ? color : 'black',
+      color: dim ? Colors.dim : color ? color : 'white',
       includeFontPadding: false,
       ...style,
     },
