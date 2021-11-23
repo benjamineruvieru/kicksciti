@@ -8,5 +8,6 @@ export default {
   bg: '#121212',
   dim:'',
   tabColor:'#263238',
-  tabBlur:'#78909c'
+  tabBlur:'#78909c',
+  highlight:'#263238'
 };

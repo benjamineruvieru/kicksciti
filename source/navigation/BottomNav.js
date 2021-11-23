@@ -4,9 +4,14 @@ import Colors from '../constants/Colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Platform} from 'react-native';
 import ShopScreen from '../features/bottomtabs/shop/ShopScreen';
+import ProfileScreen from '../features/bottomtabs/profile/ProfileScreen';
+import FavouriteScreen from '../features/bottomtabs/favourite/FavouriteScreen';
+import MarketplaceScreen from '../features/bottomtabs/marketplace/MarketplaceScreen';
 
 import ShopSvg from '../assets/svg/bottomtab/shop.svg';
 import ProfileSvg from '../assets/svg/bottomtab/profile.svg';
+import MarketSvg from '../assets/svg/bottomtab/market.svg';
+import LoveSvg from '../assets/svg/bottomtab/love.svg';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,34 +54,34 @@ export default function BottomNav() {
       />
 
       <Tab.Screen
-        // options={{
-        //   tabBarIcon: ({color, size}) => (
-        //     <Home
-        //       width={25}
-        //       height={25}
-        //       style={{
-        //         color: color,
-        //       }}
-        //     />
-        //   ),
-        // }}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <MarketSvg
+              width={21}
+              height={21}
+              style={{
+                color: color,
+              }}
+            />
+          ),
+        }}
         name="Market Place"
-        component={ShopScreen}
+        component={MarketplaceScreen}
       />
       <Tab.Screen
-        // options={{
-        //   tabBarIcon: ({color, size}) => (
-        //     <Home
-        //       width={25}
-        //       height={25}
-        //       style={{
-        //         color: color,
-        //       }}
-        //     />
-        //   ),
-        // }}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <LoveSvg
+              width={22}
+              height={22}
+              style={{
+                color: color,
+              }}
+            />
+          ),
+        }}
         name="Favourite"
-        component={ShopScreen}
+        component={FavouriteScreen}
       />
       <Tab.Screen
         options={{
@@ -91,7 +96,7 @@ export default function BottomNav() {
           ),
         }}
         name="Profile"
-        component={ShopScreen}
+        component={ProfileScreen}
       />
     </Tab.Navigator>
   );

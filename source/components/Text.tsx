@@ -195,7 +195,6 @@ export const SmallText: React.FC<TextProps> = ({
   const styles = StyleSheet.create({
     text: {
       fontFamily: 'Gilroy-Medium',
-      fontWeight: '400',
       fontSize: 13,
       ...style,
     },
