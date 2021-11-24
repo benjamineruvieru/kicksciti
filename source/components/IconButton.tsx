@@ -20,8 +20,14 @@ export const BackButton = () => {
 };
 
 export const NotificationButton = () => {
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity onPress={() => {}} style={{marginLeft: 18}}>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('NotificationsScreen');
+      }}
+      style={{marginLeft: 18}}>
       <Bell height={26} width={26} />
     </TouchableOpacity>
   );
@@ -36,8 +42,14 @@ export const FavButton = ({color = Colors.primary}) => {
 };
 
 export const CartButton = () => {
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity onPress={() => {}} style={{}}>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('CartScreen');
+      }}
+      style={{}}>
       <Cart height={26} width={26} />
     </TouchableOpacity>
   );

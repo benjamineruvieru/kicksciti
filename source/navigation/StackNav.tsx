@@ -5,6 +5,8 @@ import CollectEmailScreen from '../features/auth/CollectEmailScreen';
 import BottomNav from './BottomNav';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import ProductScreen from '../features/productdetails/ProductScreen';
+import CartScreen from '../features/checkout/CartScreen';
+import NotificationsScreen from '../features/notifications/NotificationsScreen';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -77,6 +79,11 @@ const StackNav = () => {
             const {link1} = route.params;
             return [link1];
           }}
+        />
+        <Stack.Screen name="CartScreen" component={CartScreen} />
+        <Stack.Screen
+          name="NotificationsScreen"
+          component={NotificationsScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
