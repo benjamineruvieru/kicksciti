@@ -1,11 +1,12 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import OnboardingScreen from '../features/onboarding/OnboardingScreen';
 import CollectEmailScreen from '../features/auth/CollectEmailScreen';
 import BottomNav from './BottomNav';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import ProductScreen from '../features/productdetails/ProductScreen';
 
-const Stack = createNativeStackNavigator();
+const Stack = createSharedElementStackNavigator();
 
 const StackNav = () => {
   // const navigation = useNavigation();
@@ -57,6 +58,11 @@ const StackNav = () => {
         initialRouteName={'BottomNav'}
         screenOptions={{
           header: () => null,
+          cardStyle: {backgroundColor: 'transparent'},
+          cardStyleInterpolator: ({current: {progress}}) => ({
+            gestureEnabled: false,
+            cardStyle: {opacity: progress},
+          }),
         }}>
         <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
         <Stack.Screen
@@ -64,6 +70,14 @@ const StackNav = () => {
           component={CollectEmailScreen}
         />
         <Stack.Screen name="BottomNav" component={BottomNav} />
+        <Stack.Screen
+          name="ProductScreen"
+          component={ProductScreen}
+          sharedElements={route => {
+            const {link1} = route.params;
+            return [link1];
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

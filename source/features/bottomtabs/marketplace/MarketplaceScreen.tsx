@@ -1,11 +1,13 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {SmallText} from '../../../components/Text';
+import Mainbackground from '../../../components/Mainbackground';
 
 const MarketplaceScreen = () => {
   return (
-    <View>
-      <Text>MarketplaceScreen</Text>
-    </View>
+    <Mainbackground style={{justifyContent: 'center', alignItems: 'center'}}>
+      <SmallText>Comimg Soon...</SmallText>
+    </Mainbackground>
   );
 };
 

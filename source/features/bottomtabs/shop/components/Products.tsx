@@ -9,6 +9,20 @@ import Button from '../../../../components/Button';
 import LoveOutline from '../../../../assets/svg/icons/love-outline.svg';
 import Love from '../../../../assets/svg/icons/love.svg';
 import Colors from '../../../../constants/Colors';
+import {useNavigation} from '@react-navigation/native';
+import Animated, {
+  Easing,
+  FlipInEasyY,
+  LightSpeedInRight,
+  SlideInRight,
+  StretchInX,
+  StretchInY,
+  ZoomInRight,
+} from 'react-native-reanimated';
+import {SharedElement} from 'react-navigation-shared-element';
+import LayoutAnimationComponent from '../../../../components/LayoutAnimationComponent';
+
+const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 
 const DATA = [
   {
@@ -182,47 +196,64 @@ const DATA = [
   },
 ];
 
-const ProductItem = ({item, index}) => {
-  console.log('i', index, index % 2);
-  const {name, link1, price} = item ?? {};
+const Wrapper = ({item, index, children}) => {
+  const navigation = useNavigation();
   return (
     <TouchableOpacity
       style={{
         marginBottom: 15,
         width: '100%',
         alignItems: index % 2 === 1 ? 'flex-end' : 'flex-start',
+      }}
+      onPress={() => {
+        navigation.navigate('ProductScreen', item);
       }}>
-      <View>
-        <FastImage
-          source={{uri: link1}}
-          style={{
-            height: (SCREEN_WIDTH - 40 - 10) / 2,
-            width: (SCREEN_WIDTH - 40 - 10) / 2,
-            borderRadius: 10,
-          }}
-        />
-        <View style={{paddingVertical: 10}}>
-          <View>
-            <SmallTextB style={{marginBottom: 10, fontSize: 14}}>
-              {name}
-            </SmallTextB>
-            <SmallText>N {price}</SmallText>
-          </View>
-          <TouchableOpacity></TouchableOpacity>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingTop: 5,
-          }}>
-          <Button title="Add to cart" width={35} small />
-          {/* <Love width={25} color={Colors.primary} height={25} /> */}
-          <LoveOutline color={Colors.primary} width={20} height={20} />
-        </View>
-      </View>
+      {children}
     </TouchableOpacity>
+  );
+};
+
+const ProductItem = ({item, index}) => {
+  const {name, link1, price} = item ?? {};
+
+  return (
+    <LayoutAnimationComponent
+      entering={SlideInRight.delay(index * 100).easing(Easing.ease)}>
+      <Wrapper {...{index, item}}>
+        <View>
+          <SharedElement id={link1}>
+            <FastImage
+              source={{uri: link1}}
+              style={{
+                height: (SCREEN_WIDTH - 40 - 10) / 2,
+                width: (SCREEN_WIDTH - 40 - 10) / 2,
+                borderRadius: 10,
+              }}
+            />
+          </SharedElement>
+          <View style={{paddingVertical: 10}}>
+            <View>
+              <SmallTextB style={{marginBottom: 10, fontSize: 14}}>
+                {name}
+              </SmallTextB>
+              <SmallText>N {price}</SmallText>
+            </View>
+            <TouchableOpacity></TouchableOpacity>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingTop: 5,
+            }}>
+            <Button title="Add to cart" width={35} small />
+            {/* <Love width={25} color={Colors.primary} height={25} /> */}
+            <LoveOutline color={Colors.primary} width={20} height={20} />
+          </View>
+        </View>
+      </Wrapper>
+    </LayoutAnimationComponent>
   );
 };
 const Products = () => {
@@ -233,6 +264,7 @@ const Products = () => {
         numColumns={2}
         data={DATA}
         renderItem={ProductItem}
+        estimatedItemSize={257}
       />
     </View>
   );

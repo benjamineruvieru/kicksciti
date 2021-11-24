@@ -80,7 +80,7 @@ export default function BottomNav() {
             />
           ),
         }}
-        name="Favourite"
+        name="Favourites"
         component={FavouriteScreen}
       />
       <Tab.Screen

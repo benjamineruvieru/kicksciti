@@ -14,6 +14,7 @@ type LayoutAnimationComponentProps = {
   leftInOut?: boolean;
   exit?: any;
   exitDelay?: number;
+  entering?: any;
 };
 
 const LayoutAnimationComponent: React.FC<LayoutAnimationComponentProps> = ({
@@ -21,6 +22,13 @@ const LayoutAnimationComponent: React.FC<LayoutAnimationComponentProps> = ({
   delay,
   leftInOut,
   exitDelay,
+  entering = leftInOut
+    ? FadeInLeft.delay(delay ?? 0)
+        .duration(500)
+        .easing(Easing.ease)
+    : FadeInUp.delay(delay ?? 0)
+        .duration(500)
+        .easing(Easing.ease),
   exit = leftInOut
     ? FadeOutLeft.delay(exitDelay ?? 0)
         .duration(500)
@@ -31,17 +39,7 @@ const LayoutAnimationComponent: React.FC<LayoutAnimationComponentProps> = ({
 }) => {
   exit;
   return (
-    <Animated.View
-      entering={
-        leftInOut
-          ? FadeInLeft.delay(delay ?? 0)
-              .duration(500)
-              .easing(Easing.ease)
-          : FadeInUp.delay(delay ?? 0)
-              .duration(500)
-              .easing(Easing.ease)
-      }
-      exiting={exit}>
+    <Animated.View entering={entering} exiting={exit}>
       {children}
     </Animated.View>
   );
