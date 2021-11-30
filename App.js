@@ -11,6 +11,7 @@ import StackNav from './source/navigation/StackNav';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Notification from './source/components/Notification';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Modal from './source/features/modal';
 
 Platform.OS === 'android' && StatusBar.setTranslucent(true);
 Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
@@ -53,6 +54,7 @@ const App = () => {
             }}>
             <StackNav />
           </Animated.View>
+          <Modal />
         </SafeAreaProvider>
       </GestureHandlerRootView>
     </QueryClientProvider>

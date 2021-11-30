@@ -284,6 +284,8 @@ const Input: FC<InputProps> = ({
         }}>
         <TextInput
           value={text}
+          cursorColor={Colors.primary}
+          selectionColor={Colors.primary}
           onChangeText={setText}
           returnKeyType={returnKeyType}
           multiline={multiline}

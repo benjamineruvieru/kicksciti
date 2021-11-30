@@ -1,4 +1,9 @@
-import {StatusBar, Platform, PixelRatio} from 'react-native';
+import {
+  StatusBar,
+  Platform,
+  PixelRatio,
+  DeviceEventEmitter,
+} from 'react-native';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants/Variables';
 import {LayoutAnimation} from 'react-native';
 
@@ -176,4 +181,11 @@ export const StatusBarController = (route, isDarkMode) => {
         StatusBar.setBackgroundColor(isDarkMode ? '#272727' : 'white');
     }
   }
+};
+
+export const showNotification = ({msg, error}) => {
+  DeviceEventEmitter.emit('openNotification', {
+    error,
+    msg,
+  });
 };

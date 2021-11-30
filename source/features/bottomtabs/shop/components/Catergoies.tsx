@@ -1,38 +1,81 @@
 import {
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {SmallTextB} from '../../../../components/Text';
 import Colors from '../../../../constants/Colors';
+import {useApi} from '../../../../hooks/useApi';
+import {getCategories} from '../../../../api/products';
+import {capitalizeAllFirstLetters} from '../../../../utilis/Functions';
+import LinearGradient from 'react-native-linear-gradient';
+import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+import {SCREEN_WIDTH} from '../../../../constants/Variables';
 
-const DATA = ['Hottest Products', 'Just In', 'Nike'];
-const Catergoies = ({pos}) => {
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
+
+const DATA = ['Nike', 'Adidas', 'Louis Vuittoin', 'Prada', 'Puma', 'Vans'];
+
+const Catergoies = ({category, setCategory}) => {
+  // const {data} = useApi({queryFn: getCategories, queryKey: ['getCategories']});
+  let flatListRef = useRef(null);
+  const goToIndex = i => {
+    // @ts-ignore
+    flatListRef.current.scrollToIndex({
+      index: i,
+      animated: true,
+    });
+  };
+
+  const RenderItem = ({item, index}) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setCategory(item.toLowerCase());
+          goToIndex(index);
+        }}
+        style={{
+          marginRight: 15,
+          backgroundColor:
+            item.toLowerCase() === category ? Colors.highlight : 'transparent',
+          paddingHorizontal: 20,
+          paddingVertical: 13,
+          borderRadius: 5,
+        }}>
+        <SmallTextB>{capitalizeAllFirstLetters(item)}</SmallTextB>
+      </TouchableOpacity>
+    );
+  };
+
+  const WIDTH = (SCREEN_WIDTH - 70) / 3;
   return (
     <View>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
+      {/* <View style={{paddingVertical: 15, flexDirection: 'row'}}>
+        <ShimmerPlaceHolder
+          style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
+          shimmerColors={['#263238', '#78909c', '#263238']}
+        />
+        <ShimmerPlaceHolder
+          style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
+          shimmerColors={['#263238', '#78909c', '#263238']}
+        />
+        <ShimmerPlaceHolder
+          style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
+          shimmerColors={['#263238', '#78909c', '#263238']}
+        />
+      </View> */}
+      <FlatList
+        ref={flatListRef}
         horizontal
-        style={{marginBottom: 15, marginTop: 15}}>
-        {DATA.map((data, i) => {
-          return (
-            <TouchableOpacity
-              key={data}
-              style={{
-                marginRight: 15,
-                backgroundColor: i === pos ? Colors.highlight : 'transparent',
-                paddingHorizontal: 20,
-                paddingVertical: 13,
-                borderRadius: 5,
-              }}>
-              <SmallTextB>{data}</SmallTextB>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+        showsHorizontalScrollIndicator={false}
+        style={{marginBottom: 15, marginTop: 15}}
+        data={['hottest products', ...(DATA ?? [])]}
+        renderItem={RenderItem}
+      />
     </View>
   );
 };

@@ -226,6 +226,7 @@ export const SmallTextB: React.FC<TextProps> = ({
     text: {
       fontFamily: 'Gilroy-SemiBold',
       fontSize: 13,
+
       ...style,
     },
   });

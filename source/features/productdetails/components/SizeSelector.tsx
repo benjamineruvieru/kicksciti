@@ -36,8 +36,7 @@ function range(start, end, step = 1) {
   return result;
 }
 
-const SizeSelector = ({min = 40, max = 46}) => {
-  console.log(range(min, max));
+const SizeSelector = ({sizes, size, setSize, editSize, isInCart}) => {
   return (
     <View style={{marginBottom: 20}}>
       <RegularTextB>Size</RegularTextB>
@@ -45,15 +44,23 @@ const SizeSelector = ({min = 40, max = 46}) => {
         showsHorizontalScrollIndicator={false}
         style={{marginTop: 10}}
         horizontal>
-        {range(min, max).map(data => {
+        {sizes?.map(data => {
           return (
             <TouchableOpacity
+              onPress={() => {
+                setSize(data);
+                if (isInCart) {
+                  editSize(data);
+                }
+              }}
+              key={data}
               style={{
                 borderWidth: 2,
-                borderColor: Colors.highlight,
+                borderColor: size === data ? Colors.primary : Colors.highlight,
                 marginRight: 10,
                 padding: 12,
                 borderRadius: 8,
+                backgroundColor: size === data ? Colors.primary : 'transparent',
               }}>
               <RegularTextB>{data}</RegularTextB>
             </TouchableOpacity>

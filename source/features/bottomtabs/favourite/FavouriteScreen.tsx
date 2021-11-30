@@ -5,8 +5,11 @@ import {MediumText} from '../../../components/Text';
 import {CartButton, NotificationButton} from '../../../components/IconButton';
 import Search from '../../../components/Search';
 import Products from '../shop/components/Products';
+import {useMMKVObject} from 'react-native-mmkv';
 
 const FavouriteScreen = () => {
+  const [favourites, setFavourites] = useMMKVObject('favourites');
+
   return (
     <Mainbackground padding={20} paddingBottom={0} insetsBottom={-1}>
       <View
@@ -24,7 +27,7 @@ const FavouriteScreen = () => {
       </View>
       <Search />
       <View style={{height: 20}} />
-      <Products />
+      <Products results={favourites} />
     </Mainbackground>
   );
 };
