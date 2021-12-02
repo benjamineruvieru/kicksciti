@@ -14,3 +14,22 @@ export const getCategories = async ({}) => {
   const res = axios.get(`${BASEURL}/get-categories`);
   return (await res)?.data;
 };
+
+export const getCart = async ({}) => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.get(`${BASEURL}/get-cart`);
+  return (await res)?.data;
+};
+
+export const makePayment = async ({state, lga, address, phone}) => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.post(`${BASEURL}/make-payment`, {
+    state,
+    lga,
+    address,
+    phone,
+  });
+  return res;
+};

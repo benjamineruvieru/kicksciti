@@ -6,6 +6,7 @@ import CartScreen from '../features/checkout/CartScreen';
 import NotificationsScreen from '../features/notifications/NotificationsScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AniStackNav from './AniStack';
+import {getItem} from '../utilis/storage';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +21,7 @@ const StackNav = () => {
         //     }
         //   },
         // })}
-        initialRouteName={'AniStackNav'}
+        initialRouteName={getItem('token') ? 'AniStackNav' : 'OnboardingScreen'}
         screenOptions={{
           header: () => null,
         }}>

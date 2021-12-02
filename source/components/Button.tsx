@@ -195,7 +195,7 @@ const Button: React.FC<ButtonProps> = ({
       borderRadius: small ? 5 : 8,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: small ? 8 : 20,
+      padding: small ? 8 : load ? 17 : 20,
       alignSelf: 'center',
       width: getPercentWidth(width),
       marginTop: top,
@@ -213,7 +213,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={load || disable}
       style={styles.bg}
       onPress={onPress}>
-      {load && <ActivityIndicator color={'white'} style={{marginRight: 10}} />}
+      {load && <ActivityIndicator color={'white'} style={{right: 15}} />}
       <SmallTextB
         style={{
           color: isSec ? Colors.primary : grey ? Colors.dim : 'white',

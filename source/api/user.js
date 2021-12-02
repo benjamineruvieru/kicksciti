@@ -1,14 +1,30 @@
 import {BASEURL, axiosBase} from './base';
 
-export const addToFavourite = async ({_id, add = true}) => {
+export const addToServerFavourite = async ({_id, add = true}) => {
   const axiosInstance = axiosBase();
   const res = axiosInstance.post(`${BASEURL}/add-favourite`, {_id, add});
   return res;
 };
 
-export const addToCart = async ({_id, add = true}) => {
+export const addToServerCart = async ({_id, add = true, quantity, size}) => {
   const axiosInstance = axiosBase();
 
-  const res = axiosInstance.post(`${BASEURL}/add-cart`, {_id, add});
+  const res = axiosInstance.post(`${BASEURL}/add-cart`, {
+    _id,
+    add,
+    quantity,
+    size,
+  });
+  return res;
+};
+
+export const updateServerCart = async ({_id, quantity, size}) => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.post(`${BASEURL}/update-cart`, {
+    _id,
+    quantity,
+    size,
+  });
   return res;
 };

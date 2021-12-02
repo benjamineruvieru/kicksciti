@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Colors from '../constants/Colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Platform} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import ShopScreen from '../features/bottomtabs/shop/ShopScreen';
 import ProfileScreen from '../features/bottomtabs/profile/ProfileScreen';
 import FavouriteScreen from '../features/bottomtabs/favourite/FavouriteScreen';
@@ -12,6 +12,8 @@ import ProfileSvg from '../assets/svg/bottomtab/profile.svg';
 import MarketSvg from '../assets/svg/bottomtab/market.svg';
 import LoveSvg from '../assets/svg/bottomtab/love.svg';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import messaging from '@react-native-firebase/messaging';
+import {getItem, setItem} from '../utilis/storage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createSharedElementStackNavigator({name: 'BottomNav'});
@@ -47,6 +49,64 @@ const StackFavouriteScreen = () => (
 
 export default function BottomNav() {
   const insets = useSafeAreaInsets();
+
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+  }
+
+  async function requestPermissionAndroid() {
+    try {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS, // or POST_NOTIFICATIONS
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const getToken = () => {
+    messaging()
+      .subscribeToTopic('newproduct')
+      .then(() => console.log('Subscribed to topic!'));
+    messaging()
+      .getToken()
+      .then(token => {
+        console.log('token', token);
+      });
+  };
+
+  useEffect(() => {
+    const init = async () => {
+      if (Platform.OS === 'android') {
+        await requestPermissionAndroid();
+      } else {
+        await requestUserPermission();
+      }
+      getToken();
+    };
+    init();
+  }, []);
+
+  // useEffect(() => {
+  //   return messaging().onTokenRefresh(token => {
+  //     console.log('token changed', token);
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   messaging().onNotificationOpenedApp(remoteMessage => {
+  //     // navigation.navigate('Notification');
+  //     console.log(remoteMessage);
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <Tab.Navigator
       backBehavior="history"

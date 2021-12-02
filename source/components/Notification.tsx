@@ -33,11 +33,8 @@ const Notification: React.FC<NotificationProps> = ({goDown, goUp}) => {
   }) => {
     Animated.timing(transY, {
       useNativeDriver: true,
-      toValue: StatusBar?.currentHeight ?? 0 / 1.5 + notheight.current,
+      toValue: (StatusBar?.currentHeight ?? 0) / 1.5 + notheight.current,
     }).start();
-    Platform.OS === 'android' &&
-      StatusBar.setBackgroundColor(!error ? Colors.green : Colors.red);
-    error && StatusBar.setBarStyle('light-content');
     setMsg(msg);
     setError(error);
   };
@@ -48,9 +45,6 @@ const Notification: React.FC<NotificationProps> = ({goDown, goUp}) => {
       useNativeDriver: true,
       toValue: 0,
     }).start();
-    Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
-
-    StatusBar.setBarStyle('dark-content');
     goUp();
     setTimeout(() => {
       setMsg('');
@@ -80,7 +74,7 @@ const Notification: React.FC<NotificationProps> = ({goDown, goUp}) => {
         transform: [{translateY: transY}],
         position: 'absolute',
         top: -130,
-        zIndex: 1,
+        zIndex: 10,
         width: SCREEN_WIDTH,
       }}
       onLayout={e => {

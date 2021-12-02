@@ -21,7 +21,10 @@ const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 const DATA = ['Nike', 'Adidas', 'Louis Vuittoin', 'Prada', 'Puma', 'Vans'];
 
 const Catergoies = ({category, setCategory}) => {
-  // const {data} = useApi({queryFn: getCategories, queryKey: ['getCategories']});
+  const {data, isLoading} = useApi({
+    queryFn: getCategories,
+    queryKey: ['getCategories'],
+  });
   let flatListRef = useRef(null);
   const goToIndex = i => {
     // @ts-ignore
@@ -50,32 +53,34 @@ const Catergoies = ({category, setCategory}) => {
       </TouchableOpacity>
     );
   };
-
   const WIDTH = (SCREEN_WIDTH - 70) / 3;
   return (
     <View>
-      {/* <View style={{paddingVertical: 15, flexDirection: 'row'}}>
-        <ShimmerPlaceHolder
-          style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
-          shimmerColors={['#263238', '#78909c', '#263238']}
+      {isLoading ? (
+        <View style={{paddingVertical: 15, flexDirection: 'row'}}>
+          <ShimmerPlaceHolder
+            style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
+            shimmerColors={['#263238', '#78909c', '#263238']}
+          />
+          <ShimmerPlaceHolder
+            style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
+            shimmerColors={['#263238', '#78909c', '#263238']}
+          />
+          <ShimmerPlaceHolder
+            style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
+            shimmerColors={['#263238', '#78909c', '#263238']}
+          />
+        </View>
+      ) : (
+        <FlatList
+          ref={flatListRef}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{marginBottom: 15, marginTop: 15}}
+          data={['hottest products', ...(data?.categories ?? [])]}
+          renderItem={RenderItem}
         />
-        <ShimmerPlaceHolder
-          style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
-          shimmerColors={['#263238', '#78909c', '#263238']}
-        />
-        <ShimmerPlaceHolder
-          style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
-          shimmerColors={['#263238', '#78909c', '#263238']}
-        />
-      </View> */}
-      <FlatList
-        ref={flatListRef}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{marginBottom: 15, marginTop: 15}}
-        data={['hottest products', ...(DATA ?? [])]}
-        renderItem={RenderItem}
-      />
+      )}
     </View>
   );
 };

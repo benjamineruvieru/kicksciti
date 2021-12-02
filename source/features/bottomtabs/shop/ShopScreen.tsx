@@ -9,21 +9,23 @@ import Products from './components/Products';
 import {useInfiniteApi} from '../../../hooks/useApi';
 import {getProducts} from '../../../api/products';
 import ProductsLoading from './components/ProductsLoading';
-const sequence = [
-  {text: 'Welcome, Ben Dev 👋'},
-  {text: 'Kaabo, Ben Dev 👋'},
-  {text: 'Nnooo, Ben Dev 👋', deleteCount: 5},
-  {text: 'Sannu, Ben Dev 👋'},
-];
+import {getItem} from '../../../utilis/storage';
 
 const ShopScreen = () => {
   const [category, setCategory] = useState('hottest products');
+  const {name} = getItem('userdetails', true);
+  const sequence = [
+    {text: `Welcome, ${name} 👋`},
+    {text: `Kaabo, ${name} 👋`},
+    {text: `Nnooo, ${name} 👋`, deleteCount: 5},
+    {text: `Sannu, ${name} 👋`},
+  ];
+  const {data, isLoading, refetch} = useInfiniteApi({
+    queryFunction: getProducts,
+    queryKey: ['getProducts', category],
+  });
+  const results = data?.pages.flatMap(data => data?.products) ?? [];
 
-  // const {data} = useInfiniteApi({
-  //   queryFunction: getProducts,
-  //   queryKey: ['getProducts', category],
-  // });
-  // const results = data?.pages.flatMap(data => data?.products) ?? [];
   return (
     <Mainbackground padding={20} paddingBottom={0} insetsBottom={-1}>
       <View
@@ -33,15 +35,17 @@ const ShopScreen = () => {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <TypeAnimation
-          preRenderText="Welcome, Ben Dev 👋"
-          sequence={sequence}
-          style={styles.typeAni}
-          loop
-          direction="back"
-          delayBetweenSequence={10000}
-          cursor={false}
-        />
+        <View style={{flex: 1}}>
+          <TypeAnimation
+            preRenderText={`Welcome, ${name} 👋`}
+            sequence={sequence}
+            style={styles.typeAni}
+            loop
+            direction="back"
+            delayBetweenSequence={10000}
+            cursor={false}
+          />
+        </View>
         <View style={{flexDirection: 'row'}}>
           <CartButton />
           <NotificationButton />
@@ -49,10 +53,11 @@ const ShopScreen = () => {
       </View>
       <Search />
       <Catergoies setCategory={setCategory} category={category} />
-      {/* <ProductsLoading /> */}
-      <Products
-      //  results={results}
-      />
+      {isLoading ? (
+        <ProductsLoading />
+      ) : (
+        <Products results={results} refresh={refetch} />
+      )}
     </Mainbackground>
   );
 };

@@ -68,13 +68,12 @@ const Mainbackground: React.FC<MainBackgroundProps> = ({
           flex: 1,
 
           paddingTop: noti ? 0 : top ? top : insets.top,
-
-          ...style,
         }}>
         <View
           style={{
             flex: 1,
             paddingBottom: insetsBottom ? insetsBottom : insets.bottom,
+            ...style,
           }}>
           {children}
         </View>

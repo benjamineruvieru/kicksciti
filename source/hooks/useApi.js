@@ -11,11 +11,11 @@ export const useApi = ({queryKey, queryFn, onSuccess}) => {
       switch (error?.response?.status) {
         case 401:
           {
-            deleteItem('token');
-            navigation.reset({
-              index: 0,
-              routes: [{name: 'LoginScreen'}],
-            });
+            // deleteItem('token');
+            // navigation.reset({
+            //   index: 0,
+            //   routes: [{name: 'LoginScreen'}],
+            // });
           }
           break;
         default:

@@ -6,8 +6,30 @@ import {
 } from 'react-native';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants/Variables';
 import {LayoutAnimation} from 'react-native';
+import countryData from './output.json';
+import citiesData from './outputcities.json';
 
 const scale = SCREEN_WIDTH / 390;
+
+export const getState = ({country}) => {
+  if (!country) return [];
+  const data = countryData.find(
+    data => data.name.toLowerCase() === country.toLowerCase(),
+  );
+  return data.states.map(d => {
+    return d;
+  });
+};
+
+export const getCity = ({country, state}) => {
+  if (!country || !state) return [];
+
+  return (
+    citiesData[`${country?.toLowerCase()}_${state?.toLowerCase()}`]?.map(d => {
+      return d;
+    }) ?? []
+  );
+};
 
 export const formatDate = date => {
   const givenDate = new Date(date);
