@@ -13,6 +13,8 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ListItem from './components/ListItem';
 import {deleteItem, getItem} from '../../../utilis/storage';
+import CartSvg from '../../../assets/svg/icons/cart.svg';
+import HistorySvg from '../../../assets/svg/profile/history.svg';
 
 const ProfileScreen = ({navigation}) => {
   const {name, username} = getItem('userdetails', true);
@@ -46,9 +48,12 @@ const ProfileScreen = ({navigation}) => {
         <RegularText>@{username}</RegularText>
       </View>
       <View style={{flex: 1, padding: 0}}>
-        <ListItem title={'Wallet'} />
-        <ListItem title={'Cart'} />
-        <ListItem title={'Order History'} />
+        <ListItem
+          title={'Order History'}
+          Svg={HistorySvg}
+          screen={'OrderHistory'}
+        />
+        <ListItem title={'Cart'} screen={'CartScreen'} Svg={CartSvg} />
       </View>
       <Button
         backgroundColor="red"

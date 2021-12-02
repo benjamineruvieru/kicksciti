@@ -211,3 +211,22 @@ export const showNotification = ({msg, error}) => {
     msg,
   });
 };
+
+export function addItemIfNotExists(array, newItem) {
+  // Check if an item with the same properties already exists in the array
+  const exists = array.some(
+    item =>
+      item.address === newItem.address &&
+      item.phone === newItem.phone &&
+      item.lga === newItem.lga &&
+      item.state === newItem.state,
+  );
+
+  // If the item does not exist, add it to the array
+  if (!exists) {
+    array.push(newItem);
+  }
+
+  // Return the updated array
+  return array;
+}

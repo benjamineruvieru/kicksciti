@@ -4,22 +4,24 @@ import {BASEURL, axiosBase} from './base';
 export const getProducts = async ({pageParam = 1, queryKey}) => {
   const category = queryKey[1];
   console.log('category', category);
-  const res = axios.get(
+  const res = await axios.get(
     `${BASEURL}/fetch-products?page=${pageParam}&pageSize=20&category=${category}`,
   );
-  return (await res)?.data;
+  console.log('prod res', res);
+  return res?.data;
 };
 
 export const getCategories = async ({}) => {
-  const res = axios.get(`${BASEURL}/get-categories`);
-  return (await res)?.data;
+  const res = await axios.get(`${BASEURL}/get-categories`);
+  console.log('cate res', res);
+  return res?.data;
 };
 
-export const getCart = async ({}) => {
+export const getCart = async () => {
   const axiosInstance = axiosBase();
 
   const res = axiosInstance.get(`${BASEURL}/get-cart`);
-  return (await res)?.data;
+  return res;
 };
 
 export const makePayment = async ({state, lga, address, phone}) => {

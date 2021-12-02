@@ -1,5 +1,5 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {Image, Keyboard, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import Mainbackground from '../../components/Mainbackground';
 import PageHeader from '../../components/PageHeader';
 import CartItemsList from './components/CartItemsList';
@@ -18,13 +18,17 @@ import {
   formatNumberWithCommas,
   getCity,
   getState,
+  showNotification,
 } from '../../utilis/Functions';
 import {SCREEN_WIDTH} from '../../constants/Variables';
 import EmptyCart from './components/EmptyCart';
 import {useApi} from '../../hooks/useApi';
-import {getCart} from '../../api/products';
+import {getCart, makePayment} from '../../api/products';
+import PaymentModal from './components/PaymentModal';
+import useRecentAddresses from '../../hooks/useRecentAddresses';
+import RecentAddress from './components/RecentAddress';
 
-const Amount = ({deliveryFee = 0, cart}) => {
+const Amount = ({deliveryfee = 0, cart}) => {
   let totalPrice = 0;
 
   cart.forEach(item => {
@@ -35,7 +39,7 @@ const Amount = ({deliveryFee = 0, cart}) => {
   });
   return (
     <View>
-      {!!deliveryFee && deliveryFee > 0 && (
+      {!!deliveryfee && deliveryfee > 0 && (
         <View
           style={{
             flexDirection: 'row',
@@ -47,7 +51,7 @@ const Amount = ({deliveryFee = 0, cart}) => {
             Delivery Fee
           </RegularTextB>
           <RegularTextB style={{color: Colors.tabBlur}}>
-            ₦ {formatNumberWithCommas(deliveryFee)}
+            ₦ {formatNumberWithCommas(deliveryfee)}
           </RegularTextB>
         </View>
       )}
@@ -75,7 +79,7 @@ const Amount = ({deliveryFee = 0, cart}) => {
           }}>
           <RegularTextB>Total</RegularTextB>
           <MediumText>
-            ₦ {formatNumberWithCommas(totalPrice + deliveryFee)}
+            ₦ {formatNumberWithCommas(totalPrice + deliveryfee)}
           </MediumText>
         </View>
       </LayoutAnimationComponent>
@@ -99,6 +103,7 @@ const Delivery = ({
   setAddress,
   phone,
   setPhone,
+  recentAddress,
 }) => {
   return (
     <View style={{flex: 1}}>
@@ -111,6 +116,7 @@ const Delivery = ({
       </LayoutAnimationComponent>
       <LayoutAnimationComponent rightInOut delay={550}>
         <Input
+          keyboard="phone-pad"
           placeholderText="Contact Phone Number"
           text={phone}
           setText={setPhone}
@@ -126,7 +132,7 @@ const Delivery = ({
         />
       </LayoutAnimationComponent>
       {state && (
-        <LayoutAnimationComponent rightInOut delay={50}>
+        <LayoutAnimationComponent rightInOut delay={950}>
           <ModalSelector
             placeholderText="Local government area"
             text={lga}
@@ -136,68 +142,138 @@ const Delivery = ({
           />
         </LayoutAnimationComponent>
       )}
-      <LayoutAnimationComponent rightInOut delay={950}>
-        <SmallTextB>Recents</SmallTextB>
-      </LayoutAnimationComponent>
+      <RecentAddress
+        {...{
+          recentAddress,
+          setState,
+
+          setLga,
+
+          setAddress,
+
+          setPhone,
+        }}
+      />
     </View>
   );
 };
 const CartScreen = () => {
+  const {recentAddress, addAddress} = useRecentAddresses();
   const [cart, setCart] = useMMKVObject('cart');
-  useApi({
-    queryFn: getCart,
-    queryKey: ['getCart'],
-    onSuccess: data => {
-      console.log('data cart', data?.cart);
-      setCart(data?.cart ?? []);
-    },
-  });
+  useEffect(() => {
+    getCart().then(data => {
+      console.log('data cart', data?.data?.cart);
+      setCart(data?.data?.cart ?? []);
+    });
+  }, []);
+
   const [pos, setPos] = useState(0);
-  const [state, setState] = useState();
+  const [state, setState] = useState('Lagos');
   const [lga, setLga] = useState();
   const [address, setAddress] = useState();
   const [phone, setPhone] = useState();
+  const [deliveryfee, setDeliveryfee] = useState(2000);
+  const [load, setLoad] = useState(false);
+  const [link, setLink] = useState();
+  const [order_id, setorder_id] = useState();
+  const modalRef = useRef();
+  const openModal = () => {
+    modalRef.current.open();
+  };
 
   const next = () => {
     if (pos === 0) {
       setPos(1);
+    } else if (pos === 1) {
+      if (!address) {
+        showNotification({
+          error: true,
+          msg: 'Please enter the products delivery address',
+        });
+        return;
+      }
+      if (!phone) {
+        showNotification({
+          error: true,
+          msg: 'Please enter contact phone number',
+        });
+        return;
+      }
+      if (!state) {
+        showNotification({
+          error: true,
+          msg: 'Please select the delivery state',
+        });
+        return;
+      }
+      if (!state) {
+        showNotification({
+          error: true,
+          msg: 'Please select the delivery local government',
+        });
+        return;
+      }
+      setLoad(true);
+      Keyboard.dismiss();
+      makePayment({address, lga, phone, state})
+        .then(data => {
+          const {link, order} = data.data ?? {};
+          console.log('order', order.products);
+          setorder_id(order?.order_id);
+          setLink(link);
+          openModal();
+          setCart([]);
+          addAddress({address, lga, phone, state});
+        })
+        .catch(err => {
+          console.log('err', err?.response?.data);
+          showNotification({error: true, msg: err?.response?.data?.error});
+        })
+        .finally(() => {
+          setLoad(false);
+        });
     }
   };
   return (
-    <Mainbackground avoid keyboard padding={20}>
-      <PageHeader
-        title={pos === 0 ? 'Cart' : pos === 1 ? 'Delivery Details' : ''}
-      />
-      {cart && cart.length > 0 ? (
-        <>
-          {pos === 0 && <CartItems />}
-          {pos === 1 && (
-            <Delivery
-              {...{
-                state,
-                setState,
-                lga,
-                setLga,
-                address,
-                setAddress,
-                phone,
-                setPhone,
-              }}
-            />
-          )}
-          <Amount {...{cart}} />
-          <LayoutAnimationComponent delay={300}>
-            <Button
-              title={pos === 0 ? 'Next' : 'Make Payment'}
-              onPress={next}
-              // disable={true}
-            />
-          </LayoutAnimationComponent>
-        </>
-      ) : (
-        <EmptyCart />
-      )}
-    </Mainbackground>
+    <>
+      <Mainbackground avoid keyboard padding={20}>
+        <PageHeader
+          title={pos === 0 ? 'Cart' : pos === 1 ? 'Delivery Details' : ''}
+        />
+        {cart && cart.length > 0 ? (
+          <>
+            {pos === 0 && <CartItems />}
+            {pos === 1 && (
+              <Delivery
+                {...{
+                  state,
+                  setState,
+                  lga,
+                  setLga,
+                  address,
+                  setAddress,
+                  phone,
+                  setPhone,
+                  recentAddress,
+                }}
+              />
+            )}
+            <Amount {...{cart, deliveryfee}} />
+            <LayoutAnimationComponent delay={300}>
+              <Button
+                title={pos === 0 ? 'Next' : 'Make Payment'}
+                onPress={next}
+                // disable={true}
+                load={load}
+              />
+            </LayoutAnimationComponent>
+          </>
+        ) : (
+          <EmptyCart />
+        )}
+      </Mainbackground>
+      <PaymentModal {...{modalRef, link, order_id}} />
+    </>
   );
 };
 

@@ -1,11 +1,41 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Mainbackground from '../../../components/Mainbackground';
-import {MediumText} from '../../../components/Text';
+import {MediumText, RegularTextB, SmallText} from '../../../components/Text';
 import {CartButton, NotificationButton} from '../../../components/IconButton';
 import Search from '../../../components/Search';
 import Products from '../shop/components/Products';
 import {useMMKVObject} from 'react-native-mmkv';
+import {getPercentWidth} from '../../../utilis/Functions';
+
+const EmptyFave = () => {
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 100,
+      }}>
+      <Image
+        resizeMode="contain"
+        style={{
+          width: getPercentWidth(70),
+          height: getPercentWidth(70),
+          top: -5,
+        }}
+        source={require('../../../assets/images/illustrations/emptyfave.png')}
+      />
+      <RegularTextB style={{marginBottom: 5}}>
+        Your favorites list is looking a bit lonely!
+      </RegularTextB>
+      <SmallText>
+        {' '}
+        Explore our collection and save your top picks here.{' '}
+      </SmallText>
+    </View>
+  );
+};
 
 const FavouriteScreen = () => {
   const [favourites, setFavourites] = useMMKVObject('favourites');
@@ -27,7 +57,11 @@ const FavouriteScreen = () => {
       </View>
       <Search />
       <View style={{height: 20}} />
-      <Products results={favourites} />
+      {!favourites || favourites?.length === 0 ? (
+        <EmptyFave />
+      ) : (
+        <Products results={favourites} />
+      )}
     </Mainbackground>
   );
 };
