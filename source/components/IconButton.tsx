@@ -1,4 +1,4 @@
-import {TouchableOpacity, View} from 'react-native';
+import {Share, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 
@@ -10,6 +10,25 @@ import Love from '../assets/svg/icons/love.svg';
 import Colors from '../constants/Colors';
 import {useMMKVObject} from 'react-native-mmkv';
 import {SmallText, SmallTextB} from './Text';
+import ShareSvg from '../assets/svg/icons/share.svg';
+import {getItem} from '../utilis/storage';
+
+export const ShareButton = ({id}) => {
+  const {username} = getItem('userdetails', true);
+  const link = `www.kicksciti.com/product/${id}?id=${username}`;
+
+  return (
+    <TouchableOpacity
+      onPress={async () => {
+        await Share.share({
+          message: link,
+        });
+      }}
+      style={{marginRight: 15}}>
+      <ShareSvg color={'white'} height={25} width={25} />
+    </TouchableOpacity>
+  );
+};
 
 export const BackButton = () => {
   const navigation = useNavigation();

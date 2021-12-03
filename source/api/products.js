@@ -32,6 +32,7 @@ export const makePayment = async ({state, lga, address, phone}) => {
     lga,
     address,
     phone,
+    BASEURL,
   });
   return res;
 };

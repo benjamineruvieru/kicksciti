@@ -38,7 +38,7 @@ function range(start, end, step = 1) {
 
 const SizeSelector = ({sizes, size, setSize, editSize, isInCart}) => {
   return (
-    <View style={{marginBottom: 20}}>
+    <View style={{marginBottom: 30}}>
       <RegularTextB>Size</RegularTextB>
       <ScrollView
         showsHorizontalScrollIndicator={false}

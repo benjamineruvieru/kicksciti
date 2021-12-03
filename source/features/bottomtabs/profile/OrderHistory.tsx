@@ -11,11 +11,57 @@ import Mainbackground from '../../../components/Mainbackground';
 import PageHeader from '../../../components/PageHeader';
 import {useApi} from '../../../hooks/useApi';
 import {fetchOrders} from '../../../api/order';
-import {getPercentWidth} from '../../../utilis/Functions';
-import {RegularTextB, SmallText} from '../../../components/Text';
+import {
+  formatNumberWithCommas,
+  getPercentWidth,
+} from '../../../utilis/Functions';
+import {RegularText, RegularTextB, SmallText} from '../../../components/Text';
 import Colors from '../../../constants/Colors';
 import {FlashList} from '@shopify/flash-list';
 import FastImage from 'react-native-fast-image';
+import {useNavigation} from '@react-navigation/native';
+
+function formatTimestamp(timestamp) {
+  const dateObj = new Date(timestamp);
+
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  const formattedDate = `${get12HourTime(dateObj)} ${getAMPM(dateObj)}, ${
+    daysOfWeek[dateObj.getUTCDay()]
+  } ${dateObj.getUTCDate()} ${
+    months[dateObj.getUTCMonth()]
+  } ${dateObj.getUTCFullYear()}`;
+
+  return formattedDate;
+}
+
+function get12HourTime(date) {
+  const hours = date.getUTCHours() % 12 || 12;
+  const minutes = padZero(date.getUTCMinutes());
+  return `${hours}:${minutes}`;
+}
+
+function getAMPM(date) {
+  return date.getUTCHours() < 12 ? 'AM' : 'PM';
+}
+
+function padZero(num) {
+  return num < 10 ? `0${num}` : num;
+}
 
 const EmptyHistory = () => {
   return (
@@ -46,23 +92,58 @@ const EmptyHistory = () => {
   );
 };
 
-const Wrapper = ({children, item}) => {
-  return <TouchableOpacity>{children}</TouchableOpacity>;
+const Wrapper = ({children, order_id}) => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('OrderDetails', {order_id});
+      }}
+      style={{flexDirection: 'row', marginBottom: 15}}>
+      {children}
+    </TouchableOpacity>
+  );
 };
 
 const OrderItem = ({item}) => {
-  const {products, totalamount, order_id, createdAt, lga} = item ?? {};
-  console.log(item);
+  const {
+    products,
+    totalamount,
+    order_id,
+    createdAt,
+    state,
+    lga,
+    status,
+    status_color,
+  } = item ?? {};
+  const {name, pictures} = products[0].item;
+  console.log(products[0].item);
   return (
-    <Wrapper>
-      <FastImage />
-      <RegularTextB>Hi</RegularTextB>
+    <Wrapper {...{order_id}}>
+      <FastImage
+        source={{uri: pictures[0]}}
+        style={{height: 100, width: 100, borderRadius: 10}}
+      />
+      <View style={{marginLeft: 15, justifyContent: 'space-around'}}>
+        <RegularTextB>
+          {name} - {lga}, {state}
+        </RegularTextB>
+        <RegularText>
+          ₦ {formatNumberWithCommas(totalamount)} • {order_id}
+        </RegularText>
+        <SmallText style={{color: status_color}}>{status}</SmallText>
+        <SmallText style={{color: Colors.tabBlur}}>
+          {formatTimestamp(createdAt)}
+        </SmallText>
+      </View>
     </Wrapper>
   );
 };
 
 const HistoryList = ({orders}) => {
-  return <FlashList data={orders} renderItem={OrderItem} />;
+  return (
+    <FlashList estimatedItemSize={58} data={orders} renderItem={OrderItem} />
+  );
 };
 const OrderHistory = () => {
   const {data, isLoading} = useApi({
@@ -81,7 +162,7 @@ const OrderHistory = () => {
       ) : !orders || orders.length === 0 ? (
         <EmptyHistory />
       ) : (
-        <HistoryList orders={orders} />
+        <HistoryList orders={orders.reverse()} />
       )}
     </Mainbackground>
   );

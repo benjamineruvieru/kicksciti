@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-clipboard/clipboard": "^1.12.1",
     "@react-native-firebase/app": "^18.7.1",
     "@react-native-firebase/messaging": "^18.7.1",
     "@react-navigation/bottom-tabs": "^6.5.8",

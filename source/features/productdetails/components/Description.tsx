@@ -6,7 +6,7 @@ const Description = ({description}) => {
   return (
     <View>
       <RegularTextB style={{}}>Description</RegularTextB>
-      <SmallText style={{marginBottom: 20, marginTop: 5}}>
+      <SmallText style={{marginBottom: 30, marginTop: 5}}>
         {description}
       </SmallText>
     </View>
