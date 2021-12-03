@@ -1,10 +1,14 @@
 import axios from 'axios';
 import {getItem} from '../utilis/storage';
+import {Platform} from 'react-native';
 
 // export const BASEURL =
 //   'https://dul9z0axu0.execute-api.us-east-1.amazonaws.com/v1';
 
-export const BASEURL = 'http://localhost:3000';
+export const BASEURL =
+  Platform.OS === 'ios'
+    ? 'http://localhost:3000'
+    : 'https://dul9z0axu0.execute-api.us-east-1.amazonaws.com/v1';
 export const axiosBase = () => {
   const token = getItem('token');
   if (!token) {

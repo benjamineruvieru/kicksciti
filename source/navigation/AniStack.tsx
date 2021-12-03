@@ -6,42 +6,6 @@ import ProductScreen from '../features/productdetails/ProductScreen';
 const Stack = createSharedElementStackNavigator();
 
 const AniStackNav = () => {
-  // const navigation = useNavigation();
-  // useEffect(() => {
-  //   const getUrlAsync = async () => {
-  //     const initialUrl = await Linking.getInitialURL();
-  //     handleDeepLink(initialUrl);
-  //   };
-
-  //   getUrlAsync();
-  //   Linking.addEventListener('url', handleDeepLink);
-
-  //   return () => {
-  //     Linking.removeAllListeners('url');
-  //   };
-  // }, []);
-
-  // function extractUsernameFromUrl(url) {
-  //   const regex = /\/channel\/([^/]+)/;
-  //   const match = url.match(regex);
-  //   if (match && match[1]) {
-  //     return match[1];
-  //   }
-  //   return null;
-  // }
-
-  const handleDeepLink = prop => {
-    const {url} = prop ?? {};
-    if (url) {
-      const username = extractUsernameFromUrl(url);
-      console.log('initialUrl', username);
-
-      if (username) {
-        navigation.navigate('LoadChannel', {username});
-      }
-    }
-  };
-
   return (
     <Stack.Navigator
       screenOptions={{

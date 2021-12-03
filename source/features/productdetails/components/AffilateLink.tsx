@@ -8,7 +8,7 @@ import {showNotification} from '../../../utilis/Functions';
 
 const AffilateLink = ({id}) => {
   const {username} = getItem('userdetails', true);
-  const link = `www.kicksciti.com/product/${id}?id=${username}`;
+  const link = `https://www.kicksciti.com/product/${id}?id=${username}`;
   return (
     <View style={{marginTop: 30, marginBottom: 10}}>
       <RegularTextB>Affilate Link</RegularTextB>
