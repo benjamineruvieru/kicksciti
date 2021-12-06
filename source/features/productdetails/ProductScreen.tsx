@@ -24,6 +24,7 @@ import AffilateLink from './components/AffilateLink';
 import Description from './components/Description';
 import {formatNumberWithCommas, showNotification} from '../../utilis/Functions';
 import useCart from '../../hooks/useCart';
+import {useNavigation} from '@react-navigation/native';
 
 const FullImages = ({pictures, flatListRef, scrollX, setActiveIndex}) => {
   const onViewRef = React.useRef(({viewableItems}: any) => {
@@ -64,7 +65,7 @@ const FullImages = ({pictures, flatListRef, scrollX, setActiveIndex}) => {
 
 const Header = ({item, _id, id}) => {
   const inset = useSafeAreaInsets();
-
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -76,9 +77,13 @@ const Header = ({item, _id, id}) => {
         position: 'absolute',
         top: inset.top / 1.5,
         width: SCREEN_WIDTH,
-        zIndex: 1,
+        zIndex: 3,
       }}>
-      <BackButton />
+      <BackButton
+        fallBack={() => {
+          navigation.navigate('BottomNav');
+        }}
+      />
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <ShareButton id={id} />
         <SharedElement id={`favbutton${_id}`}>

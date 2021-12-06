@@ -6,6 +6,7 @@ import MarketPlaceSvg from '../../../assets/svg/illustrations/marketplace.svg';
 import {SCREEN_WIDTH} from '../../../constants/Variables';
 import {getPercentWidth} from '../../../utilis/Functions';
 import {CartButton, NotificationButton} from '../../../components/IconButton';
+import LayoutAnimationComponent from '../../../components/LayoutAnimationComponent';
 
 const MarketplaceScreen = () => {
   return (
@@ -29,17 +30,23 @@ const MarketplaceScreen = () => {
           alignItems: 'center',
           flex: 1,
         }}>
-        <Image
-          resizeMode="contain"
-          style={{width: getPercentWidth(80), height: getPercentWidth(80)}}
-          source={require('../../../assets/images/illustrations/marketplace.png')}
-        />
-        <RegularTextB style={{marginBottom: 5}}>
-          Marketplace is coming soon
-        </RegularTextB>
-        <SmallText style={{marginBottom: 50, textAlign: 'center'}}>
-          Buy, sell, or swap your favorite sneakers and wears
-        </SmallText>
+        <LayoutAnimationComponent delay={300}>
+          <Image
+            resizeMode="contain"
+            style={{width: getPercentWidth(80), height: getPercentWidth(80)}}
+            source={require('../../../assets/images/illustrations/marketplace.png')}
+          />
+        </LayoutAnimationComponent>
+        <LayoutAnimationComponent delay={400}>
+          <RegularTextB style={{marginBottom: 5}}>
+            Marketplace is coming soon
+          </RegularTextB>
+        </LayoutAnimationComponent>
+        <LayoutAnimationComponent delay={500}>
+          <SmallText style={{marginBottom: 50, textAlign: 'center'}}>
+            Buy, sell, or swap your favorite sneakers and wears
+          </SmallText>
+        </LayoutAnimationComponent>
       </View>
     </Mainbackground>
   );

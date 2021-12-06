@@ -30,11 +30,19 @@ export const ShareButton = ({id}) => {
   );
 };
 
-export const BackButton = () => {
+export const BackButton = ({fallBack}) => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity onPress={() => navigation.goBack()} style={{}}>
+    <TouchableOpacity
+      onPress={() => {
+        if (navigation.canGoBack()) {
+          navigation.goBack();
+        } else {
+          fallBack && fallBack();
+        }
+      }}
+      style={{}}>
       <Back color={'white'} height={20} width={20} />
     </TouchableOpacity>
   );

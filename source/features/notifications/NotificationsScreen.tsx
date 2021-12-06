@@ -4,6 +4,7 @@ import Mainbackground from '../../components/Mainbackground';
 import PageHeader from '../../components/PageHeader';
 import {getPercentWidth} from '../../utilis/Functions';
 import {RegularTextB, SmallText, SmallTextB} from '../../components/Text';
+import LayoutAnimationComponent from '../../components/LayoutAnimationComponent';
 
 const EmptyNoti = () => {
   return (
@@ -14,21 +15,27 @@ const EmptyNoti = () => {
         alignItems: 'center',
         paddingBottom: 100,
       }}>
-      <Image
-        resizeMode="contain"
-        style={{
-          width: getPercentWidth(70),
-          height: getPercentWidth(70),
-          top: -5,
-        }}
-        source={require('../../assets/images/illustrations/emptynoti.png')}
-      />
-      <RegularTextB style={{marginBottom: 5}}>
-        No notifications at the moment.
-      </RegularTextB>
-      <SmallText style={{textAlign: 'center'}}>
-        Stay tuned for updates, amazing deals and exciting news!
-      </SmallText>
+      <LayoutAnimationComponent delay={300}>
+        <Image
+          resizeMode="contain"
+          style={{
+            width: getPercentWidth(70),
+            height: getPercentWidth(70),
+            top: -5,
+          }}
+          source={require('../../assets/images/illustrations/emptynoti.png')}
+        />
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={400}>
+        <RegularTextB style={{marginBottom: 5}}>
+          No notifications at the moment.
+        </RegularTextB>
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={500}>
+        <SmallText style={{textAlign: 'center'}}>
+          Stay tuned for updates, amazing deals and exciting news!
+        </SmallText>
+      </LayoutAnimationComponent>
     </View>
   );
 };

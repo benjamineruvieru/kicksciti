@@ -22,6 +22,7 @@ const queryClient = new QueryClient();
 const App = () => {
   const transY = useRef(new Animated.Value(0)).current;
   const goDown = ({num = 128}) => {
+    console.log('num val', num);
     Animated.timing(transY, {
       useNativeDriver: true,
       toValue: num,

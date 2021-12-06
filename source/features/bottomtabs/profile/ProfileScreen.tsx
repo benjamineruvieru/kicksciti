@@ -15,6 +15,7 @@ import ListItem from './components/ListItem';
 import {deleteItem, getItem} from '../../../utilis/storage';
 import CartSvg from '../../../assets/svg/icons/cart.svg';
 import HistorySvg from '../../../assets/svg/profile/history.svg';
+import EarnSvg from '../../../assets/svg/profile/earn.svg';
 
 const ProfileScreen = ({navigation}) => {
   const {name, username} = getItem('userdetails', true);
@@ -48,6 +49,11 @@ const ProfileScreen = ({navigation}) => {
         <RegularText>@{username}</RegularText>
       </View>
       <View style={{flex: 1, padding: 0}}>
+        <ListItem
+          title={'Earnings'}
+          screen={'AffilateEarnings'}
+          Svg={EarnSvg}
+        />
         <ListItem
           title={'Order History'}
           Svg={HistorySvg}

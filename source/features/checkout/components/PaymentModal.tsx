@@ -7,32 +7,41 @@ import Colors from '../../../constants/Colors';
 import {useNavigation} from '@react-navigation/native';
 import {BASEURL} from '../../../api/base';
 
-const PaymentModal = ({modalRef, link, order_id}) => {
+const PaymentModal = ({modalRef, link, order_id, callBack}) => {
   const navigation = useNavigation();
-
+  console.log('link', link);
   return (
     <Modalize
       modalStyle={{backgroundColor: Colors.bg}}
       ref={modalRef}
       modalHeight={getPercentHeight(80)}>
-      <WebView
-        nestedScrollEnabled
-        source={{uri: link}}
+      <View
         style={{
           height: getPercentHeight(80),
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-        }}
-        onLoadStart={navState => {
-          console.log('navState lo', navState.nativeEvent.url);
-          if (
-            navState.nativeEvent.url.startsWith(`${BASEURL}/payment-redirect`)
-          ) {
-            modalRef.current.close();
-            navigation.navigate('OrderDetails', {order_id});
-          }
-        }}
-      />
+          overflow: 'hidden',
+        }}>
+        <WebView
+          nestedScrollEnabled
+          source={{uri: link}}
+          style={{
+            height: getPercentHeight(80),
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+          }}
+          onLoadStart={navState => {
+            console.log('navState lo', navState.nativeEvent.url);
+            if (
+              navState.nativeEvent.url.startsWith(`${BASEURL}/payment-redirect`)
+            ) {
+              modalRef.current.close();
+              navigation.navigate('OrderDetails', {order_id});
+              callBack();
+            }
+          }}
+        />
+      </View>
     </Modalize>
   );
 };

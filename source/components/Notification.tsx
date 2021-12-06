@@ -23,7 +23,8 @@ const Notification: React.FC<NotificationProps> = ({goDown, goUp}) => {
   let timer: NodeJS.Timeout;
 
   const transY = useRef(new Animated.Value(0)).current;
-  const notheight = useRef<number>(128);
+
+  const notheight = useRef<number>(0);
   const openNotification = ({
     msg,
     error = false,
@@ -33,7 +34,7 @@ const Notification: React.FC<NotificationProps> = ({goDown, goUp}) => {
   }) => {
     Animated.timing(transY, {
       useNativeDriver: true,
-      toValue: (StatusBar?.currentHeight ?? 0) / 1.5 + notheight.current,
+      toValue: 0,
     }).start();
     setMsg(msg);
     setError(error);
@@ -43,7 +44,7 @@ const Notification: React.FC<NotificationProps> = ({goDown, goUp}) => {
     clearTimeout(timer);
     Animated.timing(transY, {
       useNativeDriver: true,
-      toValue: 0,
+      toValue: -notheight.current,
     }).start();
     goUp();
     setTimeout(() => {
@@ -57,7 +58,7 @@ const Notification: React.FC<NotificationProps> = ({goDown, goUp}) => {
       'openNotification',
       event => {
         console.log(event);
-        goDown({num: notheight.current});
+        goDown({num: notheight.current - 3});
         openNotification(event);
         setTimeout(() => {
           closeNotification();
@@ -73,17 +74,29 @@ const Notification: React.FC<NotificationProps> = ({goDown, goUp}) => {
       style={{
         transform: [{translateY: transY}],
         position: 'absolute',
-        top: -130,
         zIndex: 10,
         width: SCREEN_WIDTH,
+        opacity: msg === '' ? 0 : 1,
       }}
       onLayout={e => {
-        notheight.current = e.nativeEvent.layout.height;
+        if (notheight.current === 0) {
+          Animated.timing(transY, {
+            toValue: -e.nativeEvent.layout.height + 2,
+            duration: 1,
+            useNativeDriver: true,
+          }).start();
+        }
+        notheight.current = e.nativeEvent.layout.height + 2;
+
+        console.log(e.nativeEvent.layout.height);
       }}>
       <TouchableOpacity
         style={{
           backgroundColor: error ? Colors.red : Colors.green,
-          paddingTop: insets.top + 25,
+          paddingTop:
+            Platform.OS === 'ios'
+              ? insets.top + 25
+              : StatusBar.currentHeight + 25,
           paddingHorizontal: 20,
           paddingBottom: 25,
           flexDirection: 'row',

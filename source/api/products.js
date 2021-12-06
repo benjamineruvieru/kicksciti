@@ -24,7 +24,13 @@ export const getCart = async () => {
   return res;
 };
 
-export const makePayment = async ({state, lga, address, phone}) => {
+export const makePayment = async ({
+  state,
+  lga,
+  address,
+  phone,
+  paymentOnDelivery = false,
+}) => {
   const axiosInstance = axiosBase();
 
   const res = axiosInstance.post(`${BASEURL}/make-payment`, {
@@ -33,6 +39,22 @@ export const makePayment = async ({state, lga, address, phone}) => {
     address,
     phone,
     BASEURL,
+    paymentOnDelivery,
+  });
+  return res;
+};
+
+export const getProduct = async ({product_id}) => {
+  const res = axios.get(`${BASEURL}/get-product?product_id=${product_id}`);
+  return res;
+};
+
+export const addReferredby = async ({product_id, username}) => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.post(`${BASEURL}/add-referredby`, {
+    product_id,
+    username,
   });
   return res;
 };

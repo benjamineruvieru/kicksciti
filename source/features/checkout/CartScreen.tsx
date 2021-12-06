@@ -27,6 +27,7 @@ import {getCart, makePayment} from '../../api/products';
 import PaymentModal from './components/PaymentModal';
 import useRecentAddresses from '../../hooks/useRecentAddresses';
 import RecentAddress from './components/RecentAddress';
+import HighlightSelector from './components/HighlightSelector';
 
 const Amount = ({deliveryfee = 0, cart}) => {
   let totalPrice = 0;
@@ -157,7 +158,36 @@ const Delivery = ({
     </View>
   );
 };
-const CartScreen = () => {
+
+const PaymentType = ({paymentOnDelivery, setpaymentOnDelivery}) => {
+  return (
+    <View style={{flex: 1}}>
+      <LayoutAnimationComponent rightInOut delay={350}>
+        <HighlightSelector
+          setSelected={() => {
+            setpaymentOnDelivery(true);
+          }}
+          selected={paymentOnDelivery}
+          title={'Pay on Delivery'}
+          sub={'Shop now and pay when your order arrives at your doorstep.'}
+        />
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent rightInOut delay={550}>
+        <HighlightSelector
+          setSelected={() => {
+            setpaymentOnDelivery(false);
+          }}
+          selected={paymentOnDelivery === false}
+          title={'Pay on Now'}
+          sub={
+            "Pay for your order now. It's quick, easy, and ensures swift delivery of your favorite items"
+          }
+        />
+      </LayoutAnimationComponent>
+    </View>
+  );
+};
+const CartScreen = ({navigation}) => {
   const {recentAddress, addAddress} = useRecentAddresses();
   const [cart, setCart] = useMMKVObject('cart');
   useEffect(() => {
@@ -176,72 +206,100 @@ const CartScreen = () => {
   const [load, setLoad] = useState(false);
   const [link, setLink] = useState();
   const [order_id, setorder_id] = useState();
+  const [paymentOnDelivery, setpaymentOnDelivery] = useState();
+
   const modalRef = useRef();
   const openModal = () => {
     modalRef.current.open();
+  };
+
+  const initPayment = () => {
+    if (!address) {
+      showNotification({
+        error: true,
+        msg: 'Please enter the products delivery address',
+      });
+      return;
+    }
+    if (!phone) {
+      showNotification({
+        error: true,
+        msg: 'Please enter contact phone number',
+      });
+      return;
+    }
+    if (!state) {
+      showNotification({
+        error: true,
+        msg: 'Please select the delivery state',
+      });
+      return;
+    }
+    if (!lga) {
+      showNotification({
+        error: true,
+        msg: 'Please select the delivery local government',
+      });
+      return;
+    }
+    setLoad(true);
+    Keyboard.dismiss();
+    makePayment({address, lga, phone, state, paymentOnDelivery})
+      .then(data => {
+        const {link, order} = data.data ?? {};
+        console.log('order link', link);
+        if (paymentOnDelivery) {
+          navigation.navigate('OrderDetails', {order_id: order?.order_id});
+        } else {
+          setorder_id(order?.order_id);
+          setLink(link);
+          openModal();
+        }
+        setCart([]);
+        setPos(0);
+        addAddress({address, lga, phone, state});
+      })
+      .catch(err => {
+        console.log('err', err?.response?.data);
+        showNotification({error: true, msg: err?.response?.data?.error});
+      })
+      .finally(() => {
+        setLoad(false);
+      });
   };
 
   const next = () => {
     if (pos === 0) {
       setPos(1);
     } else if (pos === 1) {
-      if (!address) {
-        showNotification({
-          error: true,
-          msg: 'Please enter the products delivery address',
-        });
-        return;
+      if (state === 'Lagos') {
+        setPos(2);
+      } else {
+        initPayment();
       }
-      if (!phone) {
-        showNotification({
-          error: true,
-          msg: 'Please enter contact phone number',
-        });
-        return;
+    } else if (pos === 2) {
+      if (paymentOnDelivery === true || paymentOnDelivery === false) {
+        initPayment();
+      } else {
+        showNotification({msg: 'Please select a payment method', error: true});
       }
-      if (!state) {
-        showNotification({
-          error: true,
-          msg: 'Please select the delivery state',
-        });
-        return;
-      }
-      if (!state) {
-        showNotification({
-          error: true,
-          msg: 'Please select the delivery local government',
-        });
-        return;
-      }
-      setLoad(true);
-      Keyboard.dismiss();
-      makePayment({address, lga, phone, state})
-        .then(data => {
-          const {link, order} = data.data ?? {};
-          console.log('order', order.products);
-          setorder_id(order?.order_id);
-          setLink(link);
-          openModal();
-          setCart([]);
-          setPos(0);
-          addAddress({address, lga, phone, state});
-        })
-        .catch(err => {
-          console.log('err', err?.response?.data);
-          showNotification({error: true, msg: err?.response?.data?.error});
-        })
-        .finally(() => {
-          setLoad(false);
-        });
     }
   };
   return (
     <>
       <Mainbackground avoid keyboard padding={20}>
         <PageHeader
-          title={pos === 0 ? 'Cart' : pos === 1 ? 'Delivery Details' : ''}
+          title={
+            pos === 0
+              ? 'Cart'
+              : pos === 1
+              ? 'Delivery Details'
+              : pos === 2
+              ? 'Payment Method'
+              : ''
+          }
         />
-        {cart && cart.length > 0 ? (
+        {cart && cart?.length > 0 ? (
           <>
             {pos === 0 && <CartItems />}
             {pos === 1 && (
@@ -258,6 +316,9 @@ const CartScreen = () => {
                   recentAddress,
                 }}
               />
+            )}
+            {pos === 2 && (
+              <PaymentType {...{paymentOnDelivery, setpaymentOnDelivery}} />
             )}
             <Amount {...{cart, deliveryfee}} />
             <LayoutAnimationComponent delay={300}>

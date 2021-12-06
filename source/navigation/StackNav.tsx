@@ -6,10 +6,12 @@ import CartScreen from '../features/checkout/CartScreen';
 import NotificationsScreen from '../features/notifications/NotificationsScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AniStackNav from './AniStack';
-import {getItem} from '../utilis/storage';
+import {getItem, setItem} from '../utilis/storage';
 import OrderDetails from '../features/checkout/OrderDetails';
 import OrderHistory from '../features/bottomtabs/profile/OrderHistory';
 import {Linking} from 'react-native';
+import LoadProduct from '../features/productdetails/LoadProduct';
+import AffilateEarnings from '../features/bottomtabs/profile/AffilateEarnings';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,12 +31,22 @@ const StackNav = () => {
     };
   }, []);
 
-  function extractUsernameFromUrl(url) {
-    const regex = /\/channel\/([^/]+)/;
-    const match = url.match(regex);
-    if (match && match[1]) {
-      return match[1];
+  function parseLink(link) {
+    const pattern = /\/product\/(\d+)(?:\?id=([a-zA-Z0-9]+))?$/;
+    const match = link.match(pattern);
+    if (match) {
+      const [, productId, username] = match;
+
+      // Create an object with the extracted information
+      const result = {product_id: productId};
+
+      if (username) {
+        result.username = username;
+      }
+
+      return result;
     }
+
     return null;
   }
 
@@ -42,10 +54,13 @@ const StackNav = () => {
     const {url} = prop ?? {};
     if (url) {
       console.log('initialUrl', url);
-
-      // if (username) {
-      //   navigation.navigate('LoadChannel', {username});
-      // }
+      const result = parseLink(url);
+      console.log('result1', result);
+      if (getItem('token') && result?.product_id) {
+        navigation.navigate('LoadProduct', result);
+      } else {
+        setItem('affilateRefer', result, true);
+      }
     }
   };
   return (
@@ -71,6 +86,8 @@ const StackNav = () => {
         name="NotificationsScreen"
         component={NotificationsScreen}
       />
+      <Stack.Screen name="LoadProduct" component={LoadProduct} />
+      <Stack.Screen name="AffilateEarnings" component={AffilateEarnings} />
     </Stack.Navigator>
   );
 };
