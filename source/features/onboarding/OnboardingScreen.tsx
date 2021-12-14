@@ -1,5 +1,13 @@
-import {Image, Keyboard, StatusBar, StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  BackHandler,
+  Image,
+  Keyboard,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Mainbackground from '../../components/Mainbackground';
 import {BigText, BigTextB, RegularText, SmallText} from '../../components/Text';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../constants/Variables';
@@ -39,21 +47,21 @@ const Welcome = ({setPos, navigation}) => {
             top={20}
             onPress={() => {
               setPos(1);
-              // navigation.navigate('CollectEmailScreen');
             }}
           />
         </LayoutAnimationComponent>
 
         <LayoutAnimationComponent delay={200}>
-          <SmallText
-            onTextPress={() => {
+          <TouchableOpacity
+            style={{}}
+            onPress={() => {
               navigation.reset({
                 index: 0,
                 routes: [{name: 'AniStackNav'}],
               });
             }}>
-            View as guest
-          </SmallText>
+            <SmallText>View as guest</SmallText>
+          </TouchableOpacity>
         </LayoutAnimationComponent>
       </View>
     </>
@@ -73,14 +81,6 @@ const CollectEmail = ({setPos, email, setEmail, setToken}) => {
           if (data.status === 204) {
             //Email not found, create account
             setPos(2);
-          } else if (data.status === 202) {
-            //Email not verified
-            setToken(data?.data?.token);
-            setPos(4);
-            showNotification({
-              msg: 'Please verify your email address',
-              error: true,
-            });
           } else if (data.status === 200) {
             // EMail found, collect password
             setPos(5);
@@ -205,7 +205,14 @@ const CreatePassword = ({
   );
 };
 
-const CollectPassword = ({password, setPassword, email, navigation}) => {
+const CollectPassword = ({
+  password,
+  setPassword,
+  email,
+  navigation,
+  setPos,
+  setToken,
+}) => {
   const [load, setLoad] = useState(false);
   const [cart, setCart] = useMMKVObject('cart');
   const [favourites, setFavourites] = useMMKVObject('favourites');
@@ -216,19 +223,29 @@ const CollectPassword = ({password, setPassword, email, navigation}) => {
       setLoad(true);
       login({identifier: email, password})
         .then(data => {
-          console.log(data.data);
-          showNotification({msg: 'Login successful'});
-          setItem('token', data.data?.token);
-          setItem('userdetails', data.data?.user, true);
-          setCart(data.data?.user?.cart);
-          setFavourites(data.data?.user?.favourites);
-          if (getItem('affilateRefer')) {
-            navigation.navigate('LoadProduct', getItem('affilateRefer', true));
+          console.log('coll pass', data.data);
+          console.log('coll pass', data.status);
+          if (data.status === 202) {
+            // Email not verified
+            setToken(data?.data?.token);
+            setPos(4);
           } else {
-            navigation.reset({
-              index: 0,
-              routes: [{name: 'AniStackNav'}],
-            });
+            // showNotification({msg: 'Login successful'});
+            setItem('token', data.data?.token);
+            setItem('userdetails', data.data?.user, true);
+            setCart(data.data?.user?.cart);
+            setFavourites(data.data?.user?.favourites);
+            if (getItem('affilateRefer')) {
+              navigation.navigate(
+                'LoadProduct',
+                getItem('affilateRefer', true),
+              );
+            } else {
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'AniStackNav'}],
+              });
+            }
           }
         })
         .catch(err => {
@@ -325,7 +342,7 @@ const CompleteProfile = ({
       .then(data => {
         console.log(data.data);
         setItem('token', data.data?.token);
-        setItem('userdetails', data.data?.user);
+        setItem('userdetails', data.data?.user, true);
         setCart(data.data?.user?.cart);
         setFavourites(data.data?.user?.favourites);
         if (getItem('affilateRefer')) {
@@ -338,6 +355,7 @@ const CompleteProfile = ({
         }
       })
       .catch(err => {
+        console.log('err', err);
         console.log('err', err?.response?.data);
         showNotification({error: true, msg: err?.response?.data?.error});
       })
@@ -370,6 +388,36 @@ const OnboardingScreen = ({navigation}) => {
   const [name, setName] = useState();
   const [username, setUsername] = useState();
   const [token, setToken] = useState();
+
+  useEffect(() => {
+    const backAction = () => {
+      if (pos > 0) {
+        if (pos === 1) {
+          setPos(0);
+        }
+        if (pos === 2) {
+          setPos(1);
+        }
+        if (pos === 4) {
+          setPos(2);
+        }
+        if (pos === 3) {
+          setPos(2);
+        }
+        if (pos === 5) {
+          setPos(1);
+        }
+        return true;
+      }
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [pos]);
 
   return (
     <Mainbackground top={-1} avoid keyboard>
@@ -412,7 +460,7 @@ const OnboardingScreen = ({navigation}) => {
         {pos === 4 && <VerifyEmail {...{setPos, token}} />}
         {pos === 5 && (
           <CollectPassword
-            {...{email, setPos, setPassword, password, navigation}}
+            {...{email, setPos, setPassword, password, navigation, setToken}}
           />
         )}
       </View>

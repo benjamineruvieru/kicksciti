@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Mainbackground from '../../components/Mainbackground';
 import {SCREEN_WIDTH} from '../../constants/Variables';
@@ -25,6 +25,7 @@ import Description from './components/Description';
 import {formatNumberWithCommas, showNotification} from '../../utilis/Functions';
 import useCart from '../../hooks/useCart';
 import {useNavigation} from '@react-navigation/native';
+import {viewProduct} from '../../api/products';
 
 const FullImages = ({pictures, flatListRef, scrollX, setActiveIndex}) => {
   const onViewRef = React.useRef(({viewableItems}: any) => {
@@ -94,8 +95,17 @@ const Header = ({item, _id, id}) => {
   );
 };
 const ProductScreen = ({route, navigation}) => {
-  const {pictures, name, _id, id, sizes, description, price, discount} =
-    route.params ?? {};
+  const {
+    pictures,
+    name,
+    _id,
+    id,
+    sizes,
+    description,
+    price,
+    discount,
+    affiliate_commission,
+  } = route.params ?? {};
   const [activeIndex, setActiveIndex] = useState(0);
   let flatListRef = useRef(null);
   const scrollX = React.useRef(new Animated.Value(0)).current;
@@ -136,6 +146,13 @@ const ProductScreen = ({route, navigation}) => {
       addToCart({quantity, size});
     }
   };
+
+  useEffect(() => {
+    console.log('=========== VIEWING PRODUCT ============');
+    viewProduct({product_id: _id}).then(d => {
+      console.log(d.data);
+    });
+  }, []);
   return (
     <Mainbackground top={-1} avoid androidAvoid={'height'}>
       <ScrollView
@@ -170,12 +187,16 @@ const ProductScreen = ({route, navigation}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: 30,
+              marginBottom: 20,
             }}>
             <SharedElement id={`name${_id}`}>
               <MediumText>{name}</MediumText>
             </SharedElement>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
               {!!discount && discount > 0 && (
                 <SmallText
                   style={{
@@ -208,7 +229,7 @@ const ProductScreen = ({route, navigation}) => {
               removeFromCart,
             }}
           />
-          <AffilateLink id={id} />
+          <AffilateLink id={id} affiliate_commission={affiliate_commission} />
         </View>
       </ScrollView>
       <SharedElement id={`cartbutton${_id}`}>

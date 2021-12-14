@@ -2,7 +2,6 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Shimmer from '../../../../components/Shimmer';
 import {PRODUCTIMGWIDTH} from './Products';
-import {getPercentWidth} from '../../../../utilis/Functions';
 
 const Product = () => {
   return (

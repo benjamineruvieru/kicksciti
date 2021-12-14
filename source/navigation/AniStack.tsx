@@ -2,6 +2,8 @@ import React from 'react';
 import BottomNav from './BottomNav';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import ProductScreen from '../features/productdetails/ProductScreen';
+import NotificationsScreen from '../features/notifications/NotificationsScreen';
+import CartScreen from '../features/checkout/CartScreen';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -43,6 +45,11 @@ const AniStackNav = () => {
           ];
         }}
       />
+      <Stack.Screen
+        name="NotificationsScreen"
+        component={NotificationsScreen}
+      />
+      <Stack.Screen name="CartScreen" component={CartScreen} />
     </Stack.Navigator>
   );
 };

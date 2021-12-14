@@ -3,7 +3,7 @@ import React from 'react';
 import SearchSvg from '../assets/svg/icons/search.svg';
 import FilterSvg from '../assets/svg/icons/filter.svg';
 
-const Search = () => {
+const Search = ({search, setSearch}) => {
   return (
     <View
       style={{
@@ -12,9 +12,12 @@ const Search = () => {
         paddingHorizontal: 10,
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 15,
       }}>
       <SearchSvg width={23} height={23} />
       <TextInput
+        value={search}
+        onChangeText={setSearch}
         placeholder="Search"
         placeholderTextColor="black"
         style={{
@@ -26,9 +29,9 @@ const Search = () => {
           paddingHorizontal: 0,
         }}
       />
-      <TouchableOpacity>
+      {/* <TouchableOpacity>
         <FilterSvg width={23} height={23} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

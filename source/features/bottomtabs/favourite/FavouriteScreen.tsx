@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Mainbackground from '../../../components/Mainbackground';
 import {MediumText, RegularTextB, SmallText} from '../../../components/Text';
 import {CartButton, NotificationButton} from '../../../components/IconButton';
@@ -8,6 +8,49 @@ import Products from '../shop/components/Products';
 import {useMMKVObject} from 'react-native-mmkv';
 import {getPercentWidth} from '../../../utilis/Functions';
 import LayoutAnimationComponent from '../../../components/LayoutAnimationComponent';
+
+function searchFave(products, searchString) {
+  const searchWords = searchString.toLowerCase().split(' ');
+
+  let results = [];
+  let maxScore = 0;
+
+  for (const product of products) {
+    // Calculate a relevance score based on name, keywords, and category
+    let score = 0;
+
+    // Check for partial matches in the name
+    if (searchWords.some(word => product.name.toLowerCase().includes(word))) {
+      score += 3;
+    }
+
+    // Check for partial matches in keywords
+    for (const keyword of product.keywords) {
+      if (searchWords.some(word => keyword.toLowerCase().includes(word))) {
+        score += 1;
+      }
+    }
+
+    // Check for partial matches in the category
+    if (
+      searchWords.some(word => product.category.toLowerCase().includes(word))
+    ) {
+      score += 2;
+    }
+
+    // Update results if a better match is found
+    if (score > 0) {
+      if (score > maxScore) {
+        results = [product];
+        maxScore = score;
+      } else if (score === maxScore) {
+        results.push(product);
+      }
+    }
+  }
+
+  return results;
+}
 
 const EmptyFave = () => {
   return (
@@ -46,7 +89,7 @@ const EmptyFave = () => {
 
 const FavouriteScreen = () => {
   const [favourites, setFavourites] = useMMKVObject('favourites');
-
+  const [search, setSearch] = useState();
   return (
     <Mainbackground padding={20} paddingBottom={0} insetsBottom={-1}>
       <View
@@ -62,12 +105,15 @@ const FavouriteScreen = () => {
           <NotificationButton />
         </View>
       </View>
-      <Search />
-      <View style={{height: 20}} />
+      <Search {...{search, setSearch}} />
       {!favourites || favourites?.length === 0 ? (
         <EmptyFave />
       ) : (
-        <Products results={favourites} />
+        <Products
+          results={
+            search ? searchFave(favourites, search) : favourites.reverse()
+          }
+        />
       )}
     </Mainbackground>
   );

@@ -8,14 +8,20 @@ import Bell from '../assets/svg/icons/bell.svg';
 import LoveOutline from '../assets/svg/icons/love-outline.svg';
 import Love from '../assets/svg/icons/love.svg';
 import Colors from '../constants/Colors';
-import {useMMKVObject} from 'react-native-mmkv';
+import {useMMKVObject, useMMKVString} from 'react-native-mmkv';
 import {SmallText, SmallTextB} from './Text';
 import ShareSvg from '../assets/svg/icons/share.svg';
 import {getItem} from '../utilis/storage';
+import {updateFaveProduct} from '../api/products';
+import {restrictViewer} from '../utilis/Functions';
 
 export const ShareButton = ({id}) => {
+  const isLoggedIn = !!getItem('token');
+
   const {username} = getItem('userdetails', true);
-  const link = `https://www.kicksciti.com/product/${id}?id=${username}`;
+  const link = isLoggedIn
+    ? `https://www.kicksciti.com/product/${id}?id=${username}`
+    : `https://www.kicksciti.com/product/${id}`;
 
   return (
     <TouchableOpacity
@@ -50,23 +56,43 @@ export const BackButton = ({fallBack}) => {
 
 export const NotificationButton = () => {
   const navigation = useNavigation();
-
+  const [unreadNotification, setunreadNotification] =
+    useMMKVString('unreadNotification');
+  console.log('unreadNotification', unreadNotification);
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('NotificationsScreen');
+        restrictViewer({
+          navigation,
+          alt: () => {
+            navigation.navigate('NotificationsScreen');
+            setunreadNotification('false');
+          },
+        });
       }}
       style={{marginLeft: 18}}>
       <Bell height={26} width={26} />
+      <View
+        style={{
+          backgroundColor:
+            unreadNotification === 'true' ? 'red' : 'transparent',
+          width: 10,
+          height: 10,
+          borderRadius: 360,
+          position: 'absolute',
+          right: 2,
+          top: 0,
+        }}
+      />
     </TouchableOpacity>
   );
 };
 
 export const FavButton = ({color = Colors.primary, item, size = 23}) => {
+  const navigation = useNavigation();
   const [favourites, setFavourites] = useMMKVObject('favourites');
   const index = favourites?.findIndex(fav => fav?._id === item._id) ?? -1;
   const isFav = index !== -1;
-  console.log('favourites', favourites);
 
   function toggleFavorite() {
     // Check if the item exists in the favorites array
@@ -76,12 +102,25 @@ export const FavButton = ({color = Colors.primary, item, size = 23}) => {
       favourites?.splice(index, 1);
       console.log(`Removed ${item._id} from favorites`, favourites);
       setFavourites([...favourites]);
+      updateFaveProduct({isIncrease: false, product_id: item._id}).then(d => {
+        console.log('updated fav', d.data);
+      });
     } else {
-      const fav = [...(favourites ?? []), item];
+      restrictViewer({
+        navigation,
+        alt: () => {
+          const fav = [...(favourites ?? []), item];
 
-      console.log(`Added ${item._id} to favorites`);
-      console.log('favourites', fav);
-      setFavourites(fav);
+          console.log(`Added ${item._id} to favorites`);
+          console.log('favourites', fav);
+          setFavourites(fav);
+          updateFaveProduct({isIncrease: true, product_id: item._id}).then(
+            d => {
+              console.log('updated fav', d.data);
+            },
+          );
+        },
+      });
     }
   }
   return (
@@ -102,7 +141,12 @@ export const CartButton = () => {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('CartScreen');
+        restrictViewer({
+          navigation,
+          alt: () => {
+            navigation.navigate('CartScreen');
+          },
+        });
       }}
       style={{}}>
       <Cart height={26} width={26} />

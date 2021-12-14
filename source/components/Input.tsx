@@ -161,7 +161,7 @@ export const ModalSelector = ({
 // };
 
 export const OtpInput = ({setOtp, otp, num = 6}) => {
-  const ref = useBlurOnFulfill({value: otp, cellCount: 4});
+  const ref = useBlurOnFulfill({value: otp, cellCount: 6});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value: otp,
     setValue: setOtp,
@@ -183,7 +183,6 @@ export const OtpInput = ({setOtp, otp, num = 6}) => {
         rootStyle={{marginBottom: 50, justifyContent: 'space-between'}}
         keyboardType="number-pad"
         textContentType="oneTimeCode"
-        autoFocus
         renderCell={({index, symbol, isFocused}) => (
           <LayoutAnimationComponent
             key={index}
@@ -357,6 +356,8 @@ const Input: FC<InputProps> = ({
   onSubmitEditing,
   text,
   setText,
+  maxLength,
+  editable,
 }) => {
   const [hide, setHide] = useState(password);
   return (
@@ -374,6 +375,8 @@ const Input: FC<InputProps> = ({
           ...style,
         }}>
         <TextInput
+          editable={editable}
+          maxLength={maxLength}
           value={text}
           cursorColor={Colors.primary}
           selectionColor={Colors.primary}
