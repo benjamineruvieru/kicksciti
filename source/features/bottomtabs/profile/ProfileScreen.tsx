@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Linking, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Mainbackground from '../../../components/Mainbackground';
 import {MediumText, RegularText} from '../../../components/Text';
@@ -17,6 +17,10 @@ import CartSvg from '../../../assets/svg/icons/cart.svg';
 import HistorySvg from '../../../assets/svg/profile/history.svg';
 import EarnSvg from '../../../assets/svg/profile/earn.svg';
 import messaging from '@react-native-firebase/messaging';
+import PrivateSvg from '../../../assets/svg/profile/private.svg';
+import DeleteSvg from '../../../assets/svg/profile/delete.svg';
+import {logout} from '../../../api/auth';
+import {queryClient} from '../../../../App';
 
 const ProfileScreen = ({navigation}) => {
   restrictViewer({navigation});
@@ -24,21 +28,21 @@ const ProfileScreen = ({navigation}) => {
 
   const insets = useSafeAreaInsets();
 
-  const logout = async () => {
-    try {
+  const logoutFun = async () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'OnboardingScreen'}],
+    });
+    deleteItem('userdetails');
+    deleteItem('cart');
+    deleteItem('favourites');
+    deleteItem('unreadNotification');
+    queryClient.clear();
+    await logout().finally(async () => {
       deleteItem('token');
-      deleteItem('userdetails');
-      deleteItem('cart');
-      deleteItem('favourites');
+
       await messaging().unsubscribeFromTopic('newproduct');
-    } catch (err) {
-      console.log('Logout err', err);
-    } finally {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'OnboardingScreen'}],
-      });
-    }
+    });
   };
   return (
     <Mainbackground padding={0} insetsBottom={-1} top={-1}>
@@ -68,12 +72,27 @@ const ProfileScreen = ({navigation}) => {
           screen={'OrderHistory'}
         />
         <ListItem title={'Cart'} screen={'CartScreen'} Svg={CartSvg} />
+        <ListItem
+          title={'Privacy Policy'}
+          onPress={() => {
+            Linking.openURL('https://www.kicksciti.com/privacy-policy');
+          }}
+          Svg={PrivateSvg}
+          size={20}
+        />
+
+        <ListItem
+          title={'Delete Account'}
+          screen={'DeleteAccount'}
+          Svg={DeleteSvg}
+          size={18}
+        />
       </View>
       <Button
         backgroundColor="red"
         title="Log out"
         bottom={20}
-        onPress={logout}
+        onPress={logoutFun}
       />
     </Mainbackground>
   );

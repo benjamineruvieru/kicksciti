@@ -43,10 +43,11 @@ export function formatTimestamp(timestamp) {
   ];
 
   const formattedDate = `${get12HourTime(dateObj)} ${getAMPM(dateObj)}, ${
-    daysOfWeek[dateObj.getUTCDay()]
-  } ${dateObj.getUTCDate()} ${
-    months[dateObj.getUTCMonth()]
-  } ${dateObj.getUTCFullYear()}`;
+    daysOfWeek[dateObj.getDay()] // Use getDay() instead of getUTCDay()
+  } ${dateObj.getDate()} ${
+    // Use getDate() instead of getUTCDate()
+    months[dateObj.getMonth()] // Use getMonth() instead of getUTCMonth()
+  } ${dateObj.getFullYear()}`;
 
   return formattedDate;
 }

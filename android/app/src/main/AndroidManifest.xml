@@ -29,6 +29,8 @@
               android:host="www.kicksciti.com"
               android:pathPrefix="/product" />
               <data android:pathPrefix="/search"/>
+              <data android:pathPrefix="/delete-account"/>
+              <data android:pathPrefix="/order"/>
     </intent-filter>
              <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
@@ -39,7 +41,8 @@
               android:host="kicksciti.com"
               android:pathPrefix="/product" />
                 <data android:pathPrefix="/search"/>
-           
+           <data android:pathPrefix="/delete-account"/>
+              <data android:pathPrefix="/order"/>
     </intent-filter>
   
       </activity>

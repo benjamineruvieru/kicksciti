@@ -9,7 +9,7 @@ export const BASEURL = 'https://api.kicksciti.com/v1';
 //     : 'https://dul9z0axu0.execute-api.us-east-1.amazonaws.com/v1';
 export const axiosBase = () => {
   const token = getItem('token');
-  console.log('token', token);
+  // console.log('token', token);
   if (!token) {
     setTimeout(axiosBase, 2000);
     return;

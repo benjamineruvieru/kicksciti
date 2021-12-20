@@ -9,7 +9,6 @@ import {BASEURL} from '../../../api/base';
 
 const PaymentModal = ({modalRef, link, order_id, callBack}) => {
   const navigation = useNavigation();
-  console.log('link', link);
   return (
     <Modalize
       modalStyle={{backgroundColor: Colors.bg}}

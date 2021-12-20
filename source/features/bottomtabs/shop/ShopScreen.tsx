@@ -49,7 +49,15 @@ const ShopScreen = ({route}) => {
     {text: `Nnooo, ${name} 👋`, deleteCount: 5},
     {text: `Sannu, ${name} 👋`},
   ];
-  const {data, isLoading, refetch, isError, error} = useInfiniteApi({
+  const {
+    data,
+    isLoading,
+    refetch,
+    isError,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteApi({
     queryFunction: getProducts,
     queryKey: ['getProducts', category, query],
   });
@@ -84,7 +92,11 @@ const ShopScreen = ({route}) => {
       {isError ? null : isLoading ? (
         <ProductsLoading />
       ) : (
-        <Products results={results} refresh={refetch} />
+        <Products
+          results={results}
+          refresh={refetch}
+          {...{fetchNextPage, isFetchingNextPage, hasNextPage}}
+        />
       )}
     </Mainbackground>
   );

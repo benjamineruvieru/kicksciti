@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   DeviceEventEmitter,
   StyleSheet,
   Text,
@@ -36,7 +37,7 @@ const EmptyComp = () => {
         alignItems: 'center',
         height: getPercentHeight(60),
       }}>
-      <LayoutAnimationComponent delay={300}>
+      <LayoutAnimationComponent delay={300} exit={null}>
         <LottieView
           autoPlay
           loop
@@ -47,12 +48,12 @@ const EmptyComp = () => {
           }}
         />
       </LayoutAnimationComponent>
-      <LayoutAnimationComponent delay={400}>
+      <LayoutAnimationComponent exit={null} delay={400}>
         <RegularTextB style={{marginBottom: 5}}>
           It seems your search didn't return any matches.
         </RegularTextB>
       </LayoutAnimationComponent>
-      <LayoutAnimationComponent delay={500}>
+      <LayoutAnimationComponent exit={null} delay={500}>
         <SmallText style={{textAlign: 'center'}}>
           Try broadening your search or changing your search terms to find the
           perfect fit
@@ -167,7 +168,13 @@ const ProductItem = ({item, index}) => {
     </Wrapper>
   );
 };
-const Products = ({results, refresh}) => {
+const Products = ({
+  results,
+  refresh,
+  fetchNextPage,
+  isFetchingNextPage,
+  hasNextPage,
+}) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     if (refresh) {
@@ -187,6 +194,19 @@ const Products = ({results, refresh}) => {
         renderItem={ProductItem}
         estimatedItemSize={257}
         ListEmptyComponent={EmptyComp}
+        ListFooterComponent={() =>
+          isFetchingNextPage && (
+            <View style={{paddingVertical: 15}}>
+              <ActivityIndicator color={Colors.primary} />
+            </View>
+          )
+        }
+        onEndReached={() => {
+          console.log('end oo');
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
       />
     </View>
   );

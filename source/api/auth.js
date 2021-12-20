@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {BASEURL} from './base';
+import {BASEURL, axiosBase} from './base';
 
 export const findEmail = ({email}) => {
   const res = axios.post(`${BASEURL}/find-email`, {email});
@@ -7,6 +7,12 @@ export const findEmail = ({email}) => {
 };
 
 export const createUser = ({email, password, username, name, token}) => {
+  console.log({
+    email,
+    password,
+    username,
+    name,
+  });
   const res = axios.post(
     `${BASEURL}/create-user`,
     {
@@ -26,6 +32,20 @@ export const login = ({identifier, password}) => {
   return res;
 };
 
+export const logout = () => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.post(`${BASEURL}/logout`);
+  return res;
+};
+
+export const deleteAccount = () => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.delete(`${BASEURL}/delete-account`);
+  return res;
+};
+
 export const verifyEmail = ({otp, token}) => {
   console.log('to', token);
   const res = axios.post(
@@ -37,5 +57,14 @@ export const verifyEmail = ({otp, token}) => {
       headers: {Authorization: `Bearer ${token}`},
     },
   );
+  return res;
+};
+
+export const resetPassword = ({otp, password, email}) => {
+  const res = axios.post(`${BASEURL}/reset-password`, {
+    otp,
+    password,
+    email,
+  });
   return res;
 };

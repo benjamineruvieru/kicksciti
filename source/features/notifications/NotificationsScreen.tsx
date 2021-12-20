@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Mainbackground from '../../components/Mainbackground';
 import PageHeader from '../../components/PageHeader';
 import {getPercentWidth, insertDateItems} from '../../utilis/Functions';
@@ -25,6 +25,7 @@ import Colors from '../../constants/Colors';
 import {useNavigation} from '@react-navigation/native';
 import {SharedElement} from 'react-navigation-shared-element';
 import useRefetchOnRemount from '../../hooks/useRefetchOnRemount';
+import {setItem} from '../../utilis/storage';
 
 const EmptyNoti = () => {
   return (
@@ -149,6 +150,9 @@ const NotificationsScreen = () => {
 
   const notifications = insertDateItems(results.reverse());
   useRefetchOnRemount(refetch);
+  useEffect(() => {
+    setItem('unreadNotification', 'false');
+  }, []);
   return (
     <Mainbackground padding={20}>
       <PageHeader title={'Notifications'} />
