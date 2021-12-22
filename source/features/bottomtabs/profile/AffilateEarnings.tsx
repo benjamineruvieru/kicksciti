@@ -17,6 +17,7 @@ import {
   formatNumberWithCommas,
   getPercentHeight,
   getPercentWidth,
+  showNotification,
 } from '../../../utilis/Functions';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
@@ -27,11 +28,12 @@ import {
 } from '../../../components/Text';
 import LayoutAnimationComponent from '../../../components/LayoutAnimationComponent';
 import {useApi} from '../../../hooks/useApi';
-import {getEarnings} from '../../../api/user';
+import {getBanks, getEarnings} from '../../../api/user';
 import {FlashList} from '@shopify/flash-list';
 import EarnSvg from '../../../assets/svg/profile/earn.svg';
 import WithdrawModal from './components/WithdrawModal';
-import {SCREEN_HEIGHT} from '../../../constants/Variables';
+import PinModal from './components/PinModal';
+import {formatTimestamp} from './OrderHistory';
 
 const EmptyEarnings = () => {
   return (
@@ -91,7 +93,7 @@ const Balance = ({
         shadowRadius: 2,
         zIndex: 1,
       }}>
-      <RegularText>Current balance</RegularText>
+      <RegularText>Available balance</RegularText>
       <View
         style={{
           alignItems: 'center',
@@ -102,14 +104,14 @@ const Balance = ({
         }}>
         <MediumText style={{fontSize: 40}}>
           <RegularTextB>₦</RegularTextB>{' '}
-          {rewardBalance > 0
-            ? formatNumberWithCommas(parseFloat(rewardBalance).toFixed(2))
-            : '0.00'}
+          {formatNumberWithCommas(parseFloat(rewardBalance).toFixed(2))}
         </MediumText>
         <TouchableOpacity
           onPress={() => {
             if (parseInt(rewardBalance) > 0) {
               openModal();
+            } else {
+              showNotification({msg: 'Insufficient Balance', error: true});
             }
           }}
           style={{
@@ -121,6 +123,8 @@ const Balance = ({
             onPress={() => {
               if (parseInt(rewardBalance) > 0) {
                 openModal();
+              } else {
+                showNotification({msg: 'Insufficient Balance', error: true});
               }
             }}>
             Withdraw
@@ -138,7 +142,8 @@ const Balance = ({
 };
 
 const EarnItem = ({item}) => {
-  const {amount, description} = item ?? {};
+  const {amount, description, createdAt} = item ?? {};
+  console.log(item);
   return (
     <View
       style={{
@@ -157,8 +162,8 @@ const EarnItem = ({item}) => {
       }}>
       <View
         style={{
-          width: 55,
-          height: 55,
+          width: 40,
+          height: 40,
           marginRight: 15,
           backgroundColor: Colors.primary,
           borderRadius: 360,
@@ -168,10 +173,13 @@ const EarnItem = ({item}) => {
         <EarnSvg color={'white'} width={25} height={25} />
       </View>
       <View style={{flex: 1, justifyContent: 'space-around'}}>
-        <MediumText style={{marginBottom: 5}}>
+        <MediumText style={{marginBottom: 5, fontSize: 20}}>
           {formatAmount(amount)}
         </MediumText>
         <SmallText>{description}</SmallText>
+        <SmallText style={{color: Colors.tabBlur, marginTop: 8}}>
+          {formatTimestamp(createdAt)}
+        </SmallText>
       </View>
     </View>
   );
@@ -196,6 +204,8 @@ const AffilateEarnings = () => {
   });
   const rewards = data?.rewards?.reverse() ?? [];
   const modalRef = useRef();
+  const pinmodalRef = useRef();
+
   const openModal = () => {
     modalRef.current.open();
   };
@@ -203,7 +213,16 @@ const AffilateEarnings = () => {
   const TOP =
     Platform.OS === 'ios' ? inset.top + 50 : StatusBar.currentHeight + 50;
   const remainingSpace = 200 - TOP;
-  console.log(TOP);
+  const [fee, setFee] = useState();
+  const [amount, setAmount] = useState();
+  const [account_number, setaccount_number] = useState('');
+  const [bank, setBank] = useState();
+  const [name, setName] = useState();
+
+  const {data: bankData} = useApi({queryFn: getBanks, queryKey: ['getBanks']});
+
+  const account_bank = bankData?.data?.find(item => item.name === bank);
+  console.log('account_bank', account_bank);
   return (
     <>
       <Mainbackground top={-1}>
@@ -239,7 +258,39 @@ const AffilateEarnings = () => {
           <EmptyEarnings />
         )}
       </Mainbackground>
-      <WithdrawModal {...{modalRef, refetch}} />
+      <WithdrawModal
+        {...{
+          modalRef,
+          pinmodalRef,
+          account_number,
+          amount,
+          fee,
+          setaccount_number,
+          setAmount,
+          setFee,
+          account_bank,
+          bank,
+          setBank,
+          bankData,
+          name,
+          setName,
+        }}
+      />
+      <PinModal
+        {...{
+          modalRef: pinmodalRef,
+          account_bank,
+          account_number,
+          amount,
+          fee,
+          refetch,
+          setBank,
+          setFee,
+          setaccount_number,
+          setAmount,
+          setName,
+        }}
+      />
     </>
   );
 };

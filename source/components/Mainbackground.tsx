@@ -3,6 +3,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  StatusBar,
   StyleProp,
   StyleSheet,
   ViewStyle,
@@ -61,6 +62,7 @@ const Mainbackground: React.FC<MainBackgroundProps> = ({
         padding,
         paddingBottom,
       }}>
+      <StatusBar translucent={true} backgroundColor={'transparent'} />
       <KeyboardAvoidingView
         keyboardVerticalOffset={-insets.bottom}
         behavior={avoid && Platform.OS === 'ios' ? 'padding' : androidAvoid}

@@ -197,7 +197,7 @@ export default function BottomNav() {
             />
           ),
         }}
-        name="Market Place"
+        name="Marketplace"
         component={MarketplaceScreen}
       />
       <Tab.Screen

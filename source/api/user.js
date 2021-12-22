@@ -77,7 +77,13 @@ export const getWithdrawFee = async ({amount}) => {
   return res;
 };
 
-export const withdraw = async ({amount, fee, account_bank, account_number}) => {
+export const withdraw = async ({
+  amount,
+  fee,
+  account_bank,
+  account_number,
+  pin,
+}) => {
   const axiosInstance = axiosBase();
 
   const res = axiosInstance.post(`${BASEURL}/withdraw`, {
@@ -85,6 +91,7 @@ export const withdraw = async ({amount, fee, account_bank, account_number}) => {
     fee,
     account_bank,
     account_number,
+    pin,
   });
   return res;
 };
@@ -98,5 +105,23 @@ export const updateFcmtoken = async ({token}) => {
   const axiosInstance = axiosBase();
 
   const res = axiosInstance.post(`${BASEURL}/update-fcmtoken`, {token});
+  return res;
+};
+
+export const setRemotePin = async ({pin}) => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.post(`${BASEURL}/set-pin`, {
+    pin,
+  });
+  return res;
+};
+
+export const validatePin = async ({pin}) => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.post(`${BASEURL}/validate-pin`, {
+    pin,
+  });
   return res;
 };

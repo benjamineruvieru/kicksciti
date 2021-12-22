@@ -69,11 +69,11 @@ const AffilateLink = ({id, affiliate_commission}) => {
           <RegularTextB style={{marginBottom: 10}}>Affiliate Link</RegularTextB>
           <SmallText>
             Grab your unique Affiliate Link and share it. When friends use it to
-            make a purchase, you get a commission! It's that simple. Share the
-            love, earn rewards. Happy sharing!
+            make a purchase, you get a commission!{'\n\n'}It's that simple.
+            Share the love, earn rewards. Happy sharing!
           </SmallText>
           <SmallText style={{marginTop: 5}}>
-            The commission for this product is: ₦{' '}
+            Product Commission: ₦{' '}
             {formatNumberWithCommas(affiliate_commission ?? 1000)}
           </SmallText>
         </View>

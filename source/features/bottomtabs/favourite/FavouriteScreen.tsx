@@ -74,7 +74,7 @@ const EmptyFave = () => {
       </LayoutAnimationComponent>
       <LayoutAnimationComponent delay={400}>
         <RegularTextB style={{marginBottom: 5}}>
-          Your favorites list is looking a bit lonely!
+          Your favorites is looking a bit lonely!
         </RegularTextB>
       </LayoutAnimationComponent>
       <LayoutAnimationComponent delay={500}>

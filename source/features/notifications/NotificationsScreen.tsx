@@ -123,7 +123,13 @@ const NotificationItem = ({item, index}) => {
   );
 };
 
-const Notifications = ({notifications, refetch}) => {
+const Notifications = ({
+  notifications,
+  refetch,
+  fetchNextPage,
+  isFetchingNextPage,
+  hasNextPage,
+}) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
@@ -132,23 +138,44 @@ const Notifications = ({notifications, refetch}) => {
   };
   return (
     <FlashList
+      keyExtractor={(item, i) => i.toString()}
       refreshing={refreshing}
       onRefresh={onRefresh}
       estimatedItemSize={76}
       showsVerticalScrollIndicator={false}
       data={notifications}
       renderItem={NotificationItem}
+      ListFooterComponent={() =>
+        isFetchingNextPage && (
+          <View style={{paddingVertical: 15}}>
+            <ActivityIndicator color={Colors.primary} />
+          </View>
+        )
+      }
+      onEndReached={() => {
+        console.log('end oo');
+        if (hasNextPage) {
+          fetchNextPage();
+        }
+      }}
     />
   );
 };
 const NotificationsScreen = () => {
-  const {data, isLoading, refetch} = useInfiniteApi({
+  const {
+    data,
+    isLoading,
+    refetch,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteApi({
     queryFunction: getNotifications,
     queryKey: ['getNotifications'],
   });
   const results = data?.pages.flatMap(data => data?.notifications) ?? [];
 
-  const notifications = insertDateItems(results.reverse());
+  const notifications = insertDateItems(results);
   useRefetchOnRemount(refetch);
   useEffect(() => {
     setItem('unreadNotification', 'false');
@@ -161,7 +188,11 @@ const NotificationsScreen = () => {
           <ActivityIndicator color={Colors.primary} />
         </View>
       ) : notifications.length > 0 ? (
-        <Notifications notifications={notifications} refetch={refetch} />
+        <Notifications
+          notifications={notifications}
+          refetch={refetch}
+          {...{fetchNextPage, isFetchingNextPage, hasNextPage}}
+        />
       ) : (
         <EmptyNoti />
       )}

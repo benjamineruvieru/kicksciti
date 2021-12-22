@@ -11,6 +11,9 @@ const PaymentModal = ({modalRef, link, order_id, callBack}) => {
   const navigation = useNavigation();
   return (
     <Modalize
+      onClose={() => {
+        navigation.navigate('OrderDetails', {order_id});
+      }}
       modalStyle={{backgroundColor: Colors.bg}}
       ref={modalRef}
       modalHeight={getPercentHeight(80)}>

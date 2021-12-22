@@ -173,10 +173,8 @@ const PaymentType = ({paymentOnDelivery, setpaymentOnDelivery}) => {
             setpaymentOnDelivery(false);
           }}
           selected={paymentOnDelivery === false}
-          title={'Pay on Now'}
-          sub={
-            "Pay for your order now. It's quick, easy, and ensures swift delivery of your favorite items"
-          }
+          title={'Pay Now'}
+          sub={'Debit/Credit Card • Transfer • USSD'}
         />
       </LayoutAnimationComponent>
     </View>
@@ -201,7 +199,7 @@ const CartScreen = ({navigation}) => {
   const [state, setState] = useState('Lagos');
   const [lga, setLga] = useState();
   const [address, setAddress] = useState();
-  const [phone, setPhone] = useState();
+  const [phone, setPhone] = useState('+234');
   const [deliveryfee, setDeliveryfee] = useState(0);
   const [load, setLoad] = useState(false);
   const [link, setLink] = useState();
@@ -344,7 +342,7 @@ const CartScreen = ({navigation}) => {
               <Button
                 title={pos === 0 ? 'Next' : 'Make Payment'}
                 onPress={next}
-                // disable={true}
+                disable={updatingCart}
                 load={load}
               />
             </LayoutAnimationComponent>
