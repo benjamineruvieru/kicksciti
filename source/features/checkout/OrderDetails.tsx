@@ -81,7 +81,7 @@ const PaymentPending = ({order_id, modalRef, setLink}) => {
   );
 };
 
-const OrderInfo = ({order}) => {
+const OrderInfo = ({order, modalRef, setLink}) => {
   const {
     order_id,
     products,
@@ -97,6 +97,8 @@ const OrderInfo = ({order}) => {
     deliveryfee,
     createdAt,
     progress,
+    deliveryfeePaid,
+    paymentOnDelivery,
   } = order ?? {};
   console.log('order', order);
 
@@ -190,23 +192,96 @@ const OrderInfo = ({order}) => {
             {status}
           </SmallText>
         </View>
-        <View
-          style={{
-            marginTop: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <SmallTextB>Payment</SmallTextB>
-          <SmallText
+        {paymentOnDelivery && (
+          <View
             style={{
-              color: paid ? Colors.green : '#F29339',
-              marginLeft: 10,
-              flex: 1,
-              textAlign: 'right',
+              marginTop: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}>
-            {paid ? 'Paid' : 'Pending'}
-          </SmallText>
-        </View>
+            <SmallTextB>Payment Type</SmallTextB>
+
+            <SmallText
+              dim
+              style={{
+                marginLeft: 10,
+                flex: 1,
+                textAlign: 'right',
+              }}>
+              Payment On Delivery
+            </SmallText>
+          </View>
+        )}
+        {paymentOnDelivery ? (
+          <View
+            style={{
+              marginTop: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <SmallTextB>Delivery Fee Payment</SmallTextB>
+            <SmallText
+              style={{
+                color: deliveryfeePaid ? Colors.green : '#F29339',
+                marginLeft: 10,
+                flex: 1,
+                textAlign: 'right',
+              }}>
+              {deliveryfeePaid ? 'Paid' : 'Pending'}
+            </SmallText>
+          </View>
+        ) : (
+          <View
+            style={{
+              marginTop: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <SmallTextB>Payment</SmallTextB>
+            <SmallText
+              style={{
+                color: paid ? Colors.green : '#F29339',
+                marginLeft: 10,
+                flex: 1,
+                textAlign: 'right',
+              }}>
+              {paid ? 'Paid' : 'Pending'}
+            </SmallText>
+          </View>
+        )}
+
+        {!deliveryfeePaid && paymentOnDelivery && (
+          <>
+            <SmallText style={{marginTop: 10}}>
+              Kindly note that payment of the delivery fee is required for the
+              processing of your order. To ensure a swift delivery, please
+              proceed with the payment of the delivery fee.
+            </SmallText>
+            <SmallText
+              onPress={() => {
+                retryPayment({order_id})
+                  .then(data => {
+                    console.log('dat', data.data);
+                    setLink(data?.data?.link);
+                    modalRef.current.open();
+                  })
+                  .catch(err => {
+                    console.log('err', err?.response?.data);
+                    showNotification({
+                      error: true,
+                      msg: err?.response?.data?.error,
+                    });
+                  });
+              }}
+              style={{
+                marginTop: 10,
+                color: Colors.primary,
+                textDecorationLine: 'underline',
+              }}>
+              Retry payment
+            </SmallText>
+          </>
+        )}
 
         <RegularTextB style={{marginBottom: 4, marginTop: 20}}>
           Order ID
@@ -364,7 +439,7 @@ const OrderDetails = ({route, navigation}) => {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
             showsVerticalScrollIndicator={false}>
-            <OrderInfo {...{order}} />
+            <OrderInfo {...{order, modalRef, setLink}} />
           </ScrollView>
         ) : (
           <ScrollView

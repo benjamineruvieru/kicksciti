@@ -164,7 +164,9 @@ const PaymentType = ({paymentOnDelivery, setpaymentOnDelivery}) => {
           }}
           selected={paymentOnDelivery}
           title={'Pay on Delivery'}
-          sub={'Shop now and pay when your order arrives at your doorstep.'}
+          sub={
+            'Shop now and pay when your order arrives at your doorstep. Please note that the delivery fee must be paid in advance.'
+          }
         />
       </LayoutAnimationComponent>
       <LayoutAnimationComponent rightInOut delay={550}>
@@ -263,9 +265,7 @@ const CartScreen = ({navigation}) => {
         const {link, order} = data.data ?? {};
 
         console.log('order link', link);
-        if (paymentOnDelivery) {
-          navigation.navigate('OrderDetails', {order_id: order?.order_id});
-        } else if (link) {
+        if (link) {
           setorder_id(order?.order_id);
           setLink(link);
           openModal();

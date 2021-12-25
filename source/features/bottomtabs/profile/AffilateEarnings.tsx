@@ -104,7 +104,7 @@ const Balance = ({
         }}>
         <MediumText style={{fontSize: 40}}>
           <RegularTextB>₦</RegularTextB>{' '}
-          {formatNumberWithCommas(parseFloat(rewardBalance).toFixed(2))}
+          {formatNumberWithCommas(parseFloat(rewardBalance ?? 0).toFixed(2))}
         </MediumText>
         <TouchableOpacity
           onPress={() => {
