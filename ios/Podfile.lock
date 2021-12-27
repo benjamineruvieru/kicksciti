@@ -1,7 +1,13 @@
 PODS:
+  - Base64 (1.1.2)
   - boost (1.76.0)
   - BVLinearGradient (2.8.3):
     - React-Core
+  - CodePush (8.1.1):
+    - Base64 (~> 1.1)
+    - JWT (~> 3.0.0-beta.12)
+    - React-Core
+    - SSZipArchive (~> 2.2.2)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.72.3)
   - FBReactNativeSpec (0.72.3):
@@ -83,6 +89,8 @@ PODS:
   - hermes-engine (0.72.3):
     - hermes-engine/Pre-built (= 0.72.3)
   - hermes-engine/Pre-built (0.72.3)
+  - JWT (3.0.0-beta.14):
+    - Base64 (~> 1.1.2)
   - libevent (2.1.12)
   - libwebp (1.2.4):
     - libwebp/demux (= 1.2.4)
@@ -541,7 +549,7 @@ PODS:
   - RNFBApp (18.7.1):
     - Firebase/CoreOnly (= 10.18.0)
     - React-Core
-  - RNFBCrashlytics (18.7.3):
+  - RNFBCrashlytics (18.7.1):
     - Firebase/Crashlytics (= 10.18.0)
     - FirebaseCoreExtension (= 10.18.0)
     - React-Core
@@ -555,10 +563,10 @@ PODS:
     - React-Core
   - RNGestureHandler (2.12.0):
     - React-Core
-  - RNNotifee (7.8.0):
+  - RNNotifee (7.8.2):
     - React-Core
-    - RNNotifee/NotifeeCore (= 7.8.0)
-  - RNNotifee/NotifeeCore (7.8.0):
+    - RNNotifee/NotifeeCore (= 7.8.2)
+  - RNNotifee/NotifeeCore (7.8.2):
     - React-Core
   - RNReanimated (3.3.0):
     - DoubleConversion
@@ -603,11 +611,13 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.1)
+  - SSZipArchive (2.2.3)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
+  - CodePush (from `../node_modules/react-native-code-push`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -671,6 +681,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Base64
     - Firebase
     - FirebaseCore
     - FirebaseCoreExtension
@@ -682,6 +693,7 @@ SPEC REPOS:
     - fmt
     - GoogleDataTransport
     - GoogleUtilities
+    - JWT
     - libevent
     - libwebp
     - lottie-ios
@@ -693,12 +705,15 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
+    - SSZipArchive
 
 EXTERNAL SOURCES:
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BVLinearGradient:
     :path: "../node_modules/react-native-linear-gradient"
+  CodePush:
+    :path: "../node_modules/react-native-code-push"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -816,8 +831,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
+  CodePush: c3fdecab0dba1f760a1c6d1a562b9b88ce311fe1
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 4cce221dd782d3ff7c4172167bba09d58af67ccb
   FBReactNativeSpec: c6bd9e179757b3c0ecf815864fae8032377903ef
@@ -834,6 +851,7 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   hermes-engine: 10fbd3f62405c41ea07e71973ea61e1878d07322
+  JWT: ef71dfb03e1f842081e64dc42eef0e164f35d251
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
   lottie-ios: 25e7b2675dad5c3ddad369ac9baab03560c5bfdd
@@ -884,11 +902,11 @@ SPEC CHECKSUMS:
   RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBApp: 3d518e0ea7f945ae546facc0e6034806d9ddfde7
-  RNFBCrashlytics: 8e6d5bcb742712e9a8920cbc8c5f2a475d85d904
+  RNFBCrashlytics: 9f9b3b35f4db6f39c2a365e55b59a0668617cb33
   RNFBMessaging: 5c909e97a0c81c4a03c56ca17f0fe79256941ec9
   RNFlashList: 25b0e092b4470c84db0386d4f5316dc34123bb6d
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
-  RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
+  RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
   RNScreens: 50ffe2fa2342eabb2d0afbe19f7c1af286bc7fb3
   RNSharedElement: 3fd05877bd6bc95f71b332801bf4356ca69ab7f6
@@ -896,6 +914,7 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   Yoga: 8796b55dba14d7004f980b54bcc9833ee45b28ce
 
 PODFILE CHECKSUM: 19d2153d8d4e63d6b4a297fc6c994f84e680b7d6

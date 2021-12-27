@@ -51,6 +51,8 @@ const EmptyEarnings = () => {
             width: getPercentWidth(65),
             height: getPercentWidth(65),
             top: -5,
+            maxWidth: 400,
+            maxHeight: 400,
           }}
           source={require('../../../assets/images/illustrations/empty-earnings.png')}
         />

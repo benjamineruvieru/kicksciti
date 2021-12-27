@@ -20,6 +20,8 @@ const EmptyCart = () => {
             width: SCREEN_WIDTH / 1.5,
             height: SCREEN_WIDTH / 1.5,
             top: -10,
+            maxWidth: 400,
+            maxHeight: 400,
           }}
           resizeMode="contain"
         />

@@ -1,5 +1,6 @@
 import {
   KeyboardTypeOptions,
+  NativeModules,
   ReturnKeyTypeOptions,
   StyleSheet,
   TextInput,
@@ -13,7 +14,6 @@ import React, {FC, useState} from 'react';
 import {MediumText, RegularText, SmallText} from './Text';
 import {SCREEN_WIDTH} from '../constants/Variables';
 import Colors from '../constants/Colors';
-// import SelectDropdown from 'react-native-select-dropdown';
 import Down from '../assets/svg/down.svg';
 import Eyeopen from '../assets/svg/eyeopen.svg';
 import Eyeclose from '../assets/svg/eyeclose.svg';
@@ -25,6 +25,9 @@ import {
 } from 'react-native-confirmation-code-field';
 import LayoutAnimationComponent from './LayoutAnimationComponent';
 import {ListDialog} from './Dialog';
+const {PlatformConstants} = NativeModules;
+const deviceType = PlatformConstants.interfaceIdiom;
+const isPhone = deviceType === 'phone';
 
 export const ModalSelector = ({
   style,
@@ -89,84 +92,14 @@ export const ModalSelector = ({
   );
 };
 
-// export const DropDown = ({
-//   placeholderText,
-//   bottom = 20,
-//   data = [],
-//   onSelect,
-// }) => {
-//   return (
-//     <>
-//       <RegularText style={{marginBottom: 8, marginLeft: 4}}>
-//         {placeholderText}
-//       </RegularText>
-//       <SelectDropdown
-//         defaultButtonText="Wähle eine option"
-//         data={data}
-//         onSelect={(selectedItem, index) => {
-//           console.log(selectedItem, index);
-//           onSelect(selectedItem, index);
-//         }}
-//         buttonTextAfterSelection={(selectedItem, index) => {
-//           // text represented after item is selected
-//           // if data array is an array of objects then return selectedItem.property to render after item is selected
-//           return selectedItem;
-//         }}
-//         rowTextForSelection={(item, index) => {
-//           // text represented for each item in dropdown
-//           // if data array is an array of objects then return item.property to represent item in dropdown
-//           return item;
-//         }}
-//         renderDropdownIcon={() => <Down />}
-//         buttonStyle={{
-//           backgroundColor: 'white',
-//           borderWidth: 1,
-//           borderColor: '#0000004D',
-//           borderRadius: 10,
-//           width: '100%',
-//           marginBottom: bottom,
-//           height: 50,
-//         }}
-//         buttonTextStyle={{
-//           fontFamily: 'Quicksand-SemiBold',
-//           fontSize: 13,
-
-//           flex: 0,
-//         }}
-//         dropdownStyle={{
-//           backgroundColor: 'white',
-//           borderRadius: 10,
-//           shadowOpacity: 0,
-//           elevation: 0,
-//           borderWidth: 1,
-//           borderColor: Colors.grey,
-//           marginTop: 5,
-//           borderTopWidth: 1,
-//         }}
-//         dropdownOverlayColor={'transparent'}
-//         rowTextStyle={{
-//           fontFamily: 'Quicksand-SemiBold',
-//           fontSize: 13,
-
-//           flex: 0,
-//         }}
-//         rowStyle={{
-//           justifyContent: 'flex-start',
-//           paddingHorizontal: 10,
-//         }}
-//         showsVerticalScrollIndicator={false}
-//       />
-//     </>
-//   );
-// };
-
 export const OtpInput = ({setOtp, otp, num = 6}) => {
   const ref = useBlurOnFulfill({value: otp, cellCount: 6});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value: otp,
     setValue: setOtp,
   });
-  const SIZE = (SCREEN_WIDTH - 40 - 15 * (num - 1)) / num;
+  const SIZE =
+    ((isPhone ? SCREEN_WIDTH : SCREEN_WIDTH / 2) - 40 - 15 * (num - 1)) / num;
   return (
     <View
       style={{

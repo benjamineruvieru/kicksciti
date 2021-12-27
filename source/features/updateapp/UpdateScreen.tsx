@@ -22,13 +22,15 @@ const UpdateScreen = () => {
             width: getPercentWidth(80),
             height: getPercentWidth(50),
             marginBottom: 10,
+            maxWidth: 400,
+            maxHeight: 400,
           }}
           source={require('../../assets/images/illustrations/update.png')}
         />
       </LayoutAnimationComponent>
       <LayoutAnimationComponent delay={400}>
         <RegularTextB style={{marginBottom: 5}}>
-          An Update Is Available
+          A New Update Is Available
         </RegularTextB>
       </LayoutAnimationComponent>
       <LayoutAnimationComponent delay={500}>

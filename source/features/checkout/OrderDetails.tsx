@@ -366,6 +366,8 @@ const OrderNotFound = ({navigation}) => {
           style={{
             width: getPercentWidth(80),
             height: getPercentWidth(75),
+            maxWidth: 400,
+            maxHeight: 400,
           }}
           source={require('../../assets/images/illustrations/notfound.png')}
         />

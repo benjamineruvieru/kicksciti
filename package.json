@@ -7,13 +7,15 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "codepush:ios": "appcenter CodePush release-react -a benjamin-eruvieru/Kicks-Citi-iOS -m -d Production",
+    "codepush:android": "appcenter CodePush release-react -a benjamin-eruvieru/KicksCiti-Android -m -d Production"
   },
   "dependencies": {
-    "@notifee/react-native": "^7.8.0",
+    "@notifee/react-native": "^7.8.2",
     "@react-native-clipboard/clipboard": "^1.12.1",
     "@react-native-firebase/app": "^18.7.1",
-    "@react-native-firebase/crashlytics": "^18.7.3",
+    "@react-native-firebase/crashlytics": "18.7.1",
     "@react-native-firebase/messaging": "^18.7.1",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",
@@ -28,6 +30,7 @@
     "react-native-animatable": "^1.4.0",
     "react-native-animated-pagination-dots": "^0.1.73",
     "react-native-bootsplash": "^5.1.4",
+    "react-native-code-push": "^8.1.1",
     "react-native-confirmation-code-field": "^7.3.2",
     "react-native-device-info": "^10.12.0",
     "react-native-fast-image": "^8.6.3",

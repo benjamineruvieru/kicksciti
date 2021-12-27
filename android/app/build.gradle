@@ -79,8 +79,8 @@ android {
         applicationId "com.kicksciti.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "2.2"
+        versionCode 9
+        versionName "2.3"
     }
     signingConfigs {
          release {
@@ -137,3 +137,4 @@ dependencies {
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply plugin: 'com.google.gms.google-services'
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"

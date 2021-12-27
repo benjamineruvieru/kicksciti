@@ -27,6 +27,7 @@ const Search = ({search, setSearch}) => {
           marginLeft: 7,
           flex: 1,
           paddingHorizontal: 0,
+          color: 'black',
         }}
       />
       {/* <TouchableOpacity>
