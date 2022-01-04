@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  NativeModules,
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
@@ -9,9 +8,8 @@ import React from 'react';
 import {SmallTextB} from './Text';
 import Colors from '../constants/Colors';
 import {getPercentWidth} from '../utilis/Functions';
-const {PlatformConstants} = NativeModules;
-const deviceType = PlatformConstants.interfaceIdiom;
-const isPhone = deviceType === 'phone';
+import {isPhone} from '../constants/Variables';
+
 interface ButtonProps {
   title: string;
   width?: number;

@@ -4,21 +4,23 @@ import {
   Text as RNText,
   TouchableOpacity,
   TextStyle,
+  LayoutChangeEvent,
 } from 'react-native';
 import Colors from '../constants/Colors';
 
 interface TextProps {
   children: React.ReactNode;
-  style?: TextStyle; // You can use a more specific type if needed
+  style?: TextStyle;
   onPress?: () => void;
   onTextPress?: () => void;
   disabled?: boolean;
   numLines?: number;
   dim?: boolean;
-  props?: any; // You can use a more specific type if needed
-  touchStyle?: any; // You can use a more specific type if needed
+  props?: any;
+  touchStyle?: any;
   onTextLayout?: () => void;
   color?: string;
+  onLayout?: (event: LayoutChangeEvent) => void;
 }
 
 const Text: React.FC<TextProps> = ({
@@ -33,6 +35,7 @@ const Text: React.FC<TextProps> = ({
   touchStyle,
   onTextLayout = () => {},
   color,
+  onLayout,
 }) => {
   const styles = StyleSheet.create({
     text: {
@@ -56,6 +59,7 @@ const Text: React.FC<TextProps> = ({
       ) : (
         <RNText
           onTextLayout={onTextLayout}
+          onLayout={onLayout}
           {...props}
           numberOfLines={numLines}
           onPress={onTextPress}
@@ -106,6 +110,7 @@ export const MediumText: React.FC<TextProps> = ({
   onTextPress,
   dim,
   numLines,
+  onLayout,
 }) => {
   const styles = StyleSheet.create({
     text: {
@@ -121,6 +126,7 @@ export const MediumText: React.FC<TextProps> = ({
       numLines={numLines}
       onTextPress={onTextPress}
       onPress={onPress}
+      onLayout={onLayout}
       style={styles.text}>
       {children}
     </Text>

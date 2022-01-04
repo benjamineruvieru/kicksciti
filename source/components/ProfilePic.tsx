@@ -9,7 +9,7 @@ import {showNotification} from '../utilis/Functions';
 
 const no_img = require('../assets/images/no.png');
 const ProfilePic = () => {
-  const [temp, setTemp] = useState();
+  const [temp, setTemp] = useState<string | undefined>();
   const [user, setUser] = useMMKVString('userdetails');
   const {picture} = JSON.parse(user ?? '{}');
   console.log(picture);
@@ -21,7 +21,7 @@ const ProfilePic = () => {
       });
       if (!result.didCancel) {
         console.log(result.assets);
-        const {type, uri} = result.assets[0];
+        const {type, uri} = result?.assets[0];
         setTemp(uri);
         const {data} = await requestUploadUrl({type});
         const {publicUrl, signedUrl} = data;
@@ -32,15 +32,15 @@ const ProfilePic = () => {
         console.log('final res', res.data);
       }
     } catch (err) {
-      console.log('err', err?.response?.data);
-      showNotification({error: true, msg: err?.response?.data?.error});
+      const errorMessage = err?.response?.data?.error || 'An error occurred';
+      showNotification({error: true, msg: errorMessage});
     }
   };
   return (
     <TouchableOpacity onPress={open}>
       <FastImage
         source={temp ? {uri: temp} : picture ? {uri: picture} : no_img}
-        style={{height: 80, width: 80, borderRadius: 360}}
+        style={styles.profileImage}
       />
     </TouchableOpacity>
   );
@@ -48,4 +48,10 @@ const ProfilePic = () => {
 
 export default ProfilePic;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  profileImage: {
+    height: 80,
+    width: 80,
+    borderRadius: 360,
+  },
+});

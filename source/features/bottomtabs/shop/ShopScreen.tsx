@@ -12,11 +12,17 @@ import ProductsLoading from './components/ProductsLoading';
 import {getItem} from '../../../utilis/storage';
 import useDebounce from '../../../hooks/useDebounce';
 import crashlytics from '@react-native-firebase/crashlytics';
+import {RouteProp} from '@react-navigation/native';
+import {RootStackParamList} from '../../../navigation/BottomNav';
 
-const ShopScreen = ({route}) => {
+interface ShopScreenProps {
+  route: RouteProp<RootStackParamList, 'Shop'>;
+}
+
+const ShopScreen: React.FC<ShopScreenProps> = ({route}) => {
   const [category, setCategory] = useState('hottest products');
-  const [search, setSearch] = useState();
-  const [query, setQuery] = useState();
+  const [search, setSearch] = useState('');
+  const [query, setQuery] = useState('');
   const {searchPassed} = route?.params ?? {};
   const {name: rawName, email, username} = getItem('userdetails', true);
 
@@ -46,7 +52,7 @@ const ShopScreen = ({route}) => {
         setQuery(search);
       } else {
         if (query) {
-          setQuery();
+          setQuery('');
         }
       }
     },
@@ -72,16 +78,11 @@ const ShopScreen = ({route}) => {
     queryFunction: getProducts,
     queryKey: ['getProducts', category, query],
   });
-  const results = data?.pages.flatMap(data => data?.products) ?? [];
+
+  const results = data?.pages.flatMap((data: any) => data?.products) ?? [];
   return (
     <Mainbackground padding={20} paddingBottom={0} insetsBottom={-1}>
-      <View
-        style={{
-          marginBottom: 30,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
+      <View style={styles.mainView}>
         <View style={{flex: 1}}>
           <TypeAnimation
             preRenderText={`Welcome, ${name} 👋`}
@@ -121,5 +122,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: 'white',
     includeFontPadding: false,
+  },
+  mainView: {
+    marginBottom: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });

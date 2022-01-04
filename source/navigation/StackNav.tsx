@@ -100,10 +100,10 @@ const StackNav = () => {
     return paramsObject;
   }
   function extractOrderId(url: string): string | null {
-    // Define a regular expression to match the order ID in the URL
+    // A regular expression to match the order ID in the URL
     const regex = /(?:www\.)?kicksciti\.com\/order\/(\w+)/;
 
-    // Use the regular expression to match and extract the order ID
+    // Match and extract the order ID
     const match = url.match(regex);
 
     // Check if a match is found and return the order ID, or null if no match

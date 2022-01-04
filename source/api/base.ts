@@ -1,18 +1,13 @@
-import axios from 'axios';
+import axios, {AxiosInstance} from 'axios';
 import {getItem} from '../utilis/storage';
 
 export const BASEURL = 'https://api.kicksciti.com/v1';
 
-// export const BASEURL =
-//   Platform.OS === 'ios'
-//     ? 'http://localhost:3000'
-//     : 'https://dul9z0axu0.execute-api.us-east-1.amazonaws.com/v1';
-export const axiosBase = () => {
+export const axiosBase = (): AxiosInstance => {
   const token = getItem('token');
-  // console.log('token', token);
   if (!token) {
     setTimeout(axiosBase, 2000);
-    return;
+    return {} as AxiosInstance;
   }
   const axiosinstance = axios.create({
     baseURL: BASEURL,

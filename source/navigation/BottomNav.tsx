@@ -12,10 +12,17 @@ import ProfileSvg from '../assets/svg/bottomtab/profile.svg';
 import MarketSvg from '../assets/svg/bottomtab/market.svg';
 import LoveSvg from '../assets/svg/bottomtab/love.svg';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-import messaging from '@react-native-firebase/messaging';
+import messaging, {
+  FirebaseMessagingTypes,
+} from '@react-native-firebase/messaging';
 import {getItem, setItem} from '../utilis/storage';
 import {useNavigation} from '@react-navigation/native';
 import {updateFcmtoken} from '../api/user';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
+export type RootStackParamList = {
+  Shop: {searchPassed?: string};
+};
 
 const Tab = createBottomTabNavigator();
 const Stack = createSharedElementStackNavigator({name: 'BottomNav'});
@@ -51,7 +58,7 @@ const StackFavouriteScreen = () => (
 
 export default function BottomNav() {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const {username} = getItem('userdetails', true);
 
   async function requestUserPermission() {
@@ -112,14 +119,18 @@ export default function BottomNav() {
     });
   }, []);
 
-  const handleNotificationOpen = ({remoteMessage}) => {
+  const handleNotificationOpen = ({
+    remoteMessage,
+  }: {
+    remoteMessage: FirebaseMessagingTypes.RemoteMessage;
+  }) => {
     console.log('remoteMessage', remoteMessage.data);
 
     const {action, product, order_id, data} = remoteMessage.data ?? {};
     switch (action) {
       case 'open-product': {
         console.log(product);
-        if (product) {
+        if (product && typeof product === 'string') {
           navigation.navigate('ProductScreen', JSON.parse(product));
         } else {
           navigation.navigate('NotificationsScreen');
@@ -132,7 +143,7 @@ export default function BottomNav() {
           navigation.navigate('OrderDetails', {order_id});
         } else {
           try {
-            let {order_id} = JSON.parse(data);
+            let {order_id} = JSON.parse(typeof data === 'string' ? data : '');
             if (order_id) {
               navigation.navigate('OrderDetails', {order_id});
             } else {
@@ -178,29 +189,28 @@ export default function BottomNav() {
     return unsubscribe;
   }, []);
 
+  const screenOptions = {
+    header: () => null,
+    tabBarHideOnKeyboard: true,
+    tabBarActiveTintColor: Colors.primary,
+    tabBarInactiveTintColor: Colors.tabBlur,
+    tabBarLabelStyle: {
+      fontFamily: 'Gilroy-Medium',
+      fontSize: 12,
+    },
+    tabBarStyle: {
+      height: Platform.OS === 'android' ? 60 : 55 + insets.bottom,
+      paddingBottom: Platform.OS === 'android' ? 5 : insets.bottom - 5,
+      paddingTop: Platform.OS === 'ios' ? 5 : 0,
+      backgroundColor: Colors.tabColor,
+      borderTopWidth: 0,
+    },
+  };
   return (
-    <Tab.Navigator
-      backBehavior="history"
-      screenOptions={{
-        header: () => null,
-        tabBarHideOnKeyboard: true,
-        tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveTintColor: Colors.tabBlur,
-        tabBarLabelStyle: {
-          fontFamily: 'Gilroy-Medium',
-          fontSize: 12,
-        },
-        tabBarStyle: {
-          height: Platform.OS === 'android' ? 60 : 55 + insets.bottom,
-          paddingBottom: Platform.OS === 'android' ? 5 : insets.bottom - 5,
-          paddingTop: Platform.OS === 'ios' ? 5 : 0,
-          backgroundColor: Colors.tabColor,
-          borderTopWidth: 0,
-        },
-      }}>
+    <Tab.Navigator backBehavior="history" screenOptions={screenOptions}>
       <Tab.Screen
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({color}) => (
             <ShopSvg width={23} height={23} color={color} />
           ),
         }}
@@ -222,7 +232,7 @@ export default function BottomNav() {
 
       <Tab.Screen
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({color}) => (
             <LoveSvg width={22} height={22} color={color} />
           ),
         }}
@@ -231,14 +241,8 @@ export default function BottomNav() {
       />
       <Tab.Screen
         options={{
-          tabBarIcon: ({color, size}) => (
-            <ProfileSvg
-              width={23}
-              height={23}
-              style={{
-                color: color,
-              }}
-            />
+          tabBarIcon: ({color}) => (
+            <ProfileSvg width={23} height={23} color={color} />
           ),
         }}
         name="Profile"
