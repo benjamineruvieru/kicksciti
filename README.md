@@ -2,6 +2,10 @@
 
 ![App Screens](doc/img/Cover.png)
 
+## Edit: The New Version is Currently Live
+
+You can download new the application [here](https://www.kicksciti.com)
+
 ## 🔊🔊 Important Announcement: Project Rewrite
 
 Hello Everyone,
