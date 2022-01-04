@@ -4,7 +4,6 @@ import {
   Platform,
   StatusBar,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -15,7 +14,6 @@ import Colors from '../../../constants/Colors';
 import {
   formatAmount,
   formatNumberWithCommas,
-  getPercentHeight,
   getPercentWidth,
   showNotification,
 } from '../../../utilis/Functions';
@@ -36,29 +34,35 @@ import PinModal from './components/PinModal';
 import {formatTimestamp} from './OrderHistory';
 
 const EmptyEarnings = () => {
+  const styles = StyleSheet.create({
+    emptyContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingBottom: 100,
+    },
+    emptyImage: {
+      width: getPercentWidth(65),
+      height: getPercentWidth(65),
+      top: -5,
+      maxWidth: 400,
+      maxHeight: 400,
+    },
+    emptyText: {
+      marginBottom: 5,
+    },
+  });
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingBottom: 100,
-      }}>
+    <View style={styles.emptyContainer}>
       <LayoutAnimationComponent delay={300}>
         <Image
           resizeMode="contain"
-          style={{
-            width: getPercentWidth(65),
-            height: getPercentWidth(65),
-            top: -5,
-            maxWidth: 400,
-            maxHeight: 400,
-          }}
+          style={styles.emptyImage}
           source={require('../../../assets/images/illustrations/empty-earnings.png')}
         />
       </LayoutAnimationComponent>
       <LayoutAnimationComponent delay={400}>
-        <RegularTextB style={{marginBottom: 5}}>
+        <RegularTextB style={styles.emptyText}>
           Oops, it looks like you have no earnings!
         </RegularTextB>
       </LayoutAnimationComponent>
@@ -78,33 +82,44 @@ const Balance = ({
   holdingrewardBalance,
   setBalanceHeight,
 }) => {
+  const styles = StyleSheet.create({
+    balanceContainer: {
+      backgroundColor: Colors.bg,
+      elevation: 15,
+      borderRadius: 5,
+      padding: 20,
+      shadowColor: 'black',
+      shadowOffset: {height: 2, width: 2},
+      shadowOpacity: 0.5,
+      shadowRadius: 2,
+      zIndex: 1,
+    },
+    balanceContent: {
+      alignItems: 'center',
+      marginTop: 0,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingVertical: 18,
+    },
+    balanceAmount: {
+      fontSize: 40,
+    },
+    withdrawButton: {
+      backgroundColor: Colors.primary,
+      borderRadius: 360,
+      padding: 10,
+    },
+  });
   return (
     <View
       onLayout={e => {
         console.log('height', e.nativeEvent.layout.height);
         setBalanceHeight(e.nativeEvent.layout.height);
       }}
-      style={{
-        backgroundColor: Colors.bg,
-        elevation: 15,
-        borderRadius: 5,
-        padding: 20,
-        shadowColor: 'black',
-        shadowOffset: {height: 2, width: 2},
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-        zIndex: 1,
-      }}>
+      style={styles.balanceContainer}>
       <RegularText>Available balance</RegularText>
-      <View
-        style={{
-          alignItems: 'center',
-          marginTop: 0,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingVertical: 18,
-        }}>
-        <MediumText style={{fontSize: 40}}>
+      <View style={styles.balanceContent}>
+        <MediumText style={styles.balanceAmount}>
           <RegularTextB>₦</RegularTextB>{' '}
           {formatNumberWithCommas(parseFloat(rewardBalance ?? 0).toFixed(2))}
         </MediumText>
@@ -116,11 +131,7 @@ const Balance = ({
               showNotification({msg: 'Insufficient Balance', error: true});
             }
           }}
-          style={{
-            backgroundColor: Colors.primary,
-            borderRadius: 360,
-            padding: 10,
-          }}>
+          style={styles.withdrawButton}>
           <SmallText
             onPress={() => {
               if (parseInt(rewardBalance) > 0) {
@@ -146,32 +157,35 @@ const Balance = ({
 const EarnItem = ({item}) => {
   const {amount, description, createdAt} = item ?? {};
   console.log(item);
+
+  const styles = StyleSheet.create({
+    earnItemContainer: {
+      flexDirection: 'row',
+      backgroundColor: '#1c2429',
+      marginBottom: 20,
+      marginHorizontal: 20,
+      padding: 15,
+      borderRadius: 10,
+      alignItems: 'center',
+      shadowColor: 'black',
+      shadowOffset: {height: 2, width: 2},
+      shadowOpacity: 0.5,
+      shadowRadius: 2,
+      elevation: 10,
+    },
+    earnIconContainer: {
+      width: 40,
+      height: 40,
+      marginRight: 15,
+      backgroundColor: Colors.primary,
+      borderRadius: 360,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        backgroundColor: '#1c2429',
-        marginBottom: 20,
-        marginHorizontal: 20,
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        shadowColor: 'black',
-        shadowOffset: {height: 2, width: 2},
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-        elevation: 10,
-      }}>
-      <View
-        style={{
-          width: 40,
-          height: 40,
-          marginRight: 15,
-          backgroundColor: Colors.primary,
-          borderRadius: 360,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+    <View style={styles.earnItemContainer}>
+      <View style={styles.earnIconContainer}>
         <EarnSvg color={'white'} width={25} height={25} />
       </View>
       <View style={{flex: 1, justifyContent: 'space-around'}}>
@@ -233,21 +247,24 @@ const AffilateEarnings = () => {
   const {data: bankData} = useApi({queryFn: getBanks, queryKey: ['getBanks']});
 
   const account_bank = bankData?.data?.find(item => item.name === bank);
-  console.log('account_bank', account_bank);
+  const styles = StyleSheet.create({
+    headerContainer: {
+      backgroundColor: Colors.primary,
+      height: 200,
+      paddingTop:
+        Platform.OS === 'ios' ? inset.top + 20 : StatusBar.currentHeight + 20,
+      paddingHorizontal: 20,
+      zIndex: 1,
+    },
+    earningsContainer: {
+      flex: 1,
+      paddingTop: balanceHeight - remainingSpace + 40,
+    },
+  });
   return (
     <>
       <Mainbackground top={-1}>
-        <View
-          style={{
-            backgroundColor: Colors.primary,
-            height: 200,
-            paddingTop:
-              Platform.OS === 'ios'
-                ? inset.top + 20
-                : StatusBar.currentHeight + 20,
-            paddingHorizontal: 20,
-            zIndex: 1,
-          }}>
+        <View style={styles.headerContainer}>
           <PageHeader title={'Earnings'} />
           <Balance
             {...{inset, openModal, TOP, setBalanceHeight, ...(data ?? {})}}
@@ -258,11 +275,7 @@ const AffilateEarnings = () => {
             <ActivityIndicator color={Colors.primary} />
           </View>
         ) : rewards.length > 0 ? (
-          <View
-            style={{
-              flex: 1,
-              paddingTop: balanceHeight - remainingSpace + 40,
-            }}>
+          <View style={styles.earningsContainer}>
             <Earnings rewards={rewards} {...{refetch}} />
           </View>
         ) : (
@@ -307,5 +320,3 @@ const AffilateEarnings = () => {
 };
 
 export default AffilateEarnings;
-
-const styles = StyleSheet.create({});
