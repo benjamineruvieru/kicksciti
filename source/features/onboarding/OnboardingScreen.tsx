@@ -27,10 +27,11 @@ import {
 } from '../../api/auth';
 import {getItem, setItem} from '../../utilis/storage';
 import {useMMKVObject} from 'react-native-mmkv';
+import {NavigationProp} from '@react-navigation/native';
 
 const bg = require('../../assets/images/onboarding/bg.webp');
 
-function secondsToMMSS(seconds) {
+function secondsToMMSS(seconds: number) {
   // Calculate minutes and remaining seconds
   let minutes = Math.floor(seconds / 60);
   let remainingSeconds = seconds % 60;
@@ -43,7 +44,29 @@ function secondsToMMSS(seconds) {
   return timeFormat;
 }
 
-const Welcome = ({setPos, navigation}) => {
+interface ComponentsProps {
+  setPos?: (pos: number) => void;
+  password?: string;
+  setPassword?: (password: string) => void;
+  repassword?: string;
+  setRepassword?: (repassword: string) => void;
+  email?: string;
+  setEmail?: (email: string) => void;
+  token?: string;
+  setToken?: (token: string) => void;
+  navigation?: NavigationProp<any>;
+  resetotp?: string;
+  setResetOtp?: (token: string) => void;
+  name?: string;
+  setName?: (name: string) => void;
+  username?: string;
+  setUsername?: (username: string) => void;
+}
+
+const Welcome: React.FC<ComponentsProps> = ({
+  setPos = () => {},
+  navigation,
+}) => {
   return (
     <>
       <LayoutAnimationComponent leftInOut>
@@ -76,7 +99,7 @@ const Welcome = ({setPos, navigation}) => {
           <TouchableOpacity
             style={{}}
             onPress={() => {
-              navigation.reset({
+              navigation?.reset({
                 index: 0,
                 routes: [{name: 'AniStackNav'}],
               });
@@ -89,7 +112,11 @@ const Welcome = ({setPos, navigation}) => {
   );
 };
 
-const CollectEmail = ({setPos, email, setEmail, setToken}) => {
+const CollectEmail: React.FC<ComponentsProps> = ({
+  setPos = () => {},
+  email = '',
+  setEmail = () => {},
+}) => {
   const [load, setLoad] = useState(false);
   const action = () => {
     if (email && validateEmail(email)) {
@@ -150,14 +177,14 @@ const CollectEmail = ({setPos, email, setEmail, setToken}) => {
   );
 };
 
-const CreatePassword = ({
-  setPos,
-  password,
-  setPassword,
-  repassword,
-  setRepassword,
-  email,
-  setToken,
+const CreatePassword: React.FC<ComponentsProps> = ({
+  setPos = () => {},
+  password = '',
+  setPassword = () => {},
+  repassword = '',
+  setRepassword = () => {},
+  email = '',
+  setToken = () => {},
 }) => {
   const [load, setLoad] = useState(false);
 
@@ -226,13 +253,13 @@ const CreatePassword = ({
   );
 };
 
-const CollectPassword = ({
-  password,
-  setPassword,
-  email,
+const CollectPassword: React.FC<ComponentsProps> = ({
+  password = '',
+  setPassword = () => {},
+  email = '',
   navigation,
-  setPos,
-  setToken,
+  setPos = () => {},
+  setToken = () => {},
 }) => {
   const [loadForgot, setLoadForgot] = useState(false);
 
@@ -264,12 +291,12 @@ const CollectPassword = ({
             setCart(data.data?.user?.cart);
             setFavourites(data.data?.user?.favourites);
             if (getItem('affilateRefer')) {
-              navigation.navigate(
+              navigation?.navigate(
                 'LoadProduct',
                 getItem('affilateRefer', true),
               );
             } else {
-              navigation.reset({
+              navigation?.reset({
                 index: 0,
                 routes: [{name: 'AniStackNav'}],
               });
@@ -340,7 +367,11 @@ const CollectPassword = ({
   );
 };
 
-const VerifyEmail = ({setPos, token, email}) => {
+const VerifyEmail: React.FC<ComponentsProps> = ({
+  setPos = () => {},
+  token = '',
+  email = '',
+}) => {
   const [otp, setOtp] = useState('');
   const [load, setLoad] = useState(false);
   const [seconds, setSeconds] = useState(120);
@@ -422,7 +453,12 @@ const VerifyEmail = ({setPos, token, email}) => {
   );
 };
 
-const VerifyEmailReset = ({setPos, email, resetotp, setResetOtp}) => {
+const VerifyEmailReset: React.FC<ComponentsProps> = ({
+  setPos = () => {},
+  email = '',
+  resetotp,
+  setResetOtp = () => {},
+}) => {
   const [load, setLoad] = useState(false);
 
   const action = () => {
@@ -461,18 +497,18 @@ const VerifyEmailReset = ({setPos, email, resetotp, setResetOtp}) => {
   );
 };
 
-const CreateResetPassword = ({
-  setPos,
+const CreateResetPassword: React.FC<ComponentsProps> = ({
+  setPos = () => {},
 
-  email,
-  resetotp,
+  email = '',
+  resetotp = '',
 }) => {
   const [load, setLoad] = useState(false);
-  const [password, setPassword] = useState();
-  const [repassword, setRepassword] = useState();
+  const [password, setPassword] = useState('');
+  const [repassword, setRepassword] = useState('');
   const action = () => {
     if (password) {
-      if (password.length < 6) {
+      if (password?.length < 6) {
         showNotification({
           msg: 'Password must be at least 6 characters long',
           error: true,
@@ -537,12 +573,12 @@ const CreateResetPassword = ({
   );
 };
 
-const CompleteProfile = ({
+const CompleteProfile: React.FC<ComponentsProps> = ({
   navigation,
-  name,
-  setName,
-  username,
-  setUsername,
+  name = '',
+  setName = () => {},
+  username = '',
+  setUsername = () => {},
   token,
 }) => {
   const [load, setLoad] = useState(false);
@@ -568,9 +604,9 @@ const CompleteProfile = ({
         setCart(data.data?.user?.cart);
         setFavourites(data.data?.user?.favourites);
         if (getItem('affilateRefer')) {
-          navigation.navigate('LoadProduct', getItem('affilateRefer', true));
+          navigation?.navigate('LoadProduct', getItem('affilateRefer', true));
         } else {
-          navigation.reset({
+          navigation?.reset({
             index: 0,
             routes: [{name: 'AniStackNav'}],
           });
@@ -602,15 +638,19 @@ const CompleteProfile = ({
   );
 };
 
-const OnboardingScreen = ({navigation}) => {
+interface ScreenProps {
+  navigation: NavigationProp<any>;
+}
+const OnboardingScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [pos, setPos] = useState(0);
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [repassword, setRepassword] = useState();
-  const [name, setName] = useState();
-  const [username, setUsername] = useState();
-  const [token, setToken] = useState();
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [repassword, setRepassword] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [token, setToken] = useState<string>('');
   const [resetotp, setResetOtp] = useState('');
+
   useEffect(() => {
     const backAction = () => {
       if (pos > 0) {
@@ -720,7 +760,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: 'rgba(0,0,0,0.7)',
-    // width: SCREEN_WIDTH,
   },
   bgImg: {
     position: 'absolute',
@@ -729,6 +768,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT + StatusBar.currentHeight,
+    height: SCREEN_HEIGHT + (StatusBar.currentHeight ?? 0),
   },
 });

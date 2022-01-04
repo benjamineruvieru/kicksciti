@@ -50,6 +50,9 @@ const UpdateScreen = () => {
                 'https://play.google.com/store/apps/details?id=com.kicksciti.android',
               );
             } else {
+              Linking.openURL(
+                'https://apps.apple.com/app/kicks-citi/id6474217371',
+              );
             }
           }}
         />

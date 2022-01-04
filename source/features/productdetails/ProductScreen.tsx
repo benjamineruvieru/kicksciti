@@ -156,6 +156,7 @@ const ProductScreen = ({route, navigation}) => {
   return (
     <Mainbackground top={-1} avoid androidAvoid={'height'}>
       <ScrollView
+        bounces={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{flexGrow: 1}}>
         <Header {...{item: route?.params, _id, id}} />

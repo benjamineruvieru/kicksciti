@@ -11,7 +11,13 @@ import {getItem} from './storage';
 
 const scale = SCREEN_WIDTH / 390;
 
-export const restrictViewer = ({navigation, alt}) => {
+export const restrictViewer = ({
+  navigation,
+  alt,
+}: {
+  navigation: any;
+  alt: () => void;
+}) => {
   if (!getItem('token')) {
     navigation.reset({
       index: 0,
@@ -23,7 +29,7 @@ export const restrictViewer = ({navigation, alt}) => {
     }
   }
 };
-export const getDeliveryFee = ({lga, state}) => {
+export const getDeliveryFee = ({lga, state}: {lga: string; state: string}) => {
   if (state !== 'Lagos') {
     return 3000;
   } else if (
@@ -38,29 +44,29 @@ export const getDeliveryFee = ({lga, state}) => {
   }
 };
 
-export const getState = ({country}) => {
+export const getState = ({country}: {country: string}) => {
   if (!country) return [];
   const data = countryData.find(
     data => data.name.toLowerCase() === country.toLowerCase(),
   );
-  return data.states.map(d => {
+  return data?.states.map(d => {
     return d;
   });
 };
 
-export const getCity = ({country, state}) => {
+export const getCity = ({country, state}: {country: string; state: string}) => {
   if (!country || !state) return [];
   const item = citiesData.find(
     data => data.state?.toLowerCase() === state?.toLowerCase(),
   );
-  return item.lgas;
+  return item?.lgas;
 };
 
-export const formatDate = date => {
+export const formatDate = (date: string) => {
   const givenDate = new Date(date);
   const currentDate = new Date();
 
-  const diffInMilliseconds = currentDate - givenDate;
+  const diffInMilliseconds = currentDate.getTime() - givenDate.getTime();
   const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   const diffInHours = Math.floor(diffInMinutes / 60);
@@ -90,7 +96,7 @@ export const formatDate = date => {
   return output;
 };
 
-export function generateRandomString(length) {
+export function generateRandomString(length: number) {
   var characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var result = '';
@@ -103,32 +109,26 @@ export function generateRandomString(length) {
   return result;
 }
 
-export function formatProfit(number) {
+export function formatProfit(number: number) {
   if (number < 0) {
-    return '- $' + parseFloat(Math.abs(number)).toFixed(2);
+    return '- $' + Math.abs(number).toFixed(2);
   } else {
     return '$' + number;
   }
 }
 
-// Examples:
-//console.log(formatProfit(100)); // Output: $100
-//console.log(formatProfit(-50)); // Output: -$50
-//console.log(formatProfit(0)); // Output: $0
-//console.log(formatProfit(-123.45)); // Output: -$123.45
-
-export function formatAmount(number) {
+export function formatAmount(number: number) {
   let formatted_num = Math.abs(number)
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  if (parseFloat(number) > 0) {
+  if (parseFloat(number.toString()) > 0) {
     return `₦ ${formatted_num}`;
   } else {
     return `- ₦ ${formatted_num}`;
   }
 }
 
-export function formatNumberWithCommas(number) {
+export function formatNumberWithCommas(number: number) {
   // Split the number into whole and decimal parts
   const parts = number.toString().split('.');
 
@@ -144,24 +144,24 @@ export function formatNumberWithCommas(number) {
   return result;
 }
 
-export function normalizeFontSize(size) {
+export function normalizeFontSize(size: number) {
   const newSize = size * scale;
   return Math.round(PixelRatio.roundToNearestPixel(newSize));
 }
 
-export const getPercentHeight = percent => {
+export const getPercentHeight = (percent: number) => {
   return (percent / 100) * SCREEN_HEIGHT;
 };
-export const getPercentWidth = percent => {
+export const getPercentWidth = (percent: number) => {
   return (percent / 100) * SCREEN_WIDTH;
 };
 
-export const validateEmail = email => {
+export const validateEmail = (email: string) => {
   if (!email) return false;
   return email.match(/\S+@\S+\.\S+/);
 };
 
-export const hideFirstLetter = text => {
+export const hideFirstLetter = (text: string) => {
   if (text.length <= 4) {
     return '****';
   }
@@ -170,7 +170,7 @@ export const hideFirstLetter = text => {
   return asterisks + lastFour;
 };
 
-export function capitalizeAllFirstLetters(string) {
+export function capitalizeAllFirstLetters(string: string) {
   if (!string) {
     return '';
   }
@@ -180,13 +180,13 @@ export function capitalizeAllFirstLetters(string) {
     .join(' ');
 }
 
-export function capitalizeFirstLetter(string) {
+export function capitalizeFirstLetter(string: string) {
   if (!string) return '';
 
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export const pad = text => {
+export const pad = (text: string) => {
   if (text.toString().length > 1) {
     return text;
   } else {
@@ -194,59 +194,20 @@ export const pad = text => {
   }
 };
 
-export function checkPasswordStrength(password) {
-  // Scoring system.
-  const score = {
-    lowerCase: 1,
-    upperCase: 5,
-    numbers: 4,
-    symbols: 5,
-    length: 2,
-  };
-
-  // Initialize a score counter.
-  let scoreCount = 0;
-
-  // Check for lowercase letters.
-  if (password.match(/[a-z]/)) {
-    scoreCount += score.lowerCase;
-  }
-
-  // Check for uppercase letters.
-  if (password.match(/[A-Z]/)) {
-    scoreCount += score.upperCase;
-  }
-
-  // Check for numbers.
-  if (password.match(/\d+/)) {
-    scoreCount += score.numbers;
-  }
-
-  // Check for symbols.
-  if (password.match(/[^a-zA-Z\d]/)) {
-    scoreCount += score.symbols;
-  }
-
-  // Check for length.
-  if (password.length >= 8) {
-    scoreCount += score.length;
-  }
-
-  // Calculate the score as a percentage.
-  const scorePercentage = (scoreCount / 15) * 100;
-
-  // Return the score as a number from 0 - 1.
-  return scorePercentage / 100;
-}
-
-export const showNotification = ({msg, error}) => {
+export const showNotification = ({
+  msg,
+  error,
+}: {
+  msg: string;
+  error?: boolean;
+}) => {
   DeviceEventEmitter.emit('openNotification', {
     error,
     msg,
   });
 };
 
-export function addItemIfNotExists(array, newItem) {
+export function addItemIfNotExists(array: any[], newItem: any) {
   // Check if an item with the same properties already exists in the array
   const exists = array.some(
     item =>
@@ -265,7 +226,7 @@ export function addItemIfNotExists(array, newItem) {
   return array;
 }
 
-export function insertDateItems(arrayQ) {
+export function insertDateItems(arrayQ: any[]) {
   const today = new Date();
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
@@ -274,13 +235,6 @@ export function insertDateItems(arrayQ) {
   for (let i = 0; i < arrayQ.length; i++) {
     const {createdAt} = arrayQ[i];
     const createdAtDate = new Date(createdAt);
-    console.log(
-      'currDate',
-      currDate,
-      'createdAtDate',
-      createdAtDate.toDateString(),
-      currDate !== createdAtDate,
-    );
     if (currDate !== createdAtDate.toDateString()) {
       if (createdAtDate.toDateString() === today.toDateString()) {
         arr.push({date: 'Today'});
