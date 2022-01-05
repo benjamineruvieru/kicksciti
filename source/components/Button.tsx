@@ -43,19 +43,19 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const styles = StyleSheet.create({
     bg: {
-      backgroundColor,
-      borderRadius: small ? 5 : 8,
-      justifyContent: 'center',
       alignItems: 'center',
-      padding: small ? 8 : load ? 17 : 20,
       alignSelf: 'center',
-      width: getPercentWidth(width),
-      marginTop: top,
-      marginBottom: bottom,
-      opacity: disable || load ? 0.5 : 1,
-      flexDirection: 'row',
+      backgroundColor,
       borderColor: Colors.primary,
+      borderRadius: small ? 5 : 8,
       borderWidth: isSec ? 1 : 0,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginBottom: bottom,
+      marginTop: top,
+      opacity: disable || load ? 0.5 : 1,
+      padding: small ? 8 : load ? 17 : 20,
+      width: getPercentWidth(width),
       ...style,
     },
   });

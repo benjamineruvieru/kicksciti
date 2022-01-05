@@ -32,20 +32,20 @@ export const Dialog: React.FC<DialogProps> = props => {
   const {color = Colors.bg, radius = 20} = props;
 
   const styles = StyleSheet.create({
-    view: {
-      backgroundColor: color,
-      width: '85%',
-      borderRadius: radius,
-      zIndex: 10,
-      padding: 10,
-      maxHeight: '50%',
-      ...props.style,
-    },
     pressable: {
+      alignItems: 'center',
       backgroundColor: 'rgba(0,0,0,0.7)',
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
+    },
+    view: {
+      backgroundColor: color,
+      borderRadius: radius,
+      maxHeight: '50%',
+      padding: 10,
+      width: '85%',
+      zIndex: 10,
+      ...props.style,
     },
   });
 
@@ -104,23 +104,23 @@ export const ListDialog: React.FC<ListDialogProps> = ({
   };
   const styles = StyleSheet.create({
     countrydialogtouchable: {
-      paddingVertical: 12,
-      flexDirection: 'row',
       alignItems: 'center',
+      flexDirection: 'row',
       paddingHorizontal: 8,
+      paddingVertical: 12,
     },
-    textInput: {
-      height: 40,
-      fontFamily: 'Gilroy-Regular',
-      color: 'white',
-    },
-    mainView: {width: '100%', height},
+    mainView: {height, width: '100%'},
     searchView: {
+      borderColor: Colors.tabColor,
       borderRadius: 10,
       borderWidth: 1,
-      borderColor: Colors.tabColor,
-      paddingHorizontal: 10,
       marginVertical: 10,
+      paddingHorizontal: 10,
+    },
+    textInput: {
+      color: 'white',
+      fontFamily: 'Gilroy-Regular',
+      height: 40,
     },
   });
 
@@ -221,13 +221,13 @@ export const DropDown: React.FC<DropDownProps> = ({
   const [modalVisible, setModalVisible] = useState(false);
   const styles = StyleSheet.create({
     touchable: {
-      height: 55,
-      backgroundColor: '#F0F0F0',
-      justifyContent: 'space-between',
-      borderRadius: 10,
-      marginVertical: 4,
-      flexDirection: 'row',
       alignItems: 'center',
+      backgroundColor: '#F0F0F0',
+      borderRadius: 10,
+      flexDirection: 'row',
+      height: 55,
+      justifyContent: 'space-between',
+      marginVertical: 4,
       paddingHorizontal: 15,
     },
   });

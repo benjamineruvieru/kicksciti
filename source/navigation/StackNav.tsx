@@ -40,7 +40,7 @@ const StackNav = () => {
     };
   }, []);
   useEffect(() => {
-    let version = parseFloat(DeviceInfo.getVersion());
+    const version = parseFloat(DeviceInfo.getVersion());
     console.log('device version', Platform.OS, version);
     getAppVersion().then(data => {
       console.log('api app ver', data.data);

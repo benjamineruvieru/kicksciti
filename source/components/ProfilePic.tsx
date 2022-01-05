@@ -50,8 +50,8 @@ export default ProfilePic;
 
 const styles = StyleSheet.create({
   profileImage: {
+    borderRadius: 360,
     height: 80,
     width: 80,
-    borderRadius: 360,
   },
 });

@@ -107,7 +107,7 @@ const ProductScreen = ({route, navigation}) => {
     affiliate_commission,
   } = route.params ?? {};
   const [activeIndex, setActiveIndex] = useState(0);
-  let flatListRef = useRef(null);
+  const flatListRef = useRef(null);
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const displayPrice = price - (discount ?? 0);
 

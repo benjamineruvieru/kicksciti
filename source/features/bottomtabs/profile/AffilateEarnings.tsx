@@ -36,17 +36,17 @@ import {formatTimestamp} from './OrderHistory';
 const EmptyEarnings = () => {
   const styles = StyleSheet.create({
     emptyContainer: {
+      alignItems: 'center',
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
       paddingBottom: 100,
     },
     emptyImage: {
-      width: getPercentWidth(65),
       height: getPercentWidth(65),
-      top: -5,
-      maxWidth: 400,
       maxHeight: 400,
+      maxWidth: 400,
+      top: -5,
+      width: getPercentWidth(65),
     },
     emptyText: {
       marginBottom: 5,
@@ -83,10 +83,13 @@ const Balance = ({
   setBalanceHeight,
 }) => {
   const styles = StyleSheet.create({
+    balanceAmount: {
+      fontSize: 40,
+    },
     balanceContainer: {
       backgroundColor: Colors.bg,
-      elevation: 15,
       borderRadius: 5,
+      elevation: 15,
       padding: 20,
       shadowColor: 'black',
       shadowOffset: {height: 2, width: 2},
@@ -96,13 +99,10 @@ const Balance = ({
     },
     balanceContent: {
       alignItems: 'center',
-      marginTop: 0,
       flexDirection: 'row',
       justifyContent: 'space-between',
+      marginTop: 0,
       paddingVertical: 18,
-    },
-    balanceAmount: {
-      fontSize: 40,
     },
     withdrawButton: {
       backgroundColor: Colors.primary,
@@ -159,28 +159,28 @@ const EarnItem = ({item}) => {
   console.log(item);
 
   const styles = StyleSheet.create({
+    earnIconContainer: {
+      alignItems: 'center',
+      backgroundColor: Colors.primary,
+      borderRadius: 360,
+      height: 40,
+      justifyContent: 'center',
+      marginRight: 15,
+      width: 40,
+    },
     earnItemContainer: {
-      flexDirection: 'row',
+      alignItems: 'center',
       backgroundColor: '#1c2429',
+      borderRadius: 10,
+      elevation: 10,
+      flexDirection: 'row',
       marginBottom: 20,
       marginHorizontal: 20,
       padding: 15,
-      borderRadius: 10,
-      alignItems: 'center',
       shadowColor: 'black',
       shadowOffset: {height: 2, width: 2},
       shadowOpacity: 0.5,
       shadowRadius: 2,
-      elevation: 10,
-    },
-    earnIconContainer: {
-      width: 40,
-      height: 40,
-      marginRight: 15,
-      backgroundColor: Colors.primary,
-      borderRadius: 360,
-      justifyContent: 'center',
-      alignItems: 'center',
     },
   });
   return (
@@ -248,17 +248,17 @@ const AffilateEarnings = () => {
 
   const account_bank = bankData?.data?.find(item => item.name === bank);
   const styles = StyleSheet.create({
-    headerContainer: {
-      backgroundColor: Colors.primary,
-      height: 200,
-      paddingTop:
-        Platform.OS === 'ios' ? inset.top + 20 : StatusBar.currentHeight + 20,
-      paddingHorizontal: 20,
-      zIndex: 1,
-    },
     earningsContainer: {
       flex: 1,
       paddingTop: balanceHeight - remainingSpace + 40,
+    },
+    headerContainer: {
+      backgroundColor: Colors.primary,
+      height: 200,
+      paddingHorizontal: 20,
+      paddingTop:
+        Platform.OS === 'ios' ? inset.top + 20 : StatusBar.currentHeight + 20,
+      zIndex: 1,
     },
   });
   return (

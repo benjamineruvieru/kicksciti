@@ -19,7 +19,7 @@ Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
 StatusBar.setBarStyle('light-content');
 
 export const queryClient = new QueryClient();
-let codePushOptions = {checkFrequency: codePush.CheckFrequency.ON_APP_RESUME};
+const codePushOptions = {checkFrequency: codePush.CheckFrequency.ON_APP_RESUME};
 
 const App = () => {
   const transY = useRef(new Animated.Value(0)).current;

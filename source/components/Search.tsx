@@ -29,20 +29,20 @@ export default Search;
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 5,
-    paddingHorizontal: 10,
     flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 15,
+    paddingHorizontal: 10,
   },
   input: {
+    color: 'black',
+    flex: 1,
     fontFamily: 'Gilroy-SemiBold',
-    paddingVertical: 0,
     height: 45,
     marginLeft: 7,
-    flex: 1,
     paddingHorizontal: 0,
-    color: 'black',
+    paddingVertical: 0,
   },
 });
