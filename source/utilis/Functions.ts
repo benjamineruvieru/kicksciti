@@ -1,9 +1,4 @@
-import {
-  StatusBar,
-  Platform,
-  PixelRatio,
-  DeviceEventEmitter,
-} from 'react-native';
+import {PixelRatio, DeviceEventEmitter} from 'react-native';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants/Variables';
 import countryData from './output.json';
 import citiesData from './lgas.json';

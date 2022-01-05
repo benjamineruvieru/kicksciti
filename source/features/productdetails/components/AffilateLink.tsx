@@ -10,16 +10,25 @@ import {
 } from '../../../utilis/Functions';
 import QuesSvg from '../../../assets/svg/icons/question.svg';
 import {Dialog} from '../../../components/Dialog';
-const AffilateLink = ({id, affiliate_commission}) => {
-  const isLoggedIn = !!getItem('token');
+
+interface AffiliateLinkProps {
+  id: string;
+  affiliate_commission: number;
+}
+
+const AffilateLink: React.FC<AffiliateLinkProps> = ({
+  id,
+  affiliate_commission,
+}) => {
+  const isLoggedIn: boolean = !!getItem('token');
   const [open, setOpen] = useState(false);
   const {username} = getItem('userdetails', true);
   const link = isLoggedIn
     ? `https://www.kicksciti.com/product/${id}?id=${username}`
     : `https://www.kicksciti.com/product/${id}`;
   return (
-    <View style={{marginTop: 30, marginBottom: 10}}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+    <View style={styles.container}>
+      <View style={styles.rowContainer}>
         <RegularTextB
           onTextPress={() => {
             setOpen(true);
@@ -31,7 +40,7 @@ const AffilateLink = ({id, affiliate_commission}) => {
             onPress={() => {
               setOpen(true);
             }}
-            style={{marginLeft: 5}}>
+            style={styles.iconContainer}>
             <QuesSvg width={20} height={20} color={'white'} />
           </TouchableOpacity>
         )}
@@ -45,19 +54,8 @@ const AffilateLink = ({id, affiliate_commission}) => {
               : 'Product link copied to clipboard',
           });
         }}
-        style={{
-          flexDirection: 'row',
-          borderRadius: 5,
-          borderWidth: 0.7,
-          borderColor: 'white',
-          paddingVertical: 10,
-          marginTop: 10,
-          paddingHorizontal: 10,
-          alignItems: 'center',
-        }}>
-        <SmallText style={{flex: 1, textAlignVertical: 'center'}}>
-          {link}
-        </SmallText>
+        style={styles.linkContainer}>
+        <SmallText style={styles.linkText}>{link}</SmallText>
         <CopySvg color={'white'} width={20} height={20} />
       </TouchableOpacity>
       <Dialog
@@ -65,14 +63,14 @@ const AffilateLink = ({id, affiliate_commission}) => {
         closeModal={() => {
           setOpen(false);
         }}>
-        <View style={{padding: 5}}>
-          <RegularTextB style={{marginBottom: 10}}>Affiliate Link</RegularTextB>
+        <View style={styles.dialogContent}>
+          <RegularTextB style={styles.dialogTitle}>Affiliate Link</RegularTextB>
           <SmallText>
             Grab your unique Affiliate Link and share it. When friends use it to
             make a purchase, you get a commission!{'\n\n'}It's that simple.
             Share the love, earn rewards. Happy sharing!
           </SmallText>
-          <SmallText style={{marginTop: 5}}>
+          <SmallText style={styles.dialogCommissionText}>
             Product Commission: ₦{' '}
             {formatNumberWithCommas(affiliate_commission ?? 1000)}
           </SmallText>
@@ -84,4 +82,39 @@ const AffilateLink = ({id, affiliate_commission}) => {
 
 export default AffilateLink;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 30,
+    marginBottom: 10,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    marginLeft: 5,
+  },
+  linkContainer: {
+    flexDirection: 'row',
+    borderRadius: 5,
+    borderWidth: 0.7,
+    borderColor: 'white',
+    paddingVertical: 10,
+    marginTop: 10,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+  },
+  linkText: {
+    flex: 1,
+    textAlignVertical: 'center',
+  },
+  dialogContent: {
+    padding: 5,
+  },
+  dialogTitle: {
+    marginBottom: 10,
+  },
+  dialogCommissionText: {
+    marginTop: 5,
+  },
+});
