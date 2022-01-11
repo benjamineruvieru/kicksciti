@@ -13,26 +13,26 @@ export const QuantityCounter = ({
   removeFromCart,
 }) => {
   const styles = StyleSheet.create({
-    mainView: {
-      marginTop: 15,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: paddingHorizontal,
-    },
     button: {
-      backgroundColor: Colors.primary,
-      height: 25,
-      width: 25,
-      justifyContent: 'center',
       alignItems: 'center',
+      backgroundColor: Colors.primary,
       borderRadius: 5,
+      height: 25,
+      justifyContent: 'center',
+      width: 25,
     },
     input: {
       color: 'white',
       fontFamily: 'Gilroy-SemiBold',
       fontSize: 18,
       padding: 0,
+    },
+    mainView: {
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 15,
+      paddingHorizontal: paddingHorizontal,
     },
   });
 

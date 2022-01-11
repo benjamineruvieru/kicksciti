@@ -20,7 +20,7 @@ const AffilateLink: React.FC<AffiliateLinkProps> = ({
   id,
   affiliate_commission,
 }) => {
-  const isLoggedIn: boolean = !!getItem('token');
+  const isLoggedIn = !!getItem('token');
   const [open, setOpen] = useState(false);
   const {username} = getItem('userdetails', true);
   const link = isLoggedIn
@@ -84,29 +84,11 @@ export default AffilateLink;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
     marginBottom: 10,
+    marginTop: 30,
   },
-  rowContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconContainer: {
-    marginLeft: 5,
-  },
-  linkContainer: {
-    flexDirection: 'row',
-    borderRadius: 5,
-    borderWidth: 0.7,
-    borderColor: 'white',
-    paddingVertical: 10,
-    marginTop: 10,
-    paddingHorizontal: 10,
-    alignItems: 'center',
-  },
-  linkText: {
-    flex: 1,
-    textAlignVertical: 'center',
+  dialogCommissionText: {
+    marginTop: 5,
   },
   dialogContent: {
     padding: 5,
@@ -114,7 +96,25 @@ const styles = StyleSheet.create({
   dialogTitle: {
     marginBottom: 10,
   },
-  dialogCommissionText: {
-    marginTop: 5,
+  iconContainer: {
+    marginLeft: 5,
+  },
+  linkContainer: {
+    alignItems: 'center',
+    borderColor: 'white',
+    borderRadius: 5,
+    borderWidth: 0.7,
+    flexDirection: 'row',
+    marginTop: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  linkText: {
+    flex: 1,
+    textAlignVertical: 'center',
+  },
+  rowContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 });
