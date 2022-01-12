@@ -26,6 +26,7 @@ import {formatNumberWithCommas, showNotification} from '../../utilis/Functions';
 import useCart from '../../hooks/useCart';
 import {useNavigation} from '@react-navigation/native';
 import {viewProduct} from '../../api/products';
+import analytics from '@react-native-firebase/analytics';
 
 const FullImages = ({pictures, flatListRef, scrollX, setActiveIndex}) => {
   const onViewRef = React.useRef(({viewableItems}: any) => {
@@ -148,10 +149,23 @@ const ProductScreen = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    console.log('=========== VIEWING PRODUCT ============');
-    viewProduct({product_id: _id}).then(d => {
-      console.log(d.data);
-    });
+    const init = async () => {
+      console.log('=========== VIEWING PRODUCT ============');
+      viewProduct({product_id: _id}).then(d => {
+        console.log(d.data);
+      });
+      await analytics().logViewItem({
+        items: [
+          {
+            item_name: name,
+            price,
+            item_id: id,
+          },
+        ],
+      });
+    };
+
+    init();
   }, []);
   return (
     <Mainbackground top={-1} avoid androidAvoid={'height'}>

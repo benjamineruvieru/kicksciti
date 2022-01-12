@@ -649,7 +649,11 @@ const OnboardingScreen: React.FC<ScreenProps> = ({navigation}) => {
   const [username, setUsername] = useState<string>('');
   const [token, setToken] = useState<string>('');
   const [resetotp, setResetOtp] = useState('');
-
+  useEffect(() => {
+    if (!getItem('dateFirstOpened')) {
+      setItem('dateFirstOpened', Date.now(), true);
+    }
+  }, []);
   useEffect(() => {
     const backAction = () => {
       if (pos > 0) {

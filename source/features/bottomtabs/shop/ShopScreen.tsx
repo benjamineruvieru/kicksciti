@@ -14,6 +14,7 @@ import useDebounce from '../../../hooks/useDebounce';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../../navigation/BottomNav';
+import analytics from '@react-native-firebase/analytics';
 
 interface ShopScreenProps {
   route: RouteProp<RootStackParamList, 'Shop'>;
@@ -46,10 +47,11 @@ const ShopScreen: React.FC<ShopScreenProps> = ({route}) => {
   }, [searchPassed]);
 
   useDebounce(
-    () => {
+    async () => {
       if (search) {
         console.log('sa', search);
         setQuery(search);
+        await analytics().logSearch({search_term: search});
       } else {
         if (query) {
           setQuery('');

@@ -1,14 +1,15 @@
 import {useRef} from 'react';
 import {useMMKVObject} from 'react-native-mmkv';
 import {addToServerCart, updateServerCart} from '../api/user';
-import {restrictViewer} from '../utilis/Functions';
+import {restrictViewer, showRate} from '../utilis/Functions';
 import {useNavigation} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
 
 interface CartItem {
   _id: string;
-  item: any;
-  quantity: number;
-  size: number;
+  name: string;
+  brand: string;
+  price: number;
 }
 
 interface CartHook {
@@ -24,7 +25,7 @@ const useCart = ({item}: CartHook) => {
   const data = cart?.[index] ?? {};
   const {quantity, size} = data;
 
-  function addToCart({size, quantity}: {size: string; quantity: number}) {
+  async function addToCart({size, quantity}: {size: string; quantity: number}) {
     if (isInCart) {
     } else {
       const cartList = [...(cart ?? []), {item, size, quantity}];
@@ -44,10 +45,23 @@ const useCart = ({item}: CartHook) => {
         .finally(() => {
           setUpdating(false);
         });
+
+      await analytics().logAddToCart({
+        items: [
+          {
+            item_name: item.name,
+            item_brand: item.brand,
+            price: item.price,
+            quantity,
+          },
+        ],
+      });
+
+      showRate();
     }
   }
 
-  const removeFromCart = () => {
+  const removeFromCart = async () => {
     if (isInCart) {
       setUpdating(true);
       addToServerCart({_id: item._id, add: false})
@@ -64,6 +78,15 @@ const useCart = ({item}: CartHook) => {
       cart?.splice(index, 1);
       console.log(`Removed ${item._id} from cart`, cart);
       setCart([...cart]);
+      await analytics().logRemoveFromCart({
+        items: [
+          {
+            item_name: item.name,
+            item_brand: item.brand,
+            price: item.price,
+          },
+        ],
+      });
     }
   };
 
