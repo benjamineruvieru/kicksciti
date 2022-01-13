@@ -19,7 +19,7 @@ import {getItem, setItem} from '../utilis/storage';
 import {useNavigation} from '@react-navigation/native';
 import {updateFcmtoken} from '../api/user';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-
+import DeviceInfo from 'react-native-device-info';
 export type RootStackParamList = {
   Shop: {searchPassed?: string};
 };
@@ -60,7 +60,7 @@ export default function BottomNav() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const {username} = getItem('userdetails', true);
-
+  console.log('Platform.Version', Platform.Version);
   async function requestUserPermission() {
     await messaging().requestPermission();
   }
@@ -68,7 +68,7 @@ export default function BottomNav() {
   async function requestPermissionAndroid() {
     try {
       await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS, // or POST_NOTIFICATIONS
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
       );
     } catch (err) {
       console.log(err);
@@ -95,7 +95,9 @@ export default function BottomNav() {
   useEffect(() => {
     const init = async () => {
       if (Platform.OS === 'android') {
-        await requestPermissionAndroid();
+        if (Platform.Version >= 33) {
+          await requestPermissionAndroid();
+        }
       } else {
         await requestUserPermission();
       }
@@ -218,7 +220,7 @@ export default function BottomNav() {
         component={StackShopScreen}
       />
 
-      {username !== 'testaccount' && (
+      {username && username !== 'testaccount' && (
         <Tab.Screen
           options={{
             tabBarIcon: ({color}) => (

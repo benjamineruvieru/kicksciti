@@ -124,6 +124,7 @@ const CartItemsList = () => {
         estimatedItemSize={157}
         data={cart?.reverse()}
         renderItem={RenderItem}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );

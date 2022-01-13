@@ -209,13 +209,21 @@ const Earnings = ({rewards, refetch}) => {
     await refetch();
     setRefreshing(false);
   };
+
+  const sortedRewards =
+    rewards
+      ?.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      )
+      .reverse() ?? [];
   return (
     <FlashList
       refreshing={refreshing}
       onRefresh={onRefresh}
       estimatedItemSize={104}
       showsVerticalScrollIndicator={false}
-      data={rewards?.reverse()}
+      data={sortedRewards}
       renderItem={EarnItem}
     />
   );

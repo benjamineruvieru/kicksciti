@@ -16,6 +16,7 @@ import UpdateScreen from '../features/updateapp/UpdateScreen';
 import DeviceInfo from 'react-native-device-info';
 import {getAppVersion} from '../api/user';
 import DeleteAccount from '../features/bottomtabs/profile/DeleteAccount';
+import {useApi} from '../hooks/useApi';
 
 interface DeepLinkResult {
   product_id: string;
@@ -26,24 +27,13 @@ const Stack = createNativeStackNavigator();
 
 const StackNav = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  useEffect(() => {
-    const getUrlAsync = async () => {
-      const initialUrl = await Linking.getInitialURL();
-      handleDeepLink({url: initialUrl});
-    };
 
-    getUrlAsync();
-    Linking.addEventListener('url', handleDeepLink);
-
-    return () => {
-      Linking.removeAllListeners('url');
-    };
-  }, []);
-  useEffect(() => {
-    const version = parseFloat(DeviceInfo.getVersion());
-    console.log('device version', Platform.OS, version);
-    getAppVersion().then(data => {
-      console.log('api app ver', data.data);
+  useApi({
+    queryFn: getAppVersion,
+    queryKey: ['getAppVersion'],
+    onSuccess: data => {
+      console.log('sucesn use api', data.data);
+      const version = parseFloat(DeviceInfo.getVersion());
       const {android, ios} = data?.data ?? {};
       if (Platform.OS === 'android') {
         if (parseFloat(android) > version) {
@@ -60,7 +50,22 @@ const StackNav = () => {
           });
         }
       }
-    });
+    },
+    retry: true,
+  });
+
+  useEffect(() => {
+    const getUrlAsync = async () => {
+      const initialUrl = await Linking.getInitialURL();
+      handleDeepLink({url: initialUrl});
+    };
+
+    getUrlAsync();
+    Linking.addEventListener('url', handleDeepLink);
+
+    return () => {
+      Linking.removeAllListeners('url');
+    };
   }, []);
 
   function parseLink(link: string): DeepLinkResult | null {
