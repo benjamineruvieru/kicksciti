@@ -1,4 +1,4 @@
-package com.kicksciti.android>; 
+package com.kicksciti.android;
 
 import com.wix.detox.Detox;
 import com.wix.detox.config.DetoxConfig;

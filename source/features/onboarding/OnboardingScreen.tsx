@@ -86,6 +86,7 @@ const Welcome: React.FC<ComponentsProps> = ({
         }}>
         <LayoutAnimationComponent>
           <Button
+            testID={'get_started'}
             title={'Get Started'}
             bottom={15}
             top={20}
@@ -97,7 +98,6 @@ const Welcome: React.FC<ComponentsProps> = ({
 
         <LayoutAnimationComponent delay={200}>
           <TouchableOpacity
-            style={{}}
             onPress={() => {
               navigation?.reset({
                 index: 0,
@@ -168,6 +168,7 @@ const CollectEmail: React.FC<ComponentsProps> = ({
           placeholder={'Email'}
           text={email}
           setText={setEmail}
+          testID="email_input"
         />
       </LayoutAnimationComponent>
       <LayoutAnimationComponent exit={null}>
@@ -324,6 +325,7 @@ const CollectPassword: React.FC<ComponentsProps> = ({
       </LayoutAnimationComponent>
       <LayoutAnimationComponent delay={900} exitDelay={300} leftInOut>
         <Input
+          testID="password_input"
           placeholder={'Password'}
           password
           text={password}
@@ -331,7 +333,12 @@ const CollectPassword: React.FC<ComponentsProps> = ({
         />
       </LayoutAnimationComponent>
       <LayoutAnimationComponent delay={1200} exit={null}>
-        <Button title="Login" load={load} onPress={action} />
+        <Button
+          testID="login_button"
+          title="Login"
+          load={load}
+          onPress={action}
+        />
       </LayoutAnimationComponent>
       <LayoutAnimationComponent
         delay={1400}
