@@ -74,7 +74,6 @@ const StackNav = () => {
     if (match) {
       const [, productId, username] = match;
 
-      // Create an object with the extracted information
       const result: DeepLinkResult = {product_id: productId};
 
       if (username) {
@@ -108,10 +107,8 @@ const StackNav = () => {
     // A regular expression to match the order ID in the URL
     const regex = /(?:www\.)?kicksciti\.com\/order\/(\w+)/;
 
-    // Match and extract the order ID
     const match = url.match(regex);
 
-    // Check if a match is found and return the order ID, or null if no match
     return match ? match[1] : null;
   }
   const handleDeepLink = (prop: {url: string | null} | undefined) => {
