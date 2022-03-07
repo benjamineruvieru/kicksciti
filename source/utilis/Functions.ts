@@ -34,9 +34,9 @@ export const getDeliveryFee = ({lga, state}: {lga: string; state: string}) => {
     lga === 'Ibeju-Lekki' ||
     lga === 'Epe'
   ) {
-    return 3000;
+    return 3500;
   } else {
-    return 2500;
+    return 3000;
   }
 };
 

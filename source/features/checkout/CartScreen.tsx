@@ -160,7 +160,11 @@ const PaymentType = ({paymentOnDelivery, setpaymentOnDelivery}) => {
       <LayoutAnimationComponent rightInOut delay={350}>
         <HighlightSelector
           setSelected={() => {
-            setpaymentOnDelivery(true);
+            // setpaymentOnDelivery(true);
+            showNotification({
+              msg: 'Pay on delivery is temporarily not available',
+              error: true,
+            });
           }}
           selected={paymentOnDelivery}
           title={'Pay on Delivery'}
@@ -288,7 +292,7 @@ const CartScreen = ({navigation}) => {
   const next = () => {
     if (pos === 0) {
       setPos(1);
-    } else if (pos === 1) {
+    } else if (pos === 1 && phone?.length > 12) {
       if (state === 'Lagos') {
         setPos(2);
       } else {
