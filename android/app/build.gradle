@@ -146,8 +146,8 @@ android {
         applicationId "com.my.ben.kicksciti"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 11
-        versionName "2.0"
+        versionCode 12
+        versionName "2.1"
         multiDexEnabled true 
          buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         if (isNewArchitectureEnabled()) {
