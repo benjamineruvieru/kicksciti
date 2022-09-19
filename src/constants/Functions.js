@@ -11,7 +11,7 @@ export async function buildLink(id, name, price, url) {
       domainUriPrefix: 'https://kicksciti.page.link',
 
       android: {
-        packageName: 'com.my.ben.kicksciti',
+        packageName: 'com.kicksciti.android',
         minimumVersion: '2',
       },
       navigation: {
