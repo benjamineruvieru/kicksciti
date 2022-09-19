@@ -79,7 +79,7 @@ android {
         applicationId "com.kicksciti.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
+        versionCode 12
         versionName "2.4"
         testBuildType System.getProperty('testBuildType', 'debug')
     testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
