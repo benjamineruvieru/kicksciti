@@ -1,7 +1,11 @@
 # Kicks Citi
+
 ### An online footwear store
+
 ![App Screens](doc/img/longmockup.png)
+
 ## Features
+
 - Add products to cart or favorites
 - Search through a collection of products
 - Complete payments of orders In-App
@@ -9,6 +13,7 @@
 - Contact help & support staff
 
 ## Tech Used
+
 - React Native
 - Firebase
 - Flutterwave for handling payments
@@ -17,37 +22,50 @@
 - Axios
 - Sirv - Image Hosting
 
-[![website](./doc/img/en_get.svg)](https://play.google.com/store/apps/details?id=com.my.ben.kicksciti)
-
+[![website](./doc/img/en_get.svg)](https://drive.google.com/file/d/1YUf_gXDTNZGg37_CdQOTJXyCS2771bxI/view?usp=sharing)
 
 ## How to build
-Clone this repo to your machine: 
+
+Clone this repo to your machine:
+
 ```
 $ git clone https://github.com/benjamineruvieru/kicksciti.git
 ```
+
 ```
 $ cd kicksciti
 ```
-Install dependencies: 
+
+Install dependencies:
+
 ```
 $ npm install
 ```
-If you are running app on iOS: 
+
+If you are running app on iOS:
+
 ```
 $ cd ios
 ```
+
 ```
 $ pod install
 ```
-Return to the project main directory: 
+
+Return to the project main directory:
+
 ```
 $ cd ..
 ```
-To run on android: 
+
+To run on android:
+
 ```
 $ react-native run-android
 ```
-To run on iOS: 
+
+To run on iOS:
+
 ```
 $ react-native run-ios
 ```
@@ -57,12 +75,15 @@ On Android if you are getting this error<br />
 Error: spawn ./gradlew EACCES<br />
 
 To fix:
+
 ```
 $ cd android
 ```
+
 ```
 $ chmod u+x gradlew
 ```
+
 Then try running the project again
 
 <p float="left">
@@ -81,6 +102,6 @@ Then try running the project again
 3.  Commit your changes: `git commit -am 'Add some feature'`
 4.  Push to the branch: `git push origin my-new-feature`
 5.  Submit a pull request 🚀
-<br />
+    <br />
 
 Built by @benjamineruvieru
