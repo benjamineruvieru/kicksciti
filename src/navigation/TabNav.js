@@ -10,14 +10,16 @@ import React, {useRef} from 'react';
 import Colors from '../constants/Colors';
 import MainHeader from '../components/MainPageHeader';
 import {
-  SafeAreaView,
+  StatusBar,
   StyleSheet,
   Dimensions,
   Animated,
   Pressable,
+  View,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {nav_change} from '../redux/actions/headeraction';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,9 +29,14 @@ const space = spacem / 5;
 
 export default function TabNavigation() {
   const dispatch = useDispatch();
-
+  const inset = useSafeAreaInsets();
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: Colors.bag1Bg}}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: Colors.bag1Bg,
+        paddingTop: inset.top,
+      }}>
       <MainHeader />
       <Tab.Navigator
         initialRouteName="Shop"
@@ -359,7 +366,7 @@ export default function TabNavigation() {
           }}
         />
       </Tab.Navigator>
-    </SafeAreaView>
+    </View>
   );
 }
 

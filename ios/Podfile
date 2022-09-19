@@ -1,15 +1,17 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-<<<<<<< HEAD
-platform :ios, '11.0'
-=======
 platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
->>>>>>> 83353eeb (code revamp)
+
 
 target 'kicksciti' do
   config = use_native_modules!
+  flags = get_default_flags()
+  
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
 
   use_react_native!(
     :path => config[:reactNativePath],

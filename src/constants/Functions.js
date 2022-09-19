@@ -25,8 +25,6 @@ export async function buildLink(id, name, price, url) {
     },
     dynamicLinks.ShortLinkType.UNGUESSABLE,
   );
-  //console.log(id);
-  //console.log(link);
   return link;
 }
 
