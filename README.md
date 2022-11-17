@@ -52,6 +52,19 @@ To run on iOS:
 $ react-native run-ios
 ```
 
+On Android if you are getting this error<br />
+
+Error: spawn ./gradlew EACCES<br />
+
+To fix:
+```
+$ cd android
+```
+```
+$ chmod u+x gradlew
+```
+Then try running the project again
+
 <p float="left">
 <img src="doc/img/1.png" width="300" height="550">
 <img src="doc/img/2.png" width="300" height="550">
