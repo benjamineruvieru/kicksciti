@@ -36,7 +36,11 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) mic use</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string> $(PRODUCT_NAME) speech use</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Gilroy-SemiBold.ttf</string>
@@ -65,10 +69,6 @@
 	<array>
 		<string>armv7</string>
 	</array>
-	<key>NSSpeechRecognitionUsageDescription</key>
-<string> $(PRODUCT_NAME) speech use</string>
-<key>NSMicrophoneUsageDescription</key>
-<string>$(PRODUCT_NAME) mic use</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

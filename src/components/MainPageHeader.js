@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
     bottom: height - 35,
     zIndex: 999,
     flex: 1,
-    backgroundColor: Colors.bag4Bg,
+    backgroundColor: Colors.bag1Bg,
   },
 
   headSafe: {
