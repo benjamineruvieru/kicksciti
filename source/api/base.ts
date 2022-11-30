@@ -1,7 +1,7 @@
 import axios, {AxiosInstance} from 'axios';
 import {getItem} from '../utilis/storage';
 
-export const BASEURL = 'https://api.kicksciti.com/v1';
+export const BASEURL = 'https://api.kicksciti.com.ng/v1';
 
 export const axiosBase = (): AxiosInstance => {
   const token = getItem('token');
