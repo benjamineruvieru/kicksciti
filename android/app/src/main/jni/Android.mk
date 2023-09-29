@@ -6,7 +6,7 @@ include $(REACT_ANDROID_DIR)/Android-prebuilt.mk
 include $(CLEAR_VARS)
 LOCAL_PATH := $(THIS_DIR)
 # You can customize the name of your application .so file here.
-LOCAL_MODULE := com.my.ben.kicksciti_appmodules
+LOCAL_MODULE := com.kicksciti.android_appmodules
 LOCAL_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)

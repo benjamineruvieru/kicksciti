@@ -56,24 +56,7 @@ const SigninScreen = () => {
   const [login, setLogin] = useState(false);
   const [otptext, setOtptext] = useState('');
   const [sendingotp, setSendingotp] = useState(false);
-  const [copiedText, setCopiedText] = useState('');
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      Clipboard.getString().then(clipboarddata => {
-        if (clipboarddata === copiedText) {
-        } else {
-          if (clipboarddata.length === 6 && sendingotp) {
-            setCode(() => null);
-            confirmCode(clipboarddata.trim());
-          }
-          setCopiedText(clipboarddata);
-        }
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [copiedText, sendingotp, confirm]);
   const dispatch = useDispatch();
   const cartList = useSelector(state => state.cartList);
   const favList = useSelector(state => state.favList);
@@ -96,10 +79,24 @@ const SigninScreen = () => {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
-  }, []);
+  }, [phonenum]);
 
   // Handle user state changes
   function onAuthStateChanged(theuser) {
+    console.log(
+      'state change',
+      theuser,
+      'uid',
+      theuser?.uid,
+      'phone',
+      phonenum.replace(/-/g, '').replace(/\s/g, ''),
+    );
+    if (
+      theuser?.uid &&
+      theuser?.phoneNumber === phonenum.replace(/-/g, '').replace(/\s/g, '')
+    ) {
+      getuserinfo(theuser?.uid);
+    }
     setUser(theuser);
   }
 
@@ -128,6 +125,7 @@ const SigninScreen = () => {
         }
       }
     } catch (error) {
+      console.log(error);
       setCode(false);
     }
   }
@@ -199,6 +197,7 @@ const SigninScreen = () => {
       dispatch(put_login(false));
       navigation.navigate('Tab', {screen: 'Profile'});
     } catch (error) {
+      console.log('error', error);
       setLogin(false);
       setCode(true);
     }

@@ -1,10 +1,12 @@
-package com.my.ben.kicksciti.newarchitecture.modules;
+package com.kicksciti.android.newarchitecture.modules;
+
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.ReactPackageTurboModuleManagerDelegate;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
+
 /**
  * Class responsible to load the TurboModules. This class has native methods and needs a
  * corresponding C++ implementation/header file to work correctly (already placed inside the jni/
@@ -14,26 +16,38 @@ import java.util.List;
  * `newArchEnabled` property). Is ignored otherwise.
  */
 public class MainApplicationTurboModuleManagerDelegate
-    extends ReactPackageTurboModuleManagerDelegate {
+  extends ReactPackageTurboModuleManagerDelegate {
+
   private static volatile boolean sIsSoLibraryLoaded;
+
   protected MainApplicationTurboModuleManagerDelegate(
-      ReactApplicationContext reactApplicationContext, List<ReactPackage> packages) {
+    ReactApplicationContext reactApplicationContext,
+    List<ReactPackage> packages
+  ) {
     super(reactApplicationContext, packages);
   }
+
   protected native HybridData initHybrid();
+
   native boolean canCreateTurboModule(String moduleName);
-  public static class Builder extends ReactPackageTurboModuleManagerDelegate.Builder {
+
+  public static class Builder
+    extends ReactPackageTurboModuleManagerDelegate.Builder {
+
     protected MainApplicationTurboModuleManagerDelegate build(
-        ReactApplicationContext context, List<ReactPackage> packages) {
+      ReactApplicationContext context,
+      List<ReactPackage> packages
+    ) {
       return new MainApplicationTurboModuleManagerDelegate(context, packages);
     }
   }
+
   @Override
   protected synchronized void maybeLoadOtherSoLibraries() {
     if (!sIsSoLibraryLoaded) {
       // If you change the name of your application .so file in the Android.mk file,
       // make sure you update the name here as well.
-      SoLoader.loadLibrary("com.my.ben.kicksciti_appmodules");
+      SoLoader.loadLibrary("com.kicksciti.android_appmodules");
       sIsSoLibraryLoaded = true;
     }
   }
