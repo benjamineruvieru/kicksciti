@@ -1,8 +1,10 @@
 # Kicks Citi
 
-### An online footwear store
+### An E-Commerce store for Shoe Enthusiasts.
 
 ![App Screens](doc/img/longmockup.png)
+
+Kicks Citi is designed to be a one-stop destination for individuals who are passionate about footwear. Whether you're a sneakerhead, a fashion-forward trendsetter, or someone simply in need of comfortable and stylish shoes, Kicks Citi has got you covered
 
 ## Features
 
@@ -22,7 +24,7 @@
 - Axios
 - Sirv - Image Hosting
 
-[![website](./doc/img/en_get.svg)](https://drive.google.com/file/d/1YUf_gXDTNZGg37_CdQOTJXyCS2771bxI/view?usp=sharing)
+[![website](./doc/img/en_get.svg)](https://play.google.com/store/apps/details?id=com.kicksciti.android)
 
 ## How to build
 
