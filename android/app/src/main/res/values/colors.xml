@@ -1,7 +1,0 @@
-<resources>
-    <color name="bootsplash_background">#232323</color>
-    <!-- Change the color value for your need -->
-    <color name="colorPrimary">#263238</color>
-    <color name="colorPrimaryDark">#263238</color>
-    <color name="colorAccent">#263238</color>
-</resources>
