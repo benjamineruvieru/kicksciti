@@ -3,13 +3,30 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  StyleProp,
   StyleSheet,
+  ViewStyle,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DeviceEventEmitter} from 'react-native';
+import Colors from '../constants/Colors';
 
-const Mainbackground = ({children, style, keyboard, avoid, top}) => {
+interface MainBackgroundProps {
+  children: React.ReactNode;
+  style?: ViewStyle;
+  keyboard?: boolean;
+  avoid?: boolean;
+  top?: number;
+}
+
+const Mainbackground: React.FC<MainBackgroundProps> = ({
+  children,
+  style,
+  keyboard,
+  avoid,
+  top,
+}) => {
   const insets = useSafeAreaInsets();
   const [noti, setNoti] = useState(false);
   useEffect(() => {
@@ -31,7 +48,7 @@ const Mainbackground = ({children, style, keyboard, avoid, top}) => {
       onPress={() => Keyboard.dismiss()}
       style={{
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: Colors.bg,
       }}>
       <KeyboardAvoidingView
         behavior={avoid && Platform.OS === 'ios' ? 'padding' : undefined}

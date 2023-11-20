@@ -1,4 +1,4 @@
-import {Animated, StyleSheet, TouchableOpacity} from 'react-native';
+import {Animated, TouchableOpacity} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Colors from '../constants/Colors';
@@ -10,18 +10,30 @@ import Check from '../assets/svg/icons/check.svg';
 import Error from '../assets/svg/icons/error.svg';
 import {SCREEN_WIDTH} from '../constants/Variables';
 
-const Notification = ({goDown, goUp}) => {
-  const [msg, setMsg] = useState('');
-  const [error, setError] = useState(false);
+interface NotificationProps {
+  goDown: (params: {num: number}) => void;
+  goUp: () => void;
+}
+
+const Notification: React.FC<NotificationProps> = ({goDown, goUp}) => {
+  const [msg, setMsg] = useState<string>('');
+  const [error, setError] = useState<boolean>(false);
 
   const insets = useSafeAreaInsets();
-  let timer;
+  let timer: NodeJS.Timeout;
+
   const transY = useRef(new Animated.Value(0)).current;
-  const notheight = useRef(128);
-  const openNotification = ({msg, error = false}) => {
+  const notheight = useRef<number>(128);
+  const openNotification = ({
+    msg,
+    error = false,
+  }: {
+    msg: string;
+    error?: boolean;
+  }) => {
     Animated.timing(transY, {
       useNativeDriver: true,
-      toValue: StatusBar.currentHeight / 1.5 + notheight.current,
+      toValue: StatusBar?.currentHeight ?? 0 / 1.5 + notheight.current,
     }).start();
     Platform.OS === 'android' &&
       StatusBar.setBackgroundColor(!error ? Colors.green : Colors.red);
@@ -72,7 +84,6 @@ const Notification = ({goDown, goUp}) => {
         width: SCREEN_WIDTH,
       }}
       onLayout={e => {
-        console.log(e.nativeEvent.layout);
         notheight.current = e.nativeEvent.layout.height;
       }}>
       <TouchableOpacity
@@ -96,5 +107,3 @@ const Notification = ({goDown, goUp}) => {
 };
 
 export default Notification;
-
-const styles = StyleSheet.create({});
