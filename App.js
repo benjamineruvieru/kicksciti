@@ -57,7 +57,7 @@ const App = () => {
           loop
           cursorStyle={{color: 'red'}}
         />
-        {/* <SafeAreaProvider>
+        <SafeAreaProvider>
           <Notification {...{goDown, goUp}} />
           <Animated.View
             style={{
@@ -66,7 +66,7 @@ const App = () => {
             }}>
             <StackNav />
           </Animated.View>
-        </SafeAreaProvider> */}
+        </SafeAreaProvider>
       </GestureHandlerRootView>
     </QueryClientProvider>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import OnboardingScreen from '../features/onboarding/OnboardingScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -55,7 +56,7 @@ const StackNav = () => {
         screenOptions={{
           header: () => null,
         }}>
-        {/* <Stack.Screen name="BottomNav" component={BottomNav} /> */}
+        <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
