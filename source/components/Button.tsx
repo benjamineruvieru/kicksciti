@@ -1,11 +1,11 @@
 import {
   ActivityIndicator,
   StyleSheet,
-  Text,
   TouchableOpacity,
+  ViewStyle,
 } from 'react-native';
-import React, {useState} from 'react';
-import {SmallText, SmallTextB} from './Text';
+import React from 'react';
+import {SmallTextB} from './Text';
 import Colors from '../constants/Colors';
 import {getPercentWidth} from '../utilis/Functions';
 // import {
@@ -26,24 +26,24 @@ import {getPercentWidth} from '../utilis/Functions';
 //   profileImageSize: 120,
 // });
 
-const signInGoogle = async loadNotifyClose => {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const isSignedIn = await GoogleSignin.isSignedIn();
-    isSignedIn && (await GoogleSignin.signOut());
-    const userInfo = await GoogleSignin.signIn();
-    console.log(userInfo);
-    return userInfo;
-  } catch (error) {
-    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-    } else if (error.code === statusCodes.IN_PROGRESS) {
-    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-    } else {
-    }
+// const signInGoogle = async loadNotifyClose => {
+//   try {
+//     await GoogleSignin.hasPlayServices();
+//     const isSignedIn = await GoogleSignin.isSignedIn();
+//     isSignedIn && (await GoogleSignin.signOut());
+//     const userInfo = await GoogleSignin.signIn();
+//     console.log(userInfo);
+//     return userInfo;
+//   } catch (error) {
+//     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+//     } else if (error.code === statusCodes.IN_PROGRESS) {
+//     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+//     } else {
+//     }
 
-    return error;
-  }
-};
+//     return error;
+//   }
+// };
 
 // export const GoogleButton = ({login, type}) => {
 //   const [load, setLoad] = useState(false);
@@ -157,7 +157,24 @@ const signInGoogle = async loadNotifyClose => {
 //     </TouchableOpacity>
 //   );
 // };
-const Button = ({
+
+interface ButtonProps {
+  title: string;
+  width?: number;
+  style?: ViewStyle;
+  load?: boolean;
+  onPress?: () => void;
+  backgroundColor?: string;
+  bottom?: number;
+  top?: number;
+  small?: boolean;
+  disable?: boolean;
+  grey?: boolean;
+  isSec?: boolean;
+  Icon?: React.ElementType;
+}
+
+const Button: React.FC<ButtonProps> = ({
   title,
   width = 90,
   style,
