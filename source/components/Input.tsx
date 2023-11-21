@@ -1,5 +1,15 @@
-import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  KeyboardTypeOptions,
+  ReturnKeyTypeOptions,
+  StyleSheet,
+  TextInput,
+  TextInputKeyPressEventData,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
+import React, {FC, useState} from 'react';
 import {RegularText} from './Text';
 // import OTPTextView from './otpinput';
 import {SCREEN_WIDTH} from '../constants/Variables';
@@ -110,6 +120,22 @@ import Eyeclose from '../assets/svg/eyeclose.svg';
 //     </View>
 //   );
 // };
+
+interface InputProps {
+  style?: ViewStyle;
+  bottom?: number;
+  placeholder?: string;
+  placeholderText?: string;
+  inputStyle?: TextStyle;
+  password?: boolean;
+  keyboard?: KeyboardTypeOptions;
+  handleKeyPress?: (e: TextInputKeyPressEventData) => void;
+  multiline?: boolean;
+  returnKeyType?: ReturnKeyTypeOptions;
+  onSubmitEditing?: () => void;
+  text: string;
+  setText: (text: string) => void;
+}
 
 export const DescriptionInput = ({
   style,
@@ -224,7 +250,7 @@ export const PhoneInput = ({
   );
 };
 
-const Input = ({
+const Input: FC<InputProps> = ({
   style,
   bottom = 20,
   placeholder,
@@ -267,7 +293,8 @@ const Input = ({
           placeholderTextColor={'#FFFFFF50'}
           style={{
             height: 50,
-            fontFamily: 'Gilroy-Medium',
+            fontSize: 17,
+            fontFamily: 'Gilroy-Bold',
             color: 'white',
             flex: 1,
             ...inputStyle,
@@ -280,9 +307,9 @@ const Input = ({
             onPress={() => setHide(p => !p)}
             style={{marginRight: 5}}>
             {hide ? (
-              <Eyeclose height={17} width={17} />
+              <Eyeclose height={15} width={15} />
             ) : (
-              <Eyeopen height={17} width={17} />
+              <Eyeopen height={15} width={15} />
             )}
           </TouchableOpacity>
         )}

@@ -1,10 +1,15 @@
 import React from 'react';
-import {StyleSheet, Text as RNText, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text as RNText,
+  TouchableOpacity,
+  TextStyle,
+} from 'react-native';
 import Colors from '../constants/Colors';
 
 interface TextProps {
   children: React.ReactNode;
-  style?: any; // You can use a more specific type if needed
+  style?: TextStyle; // You can use a more specific type if needed
   onPress?: () => void;
   onTextPress?: () => void;
   disabled?: boolean;
@@ -59,6 +64,22 @@ const Text: React.FC<TextProps> = ({
         </RNText>
       )}
     </>
+  );
+};
+
+export const BigTextB: React.FC<TextProps> = ({children, style, onPress}) => {
+  const styles = StyleSheet.create({
+    text: {
+      fontFamily: 'Gilroy-Bold',
+      fontSize: 30,
+      ...style,
+    },
+  });
+
+  return (
+    <Text onPress={onPress} style={styles.text}>
+      {children}
+    </Text>
   );
 };
 

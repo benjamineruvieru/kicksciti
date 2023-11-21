@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import OnboardingScreen from '../features/onboarding/OnboardingScreen';
 import CollectEmailScreen from '../features/auth/CollectEmailScreen';
+import BottomNav from './BottomNav';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,7 @@ const StackNav = () => {
           name="CollectEmailScreen"
           component={CollectEmailScreen}
         />
+        <Stack.Screen name="BottomNav" component={BottomNav} />
       </Stack.Navigator>
     </NavigationContainer>
   );
