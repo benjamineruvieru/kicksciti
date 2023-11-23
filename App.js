@@ -14,7 +14,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 Platform.OS === 'android' && StatusBar.setTranslucent(true);
 Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
-
+StatusBar.setBarStyle('light-content');
 const queryClient = new QueryClient();
 
 if (Platform.OS === 'android') {

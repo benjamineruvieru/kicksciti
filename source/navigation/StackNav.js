@@ -54,7 +54,7 @@ const StackNav = () => {
         //     }
         //   },
         // })}
-        initialRouteName={''}
+        initialRouteName={'BottomNav'}
         screenOptions={{
           header: () => null,
         }}>

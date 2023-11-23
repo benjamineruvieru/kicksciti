@@ -195,7 +195,7 @@ const Button: React.FC<ButtonProps> = ({
       borderRadius: small ? 5 : 8,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: small ? 10 : 20,
+      padding: small ? 8 : 20,
       alignSelf: 'center',
       width: getPercentWidth(width),
       marginTop: top,
@@ -217,6 +217,8 @@ const Button: React.FC<ButtonProps> = ({
       <SmallTextB
         style={{
           color: isSec ? Colors.primary : grey ? Colors.dim : 'white',
+          fontFamily: small ? 'Gilroy-Medium' : 'Gilroy-SemiBold',
+          fontSize: small ? 11 : 13,
         }}>
         {title}
       </SmallTextB>

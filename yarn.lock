@@ -5993,10 +5993,10 @@ react-native-svg@^13.10.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
-react-native-type-animation@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-type-animation/-/react-native-type-animation-0.1.0.tgz#ca70b8d18a5be40b444e5da50122ed94cabae66b"
-  integrity sha512-oius5AU526Pwr2bAyoXrALithLQfn/zgsGlDPZx9D2sW6ykFkBnhj93njDWna3mmUc3YkvrAVE7+fg85iIMI0A==
+react-native-type-animation@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-type-animation/-/react-native-type-animation-0.2.0.tgz#3757e7de319229243046dc09b0ac90a1f14652c4"
+  integrity sha512-D+NAOG7GTZfb1rtCD+mtr+oYshAhRRRIUQFgwM8Xo85nHu3Af9H8aX2Mv04E5rV5eErAag2lE/bRiy7QIPqn0Q==
 
 react-native@0.72.3:
   version "0.72.3"
