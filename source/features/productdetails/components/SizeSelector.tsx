@@ -49,11 +49,11 @@ const SizeSelector = ({min = 40, max = 46}) => {
           return (
             <TouchableOpacity
               style={{
-                borderWidth: 3,
+                borderWidth: 2,
                 borderColor: Colors.highlight,
                 marginRight: 10,
-                padding: 11,
-                borderRadius: 5,
+                padding: 12,
+                borderRadius: 8,
               }}>
               <RegularTextB>{data}</RegularTextB>
             </TouchableOpacity>

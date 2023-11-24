@@ -22,6 +22,7 @@ import Colors from '../../constants/Colors';
 import VariantPicker from './components/VariantPicker';
 import Quantity from './components/Quantity';
 import SizeSelector from './components/SizeSelector';
+import AffilateLink from './components/AffilateLink';
 
 const ProductScreen = ({route}) => {
   const {link1, name} = route.params ?? {};
@@ -119,6 +120,7 @@ const ProductScreen = ({route}) => {
           </SmallText>
           <SizeSelector />
           <Quantity />
+          <AffilateLink />
         </View>
         <Button title="Add to  cart" bottom={20} />
       </ScrollView>
