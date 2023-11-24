@@ -137,7 +137,7 @@ export const RegularTextB: React.FC<TextProps> = ({
   const styles = StyleSheet.create({
     text: {
       fontFamily: 'Gilroy-Bold',
-      fontSize: 15,
+      fontSize: 17,
       ...style,
     },
   });

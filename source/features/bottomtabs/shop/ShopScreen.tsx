@@ -38,7 +38,7 @@ const ShopScreen = () => {
         </View>
       </View>
       <Search />
-      <Catergoies />
+      <Catergoies pos={0} />
       <Products />
     </Mainbackground>
   );

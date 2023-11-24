@@ -4,6 +4,7 @@ import Mainbackground from '../../../components/Mainbackground';
 import {MediumText} from '../../../components/Text';
 import {CartButton, NotificationButton} from '../../../components/IconButton';
 import Search from '../../../components/Search';
+import Products from '../shop/components/Products';
 
 const FavouriteScreen = () => {
   return (
@@ -22,6 +23,8 @@ const FavouriteScreen = () => {
         </View>
       </View>
       <Search />
+      <View style={{height: 20}} />
+      <Products />
     </Mainbackground>
   );
 };
