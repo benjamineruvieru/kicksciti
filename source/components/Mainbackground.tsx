@@ -11,6 +11,7 @@ import React, {useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DeviceEventEmitter} from 'react-native';
 import Colors from '../constants/Colors';
+import {View} from 'react-native-animatable';
 
 interface MainBackgroundProps {
   children: React.ReactNode;
@@ -61,14 +62,22 @@ const Mainbackground: React.FC<MainBackgroundProps> = ({
         paddingBottom,
       }}>
       <KeyboardAvoidingView
+        keyboardVerticalOffset={-insets.bottom}
         behavior={avoid && Platform.OS === 'ios' ? 'padding' : androidAvoid}
         style={{
           flex: 1,
+
           paddingTop: noti ? 0 : top ? top : insets.top,
-          paddingBottom: insetsBottom ? insetsBottom : insets.bottom,
+
           ...style,
         }}>
-        {children}
+        <View
+          style={{
+            flex: 1,
+            paddingBottom: insetsBottom ? insetsBottom : insets.bottom,
+          }}>
+          {children}
+        </View>
       </KeyboardAvoidingView>
     </Pressable>
   );

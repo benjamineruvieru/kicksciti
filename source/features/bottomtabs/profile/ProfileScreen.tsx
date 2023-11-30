@@ -8,6 +8,7 @@ import ProfilePic from '../../../components/ProfilePic';
 import Colors from '../../../constants/Colors';
 import {getPercentHeight} from '../../../utilis/Functions';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import ListItem from './components/ListItem';
 
 const ProfileScreen = () => {
   const insets = useSafeAreaInsets();
@@ -27,7 +28,11 @@ const ProfileScreen = () => {
         </MediumText>
         <RegularText>@bendev</RegularText>
       </View>
-      <View style={{flex: 1, padding: 0}}></View>
+      <View style={{flex: 1, padding: 0}}>
+        <ListItem title={'Wallet'} />
+        <ListItem title={'Cart'} />
+        <ListItem title={'Order History'} />
+      </View>
       <Button backgroundColor="red" title="Log out" bottom={20} />
     </Mainbackground>
   );

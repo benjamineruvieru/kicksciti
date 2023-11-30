@@ -1,4 +1,4 @@
-package com.app;
+package com.kicksciti.android;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;

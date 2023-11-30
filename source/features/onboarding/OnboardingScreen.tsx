@@ -10,7 +10,7 @@ import Input from '../../components/Input';
 
 const bg = require('../../assets/images/onboarding/bg.webp');
 
-const Welcome = ({setPos}) => {
+const Welcome = ({setPos, navigation}) => {
   return (
     <>
       <LayoutAnimationComponent leftInOut>
@@ -41,7 +41,15 @@ const Welcome = ({setPos}) => {
         </LayoutAnimationComponent>
 
         <LayoutAnimationComponent delay={200}>
-          <SmallText>View as a guest</SmallText>
+          <SmallText
+            onTextPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'AniStackNav'}],
+              });
+            }}>
+            View as guest
+          </SmallText>
         </LayoutAnimationComponent>
       </View>
     </>
@@ -114,7 +122,7 @@ const CompleteProfile = ({navigation}) => {
         onPress={() => {
           navigation.reset({
             index: 0,
-            routes: [{name: 'BottomNav'}],
+            routes: [{name: 'AniStackNav'}],
           });
         }}
       />
@@ -134,7 +142,7 @@ const OnboardingScreen = ({navigation}) => {
           justifyContent: 'flex-end',
           paddingBottom: 50,
         }}>
-        {pos === 0 && <Welcome {...{setPos}} />}
+        {pos === 0 && <Welcome {...{setPos, navigation}} />}
         {pos === 1 && <CollectEmail {...{setPos}} />}
         {pos === 2 && <CreatePassword {...{setPos}} />}
         {pos === 3 && <CompleteProfile {...{navigation}} />}

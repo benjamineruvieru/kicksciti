@@ -1,12 +1,14 @@
 import {StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Mainbackground from '../../../components/Mainbackground';
-import {MediumText, RegularText} from '../../../components/Text';
 import {TypeAnimation} from 'react-native-type-animation';
 import Search from '../../../components/Search';
 import {CartButton, NotificationButton} from '../../../components/IconButton';
 import Catergoies from './components/Catergoies';
 import Products from './components/Products';
+import {useInfiniteApi} from '../../../hooks/useApi';
+import {getProducts} from '../../../api/products';
+import ProductsLoading from './components/ProductsLoading';
 const sequence = [
   {text: 'Welcome, Ben Dev 👋'},
   {text: 'Kaabo, Ben Dev 👋'},
@@ -15,6 +17,13 @@ const sequence = [
 ];
 
 const ShopScreen = () => {
+  const [category, setCategory] = useState('hottest products');
+
+  // const {data} = useInfiniteApi({
+  //   queryFunction: getProducts,
+  //   queryKey: ['getProducts', category],
+  // });
+  // const results = data?.pages.flatMap(data => data?.products) ?? [];
   return (
     <Mainbackground padding={20} paddingBottom={0} insetsBottom={-1}>
       <View
@@ -25,6 +34,7 @@ const ShopScreen = () => {
           alignItems: 'center',
         }}>
         <TypeAnimation
+          preRenderText="Welcome, Ben Dev 👋"
           sequence={sequence}
           style={styles.typeAni}
           loop
@@ -38,8 +48,11 @@ const ShopScreen = () => {
         </View>
       </View>
       <Search />
-      <Catergoies pos={0} />
-      <Products />
+      <Catergoies setCategory={setCategory} category={category} />
+      {/* <ProductsLoading /> */}
+      <Products
+      //  results={results}
+      />
     </Mainbackground>
   );
 };

@@ -1,4 +1,4 @@
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 
@@ -8,6 +8,8 @@ import Bell from '../assets/svg/icons/bell.svg';
 import LoveOutline from '../assets/svg/icons/love-outline.svg';
 import Love from '../assets/svg/icons/love.svg';
 import Colors from '../constants/Colors';
+import {useMMKVObject} from 'react-native-mmkv';
+import {SmallText, SmallTextB} from './Text';
 
 export const BackButton = () => {
   const navigation = useNavigation();
@@ -33,16 +35,42 @@ export const NotificationButton = () => {
   );
 };
 
-export const FavButton = ({color = Colors.primary}) => {
+export const FavButton = ({color = Colors.primary, item, size = 23}) => {
+  const [favourites, setFavourites] = useMMKVObject('favourites');
+  const index = favourites?.findIndex(fav => fav?._id === item._id) ?? -1;
+  const isFav = index !== -1;
+  console.log('favourites', favourites);
+
+  function toggleFavorite() {
+    // Check if the item exists in the favorites array
+    console.log('index', index);
+    if (isFav) {
+      // If the item exists, remove it
+      favourites?.splice(index, 1);
+      console.log(`Removed ${item._id} from favorites`, favourites);
+      setFavourites([...favourites]);
+    } else {
+      const fav = [...(favourites ?? []), item];
+
+      console.log(`Added ${item._id} to favorites`);
+      console.log('favourites', fav);
+      setFavourites(fav);
+    }
+  }
   return (
-    <TouchableOpacity onPress={() => {}} style={{}}>
-      <LoveOutline height={23} width={23} color={color} />
+    <TouchableOpacity onPress={toggleFavorite} style={{}}>
+      {isFav ? (
+        <Love height={size} width={size} color={color} />
+      ) : (
+        <LoveOutline height={size} width={size} color={color} />
+      )}
     </TouchableOpacity>
   );
 };
 
 export const CartButton = () => {
   const navigation = useNavigation();
+  const [cart] = useMMKVObject('cart');
 
   return (
     <TouchableOpacity
@@ -51,6 +79,22 @@ export const CartButton = () => {
       }}
       style={{}}>
       <Cart height={26} width={26} />
+      {cart && cart.length > 0 && (
+        <View
+          style={{
+            backgroundColor: 'red',
+            width: 17,
+            height: 17,
+            borderRadius: 360,
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            right: -(17 / 2),
+            top: -5,
+          }}>
+          <SmallTextB style={{fontSize: 11}}>{cart?.length}</SmallTextB>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };

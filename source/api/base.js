@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {getItem} from '../utilis/storage';
 
-export const BASEURL = '';
+export const BASEURL =
+  'https://dul9z0axu0.execute-api.us-east-1.amazonaws.com/v1';
 
 export const axiosBase = () => {
   const token = getItem('token');
