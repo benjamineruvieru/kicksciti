@@ -6,12 +6,29 @@ import {MediumText, RegularText} from '../../../components/Text';
 import Button from '../../../components/Button';
 import ProfilePic from '../../../components/ProfilePic';
 import Colors from '../../../constants/Colors';
-import {getPercentHeight} from '../../../utilis/Functions';
+import {
+  capitalizeAllFirstLetters,
+  getPercentHeight,
+} from '../../../utilis/Functions';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ListItem from './components/ListItem';
+import {deleteItem, getItem} from '../../../utilis/storage';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
+  const {name, username} = getItem('userdetails', true);
+
   const insets = useSafeAreaInsets();
+
+  const logout = () => {
+    deleteItem('token');
+    deleteItem('userdetails');
+    deleteItem('cart');
+    deleteItem('favourites');
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'OnboardingScreen'}],
+    });
+  };
   return (
     <Mainbackground padding={0} insetsBottom={-1} top={-1}>
       <View
@@ -24,16 +41,21 @@ const ProfileScreen = () => {
         }}>
         <ProfilePic />
         <MediumText style={{marginBottom: 5, marginTop: 15}}>
-          Ben Dev
+          {capitalizeAllFirstLetters(name)}
         </MediumText>
-        <RegularText>@bendev</RegularText>
+        <RegularText>@{username}</RegularText>
       </View>
       <View style={{flex: 1, padding: 0}}>
         <ListItem title={'Wallet'} />
         <ListItem title={'Cart'} />
         <ListItem title={'Order History'} />
       </View>
-      <Button backgroundColor="red" title="Log out" bottom={20} />
+      <Button
+        backgroundColor="red"
+        title="Log out"
+        bottom={20}
+        onPress={logout}
+      />
     </Mainbackground>
   );
 };

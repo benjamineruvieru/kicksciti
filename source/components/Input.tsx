@@ -10,14 +10,84 @@ import {
   ViewStyle,
 } from 'react-native';
 import React, {FC, useState} from 'react';
-import {RegularText} from './Text';
-// import OTPTextView from './otpinput';
+import {MediumText, RegularText, SmallText} from './Text';
 import {SCREEN_WIDTH} from '../constants/Variables';
 import Colors from '../constants/Colors';
 // import SelectDropdown from 'react-native-select-dropdown';
-// import Down from '../assets/svg/down.svg';
+import Down from '../assets/svg/down.svg';
 import Eyeopen from '../assets/svg/eyeopen.svg';
 import Eyeclose from '../assets/svg/eyeclose.svg';
+import {
+  CodeField,
+  Cursor,
+  useBlurOnFulfill,
+  useClearByFocusCell,
+} from 'react-native-confirmation-code-field';
+import LayoutAnimationComponent from './LayoutAnimationComponent';
+import {ListDialog} from './Dialog';
+
+export const ModalSelector = ({
+  style,
+  bottom = 20,
+  placeholder,
+  placeholderText,
+  inputStyle,
+
+  text,
+  setText,
+  search,
+  height,
+  data,
+}) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  return (
+    <>
+      <TouchableOpacity
+        onPress={() => {
+          setModalVisible(true);
+        }}>
+        {placeholderText && (
+          <RegularText style={{marginBottom: 8}}>{placeholderText}</RegularText>
+        )}
+        <View
+          style={{
+            borderBottomWidth: 3,
+            borderColor: Colors.primary,
+            marginBottom: bottom,
+            flexDirection: 'row',
+            alignItems: 'center',
+            height: 50,
+            ...style,
+          }}>
+          <SmallText
+            style={{
+              fontSize: 17,
+              fontFamily: 'Gilroy-Bold',
+              color: 'white',
+              flex: 1,
+              ...inputStyle,
+            }}>
+            {text ?? placeholder}
+          </SmallText>
+
+          <Down color={Colors.primary} />
+        </View>
+      </TouchableOpacity>
+      <ListDialog
+        searchShow={search}
+        height={height}
+        data={data}
+        closeModal={() => setModalVisible(false)}
+        open={modalVisible}
+        onPress={data => {
+          setModalVisible(false);
+          setText(data);
+        }}
+      />
+    </>
+  );
+};
 
 // export const DropDown = ({
 //   placeholderText,
@@ -90,36 +160,59 @@ import Eyeclose from '../assets/svg/eyeclose.svg';
 //   );
 // };
 
-// export const OtpInput = ({setOpt, opt, otpInputRef, dark}) => {
-//   return (
-//     <View
-//       style={{
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         alignSelf: 'center',
-//       }}>
-//       <OTPTextView
-//         defaultValue={opt}
-//         ref={otpInputRef}
-//         handleTextChange={setOpt}
-//         offTintColor={Colors.grey}
-//         tintColor={Colors.primary}
-//         inputCount={4}
-//         textInputStyle={{
-//           width: (SCREEN_WIDTH - 120) / 4,
-//           color: 'black',
-//           fontFamily: 'Quicksand-Medium',
-//           borderBottomWidth: 1,
-//           backgroundColor: 'white',
-//           borderRadius: 15,
-//           height: 70,
-//           borderWidth: 1,
-//           borderColor: Colors.grey,
-//         }}
-//       />
-//     </View>
-//   );
-// };
+export const OtpInput = ({setOtp, otp, num = 6}) => {
+  const ref = useBlurOnFulfill({value: otp, cellCount: 4});
+  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+    value: otp,
+    setValue: setOtp,
+  });
+  const SIZE = (SCREEN_WIDTH - 40 - 15 * (num - 1)) / num;
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignSelf: 'center',
+      }}>
+      <CodeField
+        ref={ref}
+        {...props}
+        value={otp}
+        onChangeText={setOtp}
+        cellCount={6}
+        rootStyle={{marginBottom: 50, justifyContent: 'space-between'}}
+        keyboardType="number-pad"
+        textContentType="oneTimeCode"
+        autoFocus
+        renderCell={({index, symbol, isFocused}) => (
+          <LayoutAnimationComponent
+            key={index}
+            leftInOut
+            exitDelay={100 + index * 100}
+            delay={1000 + index * 100}>
+            <View
+              style={{
+                width: SIZE,
+                height: SIZE,
+                marginRight: index + 1 === num ? 0 : 15,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderWidth: 3,
+                borderRadius: 10,
+                borderColor: symbol || isFocused ? Colors.primary : '#ffffff30',
+              }}>
+              <MediumText
+                style={{color: Colors.primary}}
+                onLayout={getCellOnLayoutHandler(index)}>
+                {symbol || (isFocused ? <Cursor /> : null)}
+              </MediumText>
+            </View>
+          </LayoutAnimationComponent>
+        )}
+      />
+    </View>
+  );
+};
 
 interface InputProps {
   style?: ViewStyle;
@@ -269,9 +362,7 @@ const Input: FC<InputProps> = ({
   return (
     <>
       {placeholderText && (
-        <RegularText style={{marginBottom: 8, marginLeft: 4}}>
-          {placeholderText}
-        </RegularText>
+        <RegularText style={{marginBottom: 8}}>{placeholderText}</RegularText>
       )}
       <View
         style={{

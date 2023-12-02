@@ -60,7 +60,7 @@ export const QuantityCounter = ({
         <RegularTextB>-</RegularTextB>
       </TouchableOpacity>
       <TextInput
-        value={isInCart ? cartQuan : quantity}
+        value={isInCart ? cartQuan?.toString() : quantity?.toString()}
         onChangeText={text => {
           if (isInCart) {
             editQuantity(text);

@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {FlashList} from '@shopify/flash-list';
 import {SmallText, SmallTextB} from '../../../../components/Text';
 import FastImage from 'react-native-fast-image';
@@ -187,13 +187,23 @@ const ProductItem = ({item, index}) => {
     </Wrapper>
   );
 };
-const Products = ({results}) => {
+const Products = ({results, refresh}) => {
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    if (refresh) {
+      setRefreshing(true);
+      refresh();
+      setRefreshing(false);
+    }
+  };
   return (
     <View style={{flex: 1}}>
       <FlashList
+        refreshing={refreshing}
+        onRefresh={onRefresh}
         showsVerticalScrollIndicator={false}
         numColumns={2}
-        data={DATA}
+        data={results}
         renderItem={ProductItem}
         estimatedItemSize={257}
       />

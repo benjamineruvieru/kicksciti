@@ -18,12 +18,6 @@ Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
 StatusBar.setBarStyle('light-content');
 const queryClient = new QueryClient();
 
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
-
 const App = () => {
   const transY = useRef(new Animated.Value(0)).current;
   const goDown = ({num = 128}) => {
