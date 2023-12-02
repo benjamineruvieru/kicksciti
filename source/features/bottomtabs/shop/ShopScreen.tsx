@@ -20,12 +20,12 @@ const ShopScreen = () => {
     {text: `Nnooo, ${name} 👋`, deleteCount: 5},
     {text: `Sannu, ${name} 👋`},
   ];
-  const {data, isLoading, refetch} = useInfiniteApi({
+  const {data, isLoading, refetch, isError, error} = useInfiniteApi({
     queryFunction: getProducts,
     queryKey: ['getProducts', category],
   });
   const results = data?.pages.flatMap(data => data?.products) ?? [];
-
+  console.log({isError, isLoading, error});
   return (
     <Mainbackground padding={20} paddingBottom={0} insetsBottom={-1}>
       <View
@@ -53,7 +53,7 @@ const ShopScreen = () => {
       </View>
       <Search />
       <Catergoies setCategory={setCategory} category={category} />
-      {isLoading ? (
+      {isError ? null : isLoading ? (
         <ProductsLoading />
       ) : (
         <Products results={results} refresh={refetch} />

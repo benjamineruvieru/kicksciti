@@ -7,6 +7,8 @@ import NotificationsScreen from '../features/notifications/NotificationsScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AniStackNav from './AniStack';
 import {getItem} from '../utilis/storage';
+import OrderDetails from '../features/checkout/OrderDetails';
+import OrderHistory from '../features/bottomtabs/profile/OrderHistory';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +34,8 @@ const StackNav = () => {
         />
         <Stack.Screen name="AniStackNav" component={AniStackNav} />
         <Stack.Screen name="CartScreen" component={CartScreen} />
+        <Stack.Screen name="OrderDetails" component={OrderDetails} />
+        <Stack.Screen name="OrderHistory" component={OrderHistory} />
         <Stack.Screen
           name="NotificationsScreen"
           component={NotificationsScreen}
