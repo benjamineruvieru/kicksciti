@@ -15,7 +15,7 @@ import {getItem} from '../utilis/storage';
 
 export const ShareButton = ({id}) => {
   const {username} = getItem('userdetails', true);
-  const link = `www.kicksciti.com/product/${id}?id=${username}`;
+  const link = `https://www.kicksciti.com/product/${id}?id=${username}`;
 
   return (
     <TouchableOpacity
