@@ -48,7 +48,7 @@ const OrderDetails = ({route}) => {
     queryFn: getOrder,
     queryKey: ['getOrder', order_id],
   });
-  const order = data?.order;
+  const order = data?.order ?? {};
   console.log('da', data?.order);
   return (
     <Mainbackground padding={20}>
@@ -57,7 +57,7 @@ const OrderDetails = ({route}) => {
         <View style={{flex: 1, justifyContent: 'center', paddingBottom: 50}}>
           <ActivityIndicator color={Colors.primary} />
         </View>
-      ) : order.active ? null : (
+      ) : order?.active ? null : (
         <PaymentPending />
       )}
     </Mainbackground>

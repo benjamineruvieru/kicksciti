@@ -7,6 +7,7 @@ import Search from '../../../components/Search';
 import Products from '../shop/components/Products';
 import {useMMKVObject} from 'react-native-mmkv';
 import {getPercentWidth} from '../../../utilis/Functions';
+import LayoutAnimationComponent from '../../../components/LayoutAnimationComponent';
 
 const EmptyFave = () => {
   return (
@@ -17,22 +18,28 @@ const EmptyFave = () => {
         alignItems: 'center',
         paddingBottom: 100,
       }}>
-      <Image
-        resizeMode="contain"
-        style={{
-          width: getPercentWidth(70),
-          height: getPercentWidth(70),
-          top: -5,
-        }}
-        source={require('../../../assets/images/illustrations/emptyfave.png')}
-      />
-      <RegularTextB style={{marginBottom: 5}}>
-        Your favorites list is looking a bit lonely!
-      </RegularTextB>
-      <SmallText>
-        {' '}
-        Explore our collection and save your top picks here.{' '}
-      </SmallText>
+      <LayoutAnimationComponent delay={300}>
+        <Image
+          resizeMode="contain"
+          style={{
+            width: getPercentWidth(70),
+            height: getPercentWidth(70),
+            top: -5,
+          }}
+          source={require('../../../assets/images/illustrations/emptyfave.png')}
+        />
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={400}>
+        <RegularTextB style={{marginBottom: 5}}>
+          Your favorites list is looking a bit lonely!
+        </RegularTextB>
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={500}>
+        <SmallText>
+          {' '}
+          Explore our collection and save your top picks here.{' '}
+        </SmallText>
+      </LayoutAnimationComponent>
     </View>
   );
 };

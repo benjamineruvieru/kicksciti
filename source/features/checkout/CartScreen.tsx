@@ -223,6 +223,7 @@ const CartScreen = () => {
           setLink(link);
           openModal();
           setCart([]);
+          setPos(0);
           addAddress({address, lga, phone, state});
         })
         .catch(err => {

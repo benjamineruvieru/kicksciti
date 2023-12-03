@@ -5,6 +5,7 @@ import WebView from 'react-native-webview';
 import {getPercentHeight} from '../../../utilis/Functions';
 import Colors from '../../../constants/Colors';
 import {useNavigation} from '@react-navigation/native';
+import {BASEURL} from '../../../api/base';
 
 const PaymentModal = ({modalRef, link, order_id}) => {
   const navigation = useNavigation();
@@ -25,9 +26,7 @@ const PaymentModal = ({modalRef, link, order_id}) => {
         onLoadStart={navState => {
           console.log('navState lo', navState.nativeEvent.url);
           if (
-            navState.nativeEvent.url.startsWith(
-              'https://kicksciti.com/payment/redirect',
-            )
+            navState.nativeEvent.url.startsWith(`${BASEURL}/payment-redirect`)
           ) {
             modalRef.current.close();
             navigation.navigate('OrderDetails', {order_id});

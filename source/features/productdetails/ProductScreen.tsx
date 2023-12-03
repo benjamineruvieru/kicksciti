@@ -13,7 +13,7 @@ import {SCREEN_WIDTH} from '../../constants/Variables';
 import {SharedElement} from 'react-navigation-shared-element';
 import {MediumText, RegularTextB, SmallText} from '../../components/Text';
 import Button from '../../components/Button';
-import {BackButton, FavButton} from '../../components/IconButton';
+import {BackButton, FavButton, ShareButton} from '../../components/IconButton';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ExpandingDot} from 'react-native-animated-pagination-dots';
 import Colors from '../../constants/Colors';
@@ -62,7 +62,7 @@ const FullImages = ({pictures, flatListRef, scrollX, setActiveIndex}) => {
   );
 };
 
-const Header = ({item, _id}) => {
+const Header = ({item, _id, id}) => {
   const inset = useSafeAreaInsets();
 
   return (
@@ -79,9 +79,12 @@ const Header = ({item, _id}) => {
         zIndex: 1,
       }}>
       <BackButton />
-      <SharedElement id={`favbutton${_id}`}>
-        <FavButton color="white" item={item} />
-      </SharedElement>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <ShareButton id={id} />
+        <SharedElement id={`favbutton${_id}`}>
+          <FavButton color="white" item={item} />
+        </SharedElement>
+      </View>
     </View>
   );
 };
@@ -133,7 +136,7 @@ const ProductScreen = ({route, navigation}) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{flexGrow: 1}}>
-        <Header {...{item: route?.params, _id}} />
+        <Header {...{item: route?.params, _id, id}} />
         <FullImages
           {...{pictures, flatListRef, scrollX, activeIndex, setActiveIndex}}
         />
@@ -162,7 +165,7 @@ const ProductScreen = ({route, navigation}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: 20,
+              marginBottom: 30,
             }}>
             <SharedElement id={`name${_id}`}>
               <MediumText>{name}</MediumText>
