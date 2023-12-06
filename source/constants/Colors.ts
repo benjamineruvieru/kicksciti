@@ -6,8 +6,8 @@ export default {
   green: '#14E742',
   red: '#FF3A3AE5',
   bg: '#121212',
-  dim:'',
-  tabColor:'#263238',
-  tabBlur:'#78909c',
-  highlight:'#263238'
+  dim: '#78909c',
+  tabColor: '#263238',
+  tabBlur: '#78909c',
+  highlight: '#263238',
 };

@@ -28,3 +28,10 @@ export const updateServerCart = async ({_id, quantity, size}) => {
   });
   return res;
 };
+
+export const getEarnings = async ({}) => {
+  const axiosInstance = axiosBase();
+
+  const res = await axiosInstance.get(`${BASEURL}/get-earnings`);
+  return res.data;
+};

@@ -9,7 +9,7 @@ import {Easing, FadeOutLeft} from 'react-native-reanimated';
 import Input, {OtpInput} from '../../components/Input';
 import {showNotification, validateEmail} from '../../utilis/Functions';
 import {createUser, findEmail, login, verifyEmail} from '../../api/auth';
-import {setItem} from '../../utilis/storage';
+import {getItem, setItem} from '../../utilis/storage';
 import {useMMKVObject} from 'react-native-mmkv';
 
 const bg = require('../../assets/images/onboarding/bg.webp');
@@ -222,10 +222,14 @@ const CollectPassword = ({password, setPassword, email, navigation}) => {
           setItem('userdetails', data.data?.user, true);
           setCart(data.data?.user?.cart);
           setFavourites(data.data?.user?.favourites);
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'AniStackNav'}],
-          });
+          if (getItem('affilateRefer')) {
+            navigation.navigate('LoadProduct', getItem('affilateRefer', true));
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'AniStackNav'}],
+            });
+          }
         })
         .catch(err => {
           console.log('err', err);
@@ -324,10 +328,14 @@ const CompleteProfile = ({
         setItem('userdetails', data.data?.user);
         setCart(data.data?.user?.cart);
         setFavourites(data.data?.user?.favourites);
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'AniStackNav'}],
-        });
+        if (getItem('affilateRefer')) {
+          navigation.navigate('LoadProduct', getItem('affilateRefer', true));
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'AniStackNav'}],
+          });
+        }
       })
       .catch(err => {
         console.log('err', err?.response?.data);

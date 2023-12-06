@@ -17,3 +17,13 @@ export const fetchOrders = async ({}) => {
   const res = await axiosInstance.get(`${BASEURL}/fetch-orders`);
   return res?.data;
 };
+
+export const retryPayment = async ({order_id}) => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.post(`${BASEURL}/retry-payment`, {
+    BASEURL,
+    order_id,
+  });
+  return res;
+};

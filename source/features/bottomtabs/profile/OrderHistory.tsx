@@ -20,8 +20,10 @@ import Colors from '../../../constants/Colors';
 import {FlashList} from '@shopify/flash-list';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
+import useRefetchOnRemount from '../../../hooks/useRefetchOnRemount';
+import LayoutAnimationComponent from '../../../components/LayoutAnimationComponent';
 
-function formatTimestamp(timestamp) {
+export function formatTimestamp(timestamp) {
   const dateObj = new Date(timestamp);
 
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -72,40 +74,48 @@ const EmptyHistory = () => {
         alignItems: 'center',
         paddingBottom: 130,
       }}>
-      <Image
-        resizeMode="contain"
-        style={{
-          width: getPercentWidth(75),
-          height: getPercentWidth(75),
-          top: -10,
-        }}
-        source={require('../../../assets/images/illustrations/emptyorders.png')}
-      />
-      <RegularTextB style={{marginBottom: 5}}>
-        Your order history is currently empty.
-      </RegularTextB>
-      <SmallText style={{textAlign: 'center'}}>
-        Start shopping and watch this space fill up with your stylish
-        selections. Happy shopping!
-      </SmallText>
+      <LayoutAnimationComponent delay={300}>
+        <Image
+          resizeMode="contain"
+          style={{
+            width: getPercentWidth(75),
+            height: getPercentWidth(75),
+            top: -10,
+          }}
+          source={require('../../../assets/images/illustrations/emptyorders.png')}
+        />
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={400}>
+        <RegularTextB style={{marginBottom: 5}}>
+          Your order history is currently empty.
+        </RegularTextB>
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={500}>
+        <SmallText style={{textAlign: 'center'}}>
+          Start shopping and watch this space fill up with your stylish
+          selections. Happy shopping!
+        </SmallText>
+      </LayoutAnimationComponent>
     </View>
   );
 };
 
-const Wrapper = ({children, order_id}) => {
+const Wrapper = ({children, order_id, index}) => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate('OrderDetails', {order_id});
-      }}
-      style={{flexDirection: 'row', marginBottom: 15}}>
-      {children}
-    </TouchableOpacity>
+    <LayoutAnimationComponent leftInOut delay={100 + index * 100}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('OrderDetails', {order_id});
+        }}
+        style={{flexDirection: 'row', marginBottom: 15}}>
+        {children}
+      </TouchableOpacity>
+    </LayoutAnimationComponent>
   );
 };
 
-const OrderItem = ({item}) => {
+const OrderItem = ({item, index}) => {
   const {
     products,
     totalamount,
@@ -119,7 +129,7 @@ const OrderItem = ({item}) => {
   const {name, pictures} = products[0].item;
   console.log(products[0].item);
   return (
-    <Wrapper {...{order_id}}>
+    <Wrapper {...{order_id, index}}>
       <FastImage
         source={{uri: pictures[0]}}
         style={{height: 100, width: 100, borderRadius: 10}}
@@ -142,14 +152,20 @@ const OrderItem = ({item}) => {
 
 const HistoryList = ({orders}) => {
   return (
-    <FlashList estimatedItemSize={58} data={orders} renderItem={OrderItem} />
+    <FlashList
+      showsVerticalScrollIndicator={false}
+      estimatedItemSize={58}
+      data={orders}
+      renderItem={OrderItem}
+    />
   );
 };
 const OrderHistory = () => {
-  const {data, isLoading} = useApi({
+  const {data, isLoading, refetch} = useApi({
     queryFn: fetchOrders,
     queryKey: ['fetchOrders'],
   });
+  useRefetchOnRemount(refetch);
   const orders = data?.orders;
   console.log('data', data);
   return (
