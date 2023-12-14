@@ -1,8 +1,7 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
-import {SCREEN_WIDTH} from '../../../../constants/Variables';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 

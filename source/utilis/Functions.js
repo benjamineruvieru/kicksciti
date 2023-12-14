@@ -5,11 +5,38 @@ import {
   DeviceEventEmitter,
 } from 'react-native';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants/Variables';
-import {LayoutAnimation} from 'react-native';
 import countryData from './output.json';
-import citiesData from './outputcities.json';
+import citiesData from './lgas.json';
+import {getItem} from './storage';
 
 const scale = SCREEN_WIDTH / 390;
+
+export const restrictViewer = ({navigation, alt}) => {
+  if (!getItem('token')) {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'OnboardingScreen'}],
+    });
+  } else {
+    if (alt) {
+      alt();
+    }
+  }
+};
+export const getDeliveryFee = ({lga, state}) => {
+  if (state !== 'Lagos') {
+    return 3000;
+  } else if (
+    lga === 'Lagos Island' ||
+    lga === 'Ikorodu' ||
+    lga === 'Ibeju-Lekki' ||
+    lga === 'Epe'
+  ) {
+    return 3000;
+  } else {
+    return 2500;
+  }
+};
 
 export const getState = ({country}) => {
   if (!country) return [];
@@ -23,12 +50,10 @@ export const getState = ({country}) => {
 
 export const getCity = ({country, state}) => {
   if (!country || !state) return [];
-
-  return (
-    citiesData[`${country?.toLowerCase()}_${state?.toLowerCase()}`]?.map(d => {
-      return d;
-    }) ?? []
+  const item = citiesData.find(
+    data => data.state?.toLowerCase() === state?.toLowerCase(),
   );
+  return item.lgas;
 };
 
 export const formatDate = date => {
@@ -77,14 +102,7 @@ export function generateRandomString(length) {
 
   return result;
 }
-export const layoutAnimate = () => {
-  LayoutAnimation.configureNext({
-    duration: 300,
-    update: {type: 'easeInEaseOut', property: 'scaleY'},
-    delete: {type: 'easeOut', property: 'scaleY'},
-    create: {type: 'easeIn', property: 'scaleY'},
-  });
-};
+
 export function formatProfit(number) {
   if (number < 0) {
     return '- $' + parseFloat(Math.abs(number)).toFixed(2);
@@ -99,9 +117,33 @@ export function formatProfit(number) {
 //console.log(formatProfit(0)); // Output: $0
 //console.log(formatProfit(-123.45)); // Output: -$123.45
 
-export function formatNumberWithCommas(number) {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export function formatAmount(number) {
+  let formatted_num = Math.abs(number)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  if (parseFloat(number) > 0) {
+    return `₦ ${formatted_num}`;
+  } else {
+    return `- ₦ ${formatted_num}`;
+  }
 }
+
+export function formatNumberWithCommas(number) {
+  // Split the number into whole and decimal parts
+  const parts = number.toString().split('.');
+
+  // Format the whole number part with commas
+  const wholeNumberWithCommas = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  // If there is a decimal part, append it back to the whole number with commas
+  const result =
+    parts.length > 1
+      ? wholeNumberWithCommas + '.' + parts[1]
+      : wholeNumberWithCommas;
+
+  return result;
+}
+
 export function normalizeFontSize(size) {
   const newSize = size * scale;
   return Math.round(PixelRatio.roundToNearestPixel(newSize));
@@ -129,6 +171,9 @@ export const hideFirstLetter = text => {
 };
 
 export function capitalizeAllFirstLetters(string) {
+  if (!string) {
+    return '';
+  }
   return string
     .split(' ')
     .map(text => capitalizeFirstLetter(text))
@@ -194,17 +239,6 @@ export function checkPasswordStrength(password) {
   return scorePercentage / 100;
 }
 
-export const StatusBarController = (route, isDarkMode) => {
-  //console.log(route.name);
-  switch (route.name) {
-    default: {
-      StatusBar.setBarStyle(isDarkMode ? 'light-content' : 'dark-content');
-      Platform.OS === 'android' &&
-        StatusBar.setBackgroundColor(isDarkMode ? '#272727' : 'white');
-    }
-  }
-};
-
 export const showNotification = ({msg, error}) => {
   DeviceEventEmitter.emit('openNotification', {
     error,
@@ -229,4 +263,41 @@ export function addItemIfNotExists(array, newItem) {
 
   // Return the updated array
   return array;
+}
+
+export function insertDateItems(arrayQ) {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  let currDate;
+  let arr = [];
+  for (let i = 0; i < arrayQ.length; i++) {
+    const {createdAt} = arrayQ[i];
+    const createdAtDate = new Date(createdAt);
+    console.log(
+      'currDate',
+      currDate,
+      'createdAtDate',
+      createdAtDate.toDateString(),
+      currDate !== createdAtDate,
+    );
+    if (currDate !== createdAtDate.toDateString()) {
+      if (createdAtDate.toDateString() === today.toDateString()) {
+        arr.push({date: 'Today'});
+      } else if (createdAtDate.toDateString() === yesterday.toDateString()) {
+        arr.push({date: 'Yesterday'});
+      } else {
+        const formattedDate = createdAtDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+        arr.push({date: formattedDate});
+      }
+      currDate = createdAtDate.toDateString();
+    }
+    arr.push(arrayQ[i]);
+  }
+
+  return arr;
 }

@@ -1,18 +1,27 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {useMMKVObject} from 'react-native-mmkv';
 import {addToServerCart, updateServerCart} from '../api/user';
+import {restrictViewer} from '../utilis/Functions';
+import {useNavigation} from '@react-navigation/native';
 
 const useCart = ({item}) => {
+  const navigation = useNavigation();
+  const [updatingCart, setUpdating] = useMMKVObject('updatingCart');
   const [cart, setCart] = useMMKVObject('cart');
   const index = cart?.findIndex(cart => cart?.item?._id === item._id) ?? -1;
   const isInCart = index !== -1;
   const data = cart?.[index] ?? {};
   const {quantity, size} = data;
-
   function addToCart({size, quantity}) {
     if (isInCart) {
     } else {
+      const cartList = [...(cart ?? []), {item, size, quantity}];
+
+      console.log(`Added ${item._id} to cart`);
+      console.log('cartList', cartList);
+      setCart(cartList);
+      setUpdating(true);
       addToServerCart({_id: item._id, quantity, size})
         .then(data => {
           console.log('added', data.data);
@@ -20,17 +29,16 @@ const useCart = ({item}) => {
         .catch(err => {
           console.log('err', err);
           console.log('err2', err?.response?.data);
+        })
+        .finally(() => {
+          setUpdating(false);
         });
-      const cartList = [...(cart ?? []), {item, size, quantity}];
-
-      console.log(`Added ${item._id} to cart`);
-      console.log('cartList', cartList);
-      setCart(cartList);
     }
   }
 
   const removeFromCart = () => {
     if (isInCart) {
+      setUpdating(true);
       addToServerCart({_id: item._id, add: false})
         .then(data => {
           console.log('removed', data.data);
@@ -38,6 +46,9 @@ const useCart = ({item}) => {
         .catch(err => {
           console.log('err', err);
           console.log('err2', err?.response?.data);
+        })
+        .finally(() => {
+          setUpdating(false);
         });
       cart?.splice(index, 1);
       console.log(`Removed ${item._id} from cart`, cart);
@@ -46,6 +57,7 @@ const useCart = ({item}) => {
   };
 
   const editSize = size => {
+    setUpdating(true);
     updateServerCart({_id: item._id, size})
       .then(data => {
         console.log('added', data.data);
@@ -53,6 +65,9 @@ const useCart = ({item}) => {
       .catch(err => {
         console.log('err', err);
         console.log('err2', err?.response?.data);
+      })
+      .finally(() => {
+        setUpdating(false);
       });
     data.size = size;
     cart[index] = data;
@@ -87,7 +102,14 @@ const useCart = ({item}) => {
 
   return {
     isInCart,
-    addToCart,
+    addToCart: ({quantity, size}) => {
+      restrictViewer({
+        navigation,
+        alt: () => {
+          addToCart({quantity, size});
+        },
+      });
+    },
     removeFromCart,
     cart,
     quantity,

@@ -1,10 +1,30 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 import Mainbackground from '../../components/Mainbackground';
 import PageHeader from '../../components/PageHeader';
-import {getPercentWidth} from '../../utilis/Functions';
-import {RegularTextB, SmallText, SmallTextB} from '../../components/Text';
+import {getPercentWidth, insertDateItems} from '../../utilis/Functions';
+import {
+  RegularText,
+  RegularTextB,
+  SmallText,
+  SmallTextB,
+} from '../../components/Text';
 import LayoutAnimationComponent from '../../components/LayoutAnimationComponent';
+import {useInfiniteApi} from '../../hooks/useApi';
+import {getNotifications} from '../../api/user';
+import {FlashList} from '@shopify/flash-list';
+import FastImage from 'react-native-fast-image';
+import Colors from '../../constants/Colors';
+import {useNavigation} from '@react-navigation/native';
+import {SharedElement} from 'react-navigation-shared-element';
+import useRefetchOnRemount from '../../hooks/useRefetchOnRemount';
 
 const EmptyNoti = () => {
   return (
@@ -40,11 +60,107 @@ const EmptyNoti = () => {
   );
 };
 
+const Wrapper = ({children, item, index}) => {
+  const navigation = useNavigation();
+  const {data, action} = item;
+  const onPress = () => {
+    switch (action) {
+      case 'open-product': {
+        console.log(data.product);
+        navigation.navigate('ProductScreen', data.product);
+        break;
+      }
+      case 'open-order': {
+        console.log(data.order_id);
+        navigation.navigate('OrderDetails', {order_id: data.order_id});
+        break;
+      }
+    }
+  };
+  return (
+    <LayoutAnimationComponent exit={null} rightInOut delay={100 + index * 100}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          paddingVertical: 15,
+          borderBottomWidth: 1,
+          borderColor: Colors.highlight,
+          flexDirection: 'row',
+        }}>
+        {children}
+      </TouchableOpacity>
+    </LayoutAnimationComponent>
+  );
+};
+
+const NotificationItem = ({item, index}) => {
+  const {image, date, body, title, action} = item;
+  return date ? (
+    <LayoutAnimationComponent exit={null} rightInOut delay={100 + index * 100}>
+      <SmallText style={{marginTop: 15}}>{date}</SmallText>
+    </LayoutAnimationComponent>
+  ) : (
+    <Wrapper {...{index, item}}>
+      {action === 'open-product' ? (
+        <SharedElement id={image}>
+          <FastImage
+            source={{uri: image}}
+            style={{width: 65, height: 65, marginRight: 15}}
+          />
+        </SharedElement>
+      ) : (
+        <FastImage
+          source={{uri: image}}
+          style={{width: 65, height: 65, marginRight: 15}}
+        />
+      )}
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <RegularTextB style={{marginBottom: 3}}>{title}</RegularTextB>
+        <SmallText>{body}</SmallText>
+      </View>
+    </Wrapper>
+  );
+};
+
+const Notifications = ({notifications, refetch}) => {
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
+  return (
+    <FlashList
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      estimatedItemSize={76}
+      showsVerticalScrollIndicator={false}
+      data={notifications}
+      renderItem={NotificationItem}
+    />
+  );
+};
 const NotificationsScreen = () => {
+  const {data, isLoading, refetch} = useInfiniteApi({
+    queryFunction: getNotifications,
+    queryKey: ['getNotifications'],
+  });
+  const results = data?.pages.flatMap(data => data?.notifications) ?? [];
+
+  const notifications = insertDateItems(results.reverse());
+  useRefetchOnRemount(refetch);
   return (
     <Mainbackground padding={20}>
       <PageHeader title={'Notifications'} />
-      <EmptyNoti />
+      {isLoading ? (
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator color={Colors.primary} />
+        </View>
+      ) : notifications.length > 0 ? (
+        <Notifications notifications={notifications} refetch={refetch} />
+      ) : (
+        <EmptyNoti />
+      )}
     </Mainbackground>
   );
 };

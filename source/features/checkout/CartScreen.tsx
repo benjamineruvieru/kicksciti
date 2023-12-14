@@ -1,15 +1,10 @@
-import {Image, Keyboard, StyleSheet, Text, View} from 'react-native';
+import {Keyboard, ScrollView, StyleSheet, View} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import Mainbackground from '../../components/Mainbackground';
 import PageHeader from '../../components/PageHeader';
 import CartItemsList from './components/CartItemsList';
 import Button from '../../components/Button';
-import {
-  MediumText,
-  RegularTextB,
-  SmallText,
-  SmallTextB,
-} from '../../components/Text';
+import {MediumText, RegularTextB} from '../../components/Text';
 import Input, {ModalSelector} from '../../components/Input';
 import Colors from '../../constants/Colors';
 import LayoutAnimationComponent from '../../components/LayoutAnimationComponent';
@@ -17,17 +12,17 @@ import {useMMKVObject} from 'react-native-mmkv';
 import {
   formatNumberWithCommas,
   getCity,
+  getDeliveryFee,
   getState,
   showNotification,
 } from '../../utilis/Functions';
-import {SCREEN_WIDTH} from '../../constants/Variables';
 import EmptyCart from './components/EmptyCart';
-import {useApi} from '../../hooks/useApi';
 import {getCart, makePayment} from '../../api/products';
 import PaymentModal from './components/PaymentModal';
 import useRecentAddresses from '../../hooks/useRecentAddresses';
 import RecentAddress from './components/RecentAddress';
 import HighlightSelector from './components/HighlightSelector';
+import useKeyboardOpen from '../../hooks/useKeyboardOpen';
 
 const Amount = ({deliveryfee = 0, cart}) => {
   let totalPrice = 0;
@@ -107,7 +102,7 @@ const Delivery = ({
   recentAddress,
 }) => {
   return (
-    <View style={{flex: 1}}>
+    <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
       <LayoutAnimationComponent rightInOut delay={350}>
         <Input
           placeholderText="Delivery Address"
@@ -155,7 +150,7 @@ const Delivery = ({
           setPhone,
         }}
       />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -190,24 +185,45 @@ const PaymentType = ({paymentOnDelivery, setpaymentOnDelivery}) => {
 const CartScreen = ({navigation}) => {
   const {recentAddress, addAddress} = useRecentAddresses();
   const [cart, setCart] = useMMKVObject('cart');
+  const [updatingCart] = useMMKVObject('updatingCart');
+
   useEffect(() => {
-    getCart().then(data => {
-      console.log('data cart', data?.data?.cart);
-      setCart(data?.data?.cart ?? []);
-    });
-  }, []);
+    console.log('updatingCart', updatingCart);
+    if (!updatingCart) {
+      getCart().then(data => {
+        console.log('data cart', data?.data?.cart);
+        setCart(data?.data?.cart ?? []);
+      });
+    }
+  }, [updatingCart]);
 
   const [pos, setPos] = useState(0);
   const [state, setState] = useState('Lagos');
   const [lga, setLga] = useState();
   const [address, setAddress] = useState();
   const [phone, setPhone] = useState();
-  const [deliveryfee, setDeliveryfee] = useState(2000);
+  const [deliveryfee, setDeliveryfee] = useState(0);
   const [load, setLoad] = useState(false);
   const [link, setLink] = useState();
   const [order_id, setorder_id] = useState();
   const [paymentOnDelivery, setpaymentOnDelivery] = useState();
+  const [keyboardOpen, setKeyboardOpen] = useState();
 
+  useEffect(() => {
+    if (state && lga) {
+      setDeliveryfee(getDeliveryFee({lga, state}));
+    }
+  }, [state, lga]);
+
+  useKeyboardOpen(
+    () => {
+      setKeyboardOpen(true);
+    },
+    () => {
+      setKeyboardOpen(false);
+    },
+    [],
+  );
   const modalRef = useRef();
   const openModal = () => {
     modalRef.current.open();
@@ -247,13 +263,16 @@ const CartScreen = ({navigation}) => {
     makePayment({address, lga, phone, state, paymentOnDelivery})
       .then(data => {
         const {link, order} = data.data ?? {};
+
         console.log('order link', link);
         if (paymentOnDelivery) {
           navigation.navigate('OrderDetails', {order_id: order?.order_id});
-        } else {
+        } else if (link) {
           setorder_id(order?.order_id);
           setLink(link);
           openModal();
+        } else {
+          navigation.navigate('OrderDetails', {order_id: order?.order_id});
         }
         setCart([]);
         setPos(0);
@@ -320,7 +339,7 @@ const CartScreen = ({navigation}) => {
             {pos === 2 && (
               <PaymentType {...{paymentOnDelivery, setpaymentOnDelivery}} />
             )}
-            <Amount {...{cart, deliveryfee}} />
+            {!keyboardOpen && <Amount {...{cart, deliveryfee}} />}
             <LayoutAnimationComponent delay={300}>
               <Button
                 title={pos === 0 ? 'Next' : 'Make Payment'}

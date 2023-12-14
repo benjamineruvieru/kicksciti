@@ -14,10 +14,11 @@ import LoveSvg from '../assets/svg/bottomtab/love.svg';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import messaging from '@react-native-firebase/messaging';
 import {getItem, setItem} from '../utilis/storage';
+import {useNavigation} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createSharedElementStackNavigator({name: 'BottomNav'});
-const Stack2 = createSharedElementStackNavigator({name: 'BottomNav'});
+const Stack2 = createSharedElementStackNavigator({name: 'BottomNav2'});
 
 const StackShopScreen = () => (
   <Stack2.Navigator
@@ -49,9 +50,9 @@ const StackFavouriteScreen = () => (
 
 export default function BottomNav() {
   const insets = useSafeAreaInsets();
-
+  const navigation = useNavigation();
   async function requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
+    await messaging().requestPermission();
   }
 
   async function requestPermissionAndroid() {
@@ -64,9 +65,7 @@ export default function BottomNav() {
     }
   }
   const getToken = () => {
-    messaging()
-      .subscribeToTopic('newproduct')
-      .then(() => console.log('Subscribed to topic!'));
+    messaging().subscribeToTopic('newproduct');
     messaging()
       .getToken()
       .then(token => {
@@ -86,22 +85,43 @@ export default function BottomNav() {
     init();
   }, []);
 
-  // useEffect(() => {
-  //   return messaging().onTokenRefresh(token => {
-  //     console.log('token changed', token);
-  //   });
-  // }, []);
+  useEffect(() => {
+    return messaging().onTokenRefresh(token => {
+      console.log('token changed', token);
+    });
+  }, []);
 
-  // useEffect(() => {
-  //   messaging().onNotificationOpenedApp(remoteMessage => {
-  //     // navigation.navigate('Notification');
-  //     console.log(remoteMessage);
-  //   });
-  // }, []);
+  useEffect(() => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      const {action, product, order_id} = remoteMessage.data ?? {};
+      switch (action) {
+        case 'open-product': {
+          console.log(product);
+          if (product) {
+            navigation.navigate('ProductScreen', JSON.parse(product));
+          } else {
+            navigation.navigate('NotificationsScreen');
+          }
+          break;
+        }
+        case 'open-order': {
+          console.log(order_id);
+          if (order_id) {
+            navigation.navigate('OrderDetails', {order_id});
+          } else {
+            navigation.navigate('NotificationsScreen');
+          }
+          break;
+        }
+      }
+      console.log('remoteMessage', remoteMessage.data);
+    });
+  }, []);
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      setItem('unreadNotification', 'true');
     });
 
     return unsubscribe;

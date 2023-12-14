@@ -18,6 +18,7 @@ import LayoutAnimationComponent from '../../../components/LayoutAnimationCompone
 import {useMMKVObject} from 'react-native-mmkv';
 import useCart from '../../../hooks/useCart';
 import {useNavigation} from '@react-navigation/native';
+import {SharedElement} from 'react-navigation-shared-element';
 
 const QuantityWrapper = ({product}) => {
   const {
@@ -64,22 +65,26 @@ const Wrapper = ({item, children, index}) => {
 };
 const RenderItem = ({item, index}) => {
   const {item: product, size} = item ?? {};
-  const {pictures, name, price, discount} = product ?? {};
+  const {pictures, name, price, discount, _id} = product ?? {};
   const displayPrice = price - (discount ?? 0);
 
   return (
     <Wrapper {...{index}} item={product}>
-      <FastImage
-        source={{uri: pictures[0]}}
-        style={{
-          width: getPercentWidth(40),
-          height: getPercentWidth(40),
-          borderRadius: 10,
-        }}
-      />
+      <SharedElement id={pictures[0]}>
+        <FastImage
+          source={{uri: pictures[0]}}
+          style={{
+            width: getPercentWidth(40),
+            height: getPercentWidth(40),
+            borderRadius: 10,
+          }}
+        />
+      </SharedElement>
       <View style={{flex: 1, paddingLeft: 15, paddingTop: 5}}>
         <View style={{flex: 1}}>
-          <MediumText>{name}</MediumText>
+          <SharedElement id={`name${_id}`}>
+            <MediumText>{name}</MediumText>
+          </SharedElement>
           <View
             style={{
               flexDirection: 'row',
@@ -87,7 +92,11 @@ const RenderItem = ({item, index}) => {
               marginBottom: 15,
               alignItems: 'center',
             }}>
-            <RegularText>₦ {formatNumberWithCommas(displayPrice)}</RegularText>
+            <SharedElement id={`price${_id}`}>
+              <RegularText>
+                ₦ {formatNumberWithCommas(displayPrice)}
+              </RegularText>
+            </SharedElement>
             {!!discount && discount > 0 && (
               <SmallText
                 style={{
@@ -108,7 +117,7 @@ const RenderItem = ({item, index}) => {
 };
 const CartItemsList = () => {
   const [cart] = useMMKVObject('cart');
-
+  console.log('local cart', cart);
   return (
     <View style={{flex: 1}}>
       <FlashList

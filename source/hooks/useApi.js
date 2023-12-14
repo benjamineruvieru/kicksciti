@@ -33,10 +33,10 @@ export function useInfiniteApi({queryKey, queryFunction, onSuccess}) {
     retry: true,
     failureCount: 3,
     getNextPageParam: (lastPage, pages) => {
-      console.log('pages', pages, lastPage);
+      const {currentPage, totalPages} = lastPage.paginationData;
 
-      if (lastPage?.hasNextPage) {
-        return pages.length + 1;
+      if (totalPages > currentPage) {
+        return currentPage + 1;
       } else {
         return undefined;
       }

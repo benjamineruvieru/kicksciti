@@ -23,12 +23,16 @@ const PaymentModal = ({modalRef, link, order_id, callBack}) => {
           overflow: 'hidden',
         }}>
         <WebView
+          startInLoadingState={true}
+          scalesPageToFit={true}
+          javaScriptEnabled={true}
           nestedScrollEnabled
-          source={{uri: link}}
+          source={{uri: link ?? ''}}
           style={{
-            height: getPercentHeight(80),
+            // height: getPercentHeight(80),
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
+            flex: 1,
           }}
           onLoadStart={navState => {
             console.log('navState lo', navState.nativeEvent.url);
@@ -37,7 +41,9 @@ const PaymentModal = ({modalRef, link, order_id, callBack}) => {
             ) {
               modalRef.current.close();
               navigation.navigate('OrderDetails', {order_id});
-              callBack();
+              if (callBack) {
+                callBack();
+              }
             }
           }}
         />

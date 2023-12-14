@@ -1,4 +1,9 @@
-import {View, ActivityIndicator, ScrollView} from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Mainbackground from '../../components/Mainbackground';
 import PageHeader from '../../components/PageHeader';
@@ -20,13 +25,6 @@ import TimeLine from './components/TimeLine';
 import PaymentModal from './components/PaymentModal';
 import useRefetchOnRemount from '../../hooks/useRefetchOnRemount';
 
-const OrderDetailsView = ({}) => {
-  return (
-    <View>
-      <View></View>
-    </View>
-  );
-};
 const PaymentPending = ({order_id, modalRef, setLink}) => {
   return (
     <View
@@ -53,7 +51,7 @@ const PaymentPending = ({order_id, modalRef, setLink}) => {
         We are confirming the payment for{'\n'}this order, please be patient
       </SmallText>
       <SmallText
-        onTextPress={() => {
+        onPress={() => {
           retryPayment({order_id})
             .then(data => {
               console.log('dat', data.data);
@@ -286,6 +284,15 @@ const OrderDetails = ({route}) => {
 
   console.log('da', data?.order);
   useRefetchOnRemount(refetch);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  }, [refetch]);
+
   return (
     <>
       <Mainbackground padding={20}>
@@ -295,11 +302,22 @@ const OrderDetails = ({route}) => {
             <ActivityIndicator color={Colors.primary} />
           </View>
         ) : order?.active ? (
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            showsVerticalScrollIndicator={false}>
             <OrderInfo {...{order}} />
           </ScrollView>
         ) : (
-          <PaymentPending {...{order_id, modalRef, setLink}} />
+          <ScrollView
+            contentContainerStyle={{justifyContent: 'center', flex: 1}}
+            style={{flex: 1}}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+            <PaymentPending {...{order_id, modalRef, setLink}} />
+          </ScrollView>
         )}
       </Mainbackground>
       <PaymentModal

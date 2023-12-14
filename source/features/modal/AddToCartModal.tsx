@@ -5,9 +5,8 @@ import SizeSelector from '../productdetails/components/SizeSelector';
 import useCart from '../../hooks/useCart';
 import Colors from '../../constants/Colors';
 import Button from '../../components/Button';
-import {showNotification} from '../../utilis/Functions';
 import Quantity from '../productdetails/components/Quantity';
-import {MediumText, RegularTextB} from '../../components/Text';
+import {RegularTextB} from '../../components/Text';
 
 const AddToCartModal = () => {
   const modalRef = useRef();

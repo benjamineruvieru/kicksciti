@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   Platform,
   StatusBar,
@@ -7,11 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import Mainbackground from '../../../components/Mainbackground';
 import PageHeader from '../../../components/PageHeader';
 import Colors from '../../../constants/Colors';
 import {
+  formatAmount,
   formatNumberWithCommas,
   getPercentHeight,
   getPercentWidth,
@@ -23,10 +25,13 @@ import {
   RegularTextB,
   SmallText,
 } from '../../../components/Text';
-import Button from '../../../components/Button';
 import LayoutAnimationComponent from '../../../components/LayoutAnimationComponent';
 import {useApi} from '../../../hooks/useApi';
 import {getEarnings} from '../../../api/user';
+import {FlashList} from '@shopify/flash-list';
+import EarnSvg from '../../../assets/svg/profile/earn.svg';
+import WithdrawModal from './components/WithdrawModal';
+import {SCREEN_HEIGHT} from '../../../constants/Variables';
 
 const EmptyEarnings = () => {
   return (
@@ -63,23 +68,28 @@ const EmptyEarnings = () => {
   );
 };
 
-const Balance = ({inset, rewardBalance, holdingrewardBalance}) => {
+const Balance = ({
+  openModal,
+  rewardBalance,
+  holdingrewardBalance,
+  setBalanceHeight,
+}) => {
   return (
     <View
+      onLayout={e => {
+        console.log('height', e.nativeEvent.layout.height);
+        setBalanceHeight(e.nativeEvent.layout.height);
+      }}
       style={{
         backgroundColor: Colors.bg,
-        elevation: 20,
+        elevation: 15,
         borderRadius: 5,
         padding: 20,
-        position: 'absolute',
-        top:
-          Platform.OS === 'ios' ? inset.top + 70 : StatusBar.currentHeight + 70,
-        left: 20,
-        right: 20,
         shadowColor: 'black',
         shadowOffset: {height: 2, width: 2},
         shadowOpacity: 0.5,
         shadowRadius: 2,
+        zIndex: 1,
       }}>
       <RegularText>Current balance</RegularText>
       <View
@@ -92,15 +102,29 @@ const Balance = ({inset, rewardBalance, holdingrewardBalance}) => {
         }}>
         <MediumText style={{fontSize: 40}}>
           <RegularTextB>₦</RegularTextB>{' '}
-          {rewardBalance > 0 ? formatNumberWithCommas(rewardBalance) : '0.00'}
+          {rewardBalance > 0
+            ? formatNumberWithCommas(parseFloat(rewardBalance).toFixed(2))
+            : '0.00'}
         </MediumText>
         <TouchableOpacity
+          onPress={() => {
+            if (parseInt(rewardBalance) > 0) {
+              openModal();
+            }
+          }}
           style={{
             backgroundColor: Colors.primary,
             borderRadius: 360,
             padding: 10,
           }}>
-          <SmallText>Withdraw</SmallText>
+          <SmallText
+            onPress={() => {
+              if (parseInt(rewardBalance) > 0) {
+                openModal();
+              }
+            }}>
+            Withdraw
+          </SmallText>
         </TouchableOpacity>
       </View>
       <SmallText>
@@ -113,28 +137,110 @@ const Balance = ({inset, rewardBalance, holdingrewardBalance}) => {
   );
 };
 
-const AffilateEarnings = () => {
-  const inset = useSafeAreaInsets();
-  const {data} = useApi({queryFn: getEarnings, queryKey: ['getEarnings']});
-
-  console.log('data', data);
+const EarnItem = ({item}) => {
+  const {amount, description} = item ?? {};
   return (
-    <Mainbackground top={-1}>
+    <View
+      style={{
+        flexDirection: 'row',
+        backgroundColor: '#1c2429',
+        marginBottom: 20,
+        marginHorizontal: 20,
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        shadowColor: 'black',
+        shadowOffset: {height: 2, width: 2},
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 10,
+      }}>
       <View
         style={{
+          width: 55,
+          height: 55,
+          marginRight: 15,
           backgroundColor: Colors.primary,
-          height: 200,
-          paddingTop:
-            Platform.OS === 'ios'
-              ? inset.top + 20
-              : StatusBar.currentHeight + 20,
-          paddingHorizontal: 20,
+          borderRadius: 360,
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
-        <PageHeader title={'Earnings'} />
+        <EarnSvg color={'white'} width={25} height={25} />
       </View>
-      <Balance {...{inset, ...(data ?? {})}} />
-      <EmptyEarnings />
-    </Mainbackground>
+      <View style={{flex: 1, justifyContent: 'space-around'}}>
+        <MediumText style={{marginBottom: 5}}>
+          {formatAmount(amount)}
+        </MediumText>
+        <SmallText>{description}</SmallText>
+      </View>
+    </View>
+  );
+};
+
+const Earnings = ({rewards}) => {
+  return (
+    <FlashList
+      estimatedItemSize={104}
+      showsVerticalScrollIndicator={false}
+      data={rewards}
+      renderItem={EarnItem}
+    />
+  );
+};
+
+const AffilateEarnings = () => {
+  const inset = useSafeAreaInsets();
+  const {data, isLoading, refetch} = useApi({
+    queryFn: getEarnings,
+    queryKey: ['getEarnings'],
+  });
+  const rewards = data?.rewards?.reverse() ?? [];
+  const modalRef = useRef();
+  const openModal = () => {
+    modalRef.current.open();
+  };
+  const [balanceHeight, setBalanceHeight] = useState(0);
+  const TOP =
+    Platform.OS === 'ios' ? inset.top + 50 : StatusBar.currentHeight + 50;
+  const remainingSpace = 200 - TOP;
+  console.log(TOP);
+  return (
+    <>
+      <Mainbackground top={-1}>
+        <View
+          style={{
+            backgroundColor: Colors.primary,
+            height: 200,
+            paddingTop:
+              Platform.OS === 'ios'
+                ? inset.top + 20
+                : StatusBar.currentHeight + 20,
+            paddingHorizontal: 20,
+            zIndex: 1,
+          }}>
+          <PageHeader title={'Earnings'} />
+          <Balance
+            {...{inset, openModal, TOP, setBalanceHeight, ...(data ?? {})}}
+          />
+        </View>
+        {isLoading ? (
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <ActivityIndicator color={Colors.primary} />
+          </View>
+        ) : rewards.length > 0 ? (
+          <View
+            style={{
+              flex: 1,
+              paddingTop: balanceHeight - remainingSpace + 40,
+            }}>
+            <Earnings rewards={rewards} />
+          </View>
+        ) : (
+          <EmptyEarnings />
+        )}
+      </Mainbackground>
+      <WithdrawModal {...{modalRef, refetch}} />
+    </>
   );
 };
 

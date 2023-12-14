@@ -1,21 +1,49 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {RegularTextB, SmallText, SmallTextB} from '../../../components/Text';
 import {getItem} from '../../../utilis/storage';
 import CopySvg from '../../../assets/svg/icons/copy.svg';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {showNotification} from '../../../utilis/Functions';
-
-const AffilateLink = ({id}) => {
+import {
+  formatNumberWithCommas,
+  showNotification,
+} from '../../../utilis/Functions';
+import QuesSvg from '../../../assets/svg/icons/question.svg';
+import {Dialog} from '../../../components/Dialog';
+const AffilateLink = ({id, affiliate_commission}) => {
+  const isLoggedIn = !!getItem('token');
+  const [open, setOpen] = useState(false);
   const {username} = getItem('userdetails', true);
-  const link = `https://www.kicksciti.com/product/${id}?id=${username}`;
+  const link = isLoggedIn
+    ? `https://www.kicksciti.com/product/${id}?id=${username}`
+    : `https://www.kicksciti.com/product/${id}`;
   return (
     <View style={{marginTop: 30, marginBottom: 10}}>
-      <RegularTextB>Affilate Link</RegularTextB>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <RegularTextB
+          onTextPress={() => {
+            setOpen(true);
+          }}>
+          {isLoggedIn ? 'Affilate Link' : 'Product Link'}
+        </RegularTextB>
+        {isLoggedIn && (
+          <TouchableOpacity
+            onPress={() => {
+              setOpen(true);
+            }}
+            style={{marginLeft: 5}}>
+            <QuesSvg width={20} height={20} color={'white'} />
+          </TouchableOpacity>
+        )}
+      </View>
       <TouchableOpacity
         onPress={() => {
           Clipboard.setString(link);
-          showNotification({msg: 'Affilate link copied to clipboard'});
+          showNotification({
+            msg: isLoggedIn
+              ? 'Affilate link copied to clipboard'
+              : 'Product link copied to clipboard',
+          });
         }}
         style={{
           flexDirection: 'row',
@@ -32,6 +60,24 @@ const AffilateLink = ({id}) => {
         </SmallText>
         <CopySvg color={'white'} width={20} height={20} />
       </TouchableOpacity>
+      <Dialog
+        open={open}
+        closeModal={() => {
+          setOpen(false);
+        }}>
+        <View style={{padding: 5}}>
+          <RegularTextB style={{marginBottom: 10}}>Affiliate Link</RegularTextB>
+          <SmallText>
+            Grab your unique Affiliate Link and share it. When friends use it to
+            make a purchase, you get a commission! It's that simple. Share the
+            love, earn rewards. Happy sharing!
+          </SmallText>
+          <SmallText style={{marginTop: 5}}>
+            The commission for this product is: ₦{' '}
+            {formatNumberWithCommas(affiliate_commission ?? 1000)}
+          </SmallText>
+        </View>
+      </Dialog>
     </View>
   );
 };

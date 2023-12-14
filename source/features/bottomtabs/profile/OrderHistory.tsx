@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Mainbackground from '../../../components/Mainbackground';
 import PageHeader from '../../../components/PageHeader';
 import {useApi} from '../../../hooks/useApi';
@@ -103,7 +103,7 @@ const EmptyHistory = () => {
 const Wrapper = ({children, order_id, index}) => {
   const navigation = useNavigation();
   return (
-    <LayoutAnimationComponent leftInOut delay={100 + index * 100}>
+    <LayoutAnimationComponent exit={null} leftInOut delay={100 + index * 100}>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('OrderDetails', {order_id});
@@ -150,9 +150,17 @@ const OrderItem = ({item, index}) => {
   );
 };
 
-const HistoryList = ({orders}) => {
+const HistoryList = ({orders, refetch}) => {
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
   return (
     <FlashList
+      refreshing={refreshing}
+      onRefresh={onRefresh}
       showsVerticalScrollIndicator={false}
       estimatedItemSize={58}
       data={orders}
@@ -178,7 +186,7 @@ const OrderHistory = () => {
       ) : !orders || orders.length === 0 ? (
         <EmptyHistory />
       ) : (
-        <HistoryList orders={orders.reverse()} />
+        <HistoryList refetch={refetch} orders={orders.reverse()} />
       )}
     </Mainbackground>
   );

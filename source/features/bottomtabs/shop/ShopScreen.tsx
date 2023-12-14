@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Mainbackground from '../../../components/Mainbackground';
 import {TypeAnimation} from 'react-native-type-animation';
 import Search from '../../../components/Search';
@@ -10,10 +10,39 @@ import {useInfiniteApi} from '../../../hooks/useApi';
 import {getProducts} from '../../../api/products';
 import ProductsLoading from './components/ProductsLoading';
 import {getItem} from '../../../utilis/storage';
+import useDebounce from '../../../hooks/useDebounce';
+import {SmallText} from '../../../components/Text';
 
-const ShopScreen = () => {
+const ShopScreen = ({route}) => {
   const [category, setCategory] = useState('hottest products');
-  const {name} = getItem('userdetails', true);
+  const [search, setSearch] = useState();
+  const [query, setQuery] = useState();
+  const {searchPassed} = route?.params ?? {};
+
+  useEffect(() => {
+    console.log('searchPassed', searchPassed);
+    if (searchPassed) {
+      setSearch(searchPassed);
+      setQuery(searchPassed);
+    }
+  }, [searchPassed]);
+
+  useDebounce(
+    () => {
+      if (search) {
+        console.log('sa', search);
+        setQuery(search);
+      } else {
+        if (query) {
+          setQuery();
+        }
+      }
+    },
+    [search],
+    600,
+  );
+  const {name: rawName} = getItem('userdetails', true);
+  const name = rawName?.split(' ')[0] ?? 'User';
   const sequence = [
     {text: `Welcome, ${name} 👋`},
     {text: `Kaabo, ${name} 👋`},
@@ -22,10 +51,9 @@ const ShopScreen = () => {
   ];
   const {data, isLoading, refetch, isError, error} = useInfiniteApi({
     queryFunction: getProducts,
-    queryKey: ['getProducts', category],
+    queryKey: ['getProducts', category, query],
   });
   const results = data?.pages.flatMap(data => data?.products) ?? [];
-  console.log({isError, isLoading, error});
   return (
     <Mainbackground padding={20} paddingBottom={0} insetsBottom={-1}>
       <View
@@ -51,8 +79,8 @@ const ShopScreen = () => {
           <NotificationButton />
         </View>
       </View>
-      <Search />
-      <Catergoies setCategory={setCategory} category={category} />
+      <Search {...{search, setSearch}} />
+      {!query && <Catergoies setCategory={setCategory} category={category} />}
       {isError ? null : isLoading ? (
         <ProductsLoading />
       ) : (

@@ -57,7 +57,7 @@ const Catergoies = ({category, setCategory}) => {
   return (
     <View>
       {isLoading ? (
-        <View style={{paddingVertical: 15, flexDirection: 'row'}}>
+        <View style={{paddingBottom: 15, flexDirection: 'row'}}>
           <ShimmerPlaceHolder
             style={{height: 40, borderRadius: 5, marginRight: 15, width: WIDTH}}
             shimmerColors={['#263238', '#78909c', '#263238']}
@@ -76,7 +76,7 @@ const Catergoies = ({category, setCategory}) => {
           ref={flatListRef}
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={{marginBottom: 15, marginTop: 15}}
+          style={{marginBottom: 15}}
           data={['hottest products', ...(data?.categories ?? [])]}
           renderItem={RenderItem}
         />

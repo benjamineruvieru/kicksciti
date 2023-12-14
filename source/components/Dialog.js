@@ -33,6 +33,7 @@ export const Dialog = props => {
   return (
     <Modal
       useNativeDriver={true}
+      statusBarTranslucent
       visible={props.open}
       transparent={true}
       animationType="fade"
@@ -46,7 +47,7 @@ export const Dialog = props => {
           }
         }}
         style={{
-          backgroundColor: 'rgba(0,0,0,0.5)',
+          backgroundColor: 'rgba(0,0,0,0.7)',
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
@@ -85,7 +86,7 @@ export const ListDialog = ({
     },
     textInput: {
       height: 40,
-      fontFamily: 'Poppins-regular',
+      fontFamily: 'Gilroy-Regular',
       color: 'white',
     },
   });
@@ -103,7 +104,6 @@ export const ListDialog = ({
         style={styles.countrydialogtouchable}>
         <SmallText
           style={{
-            fontFamily: 'QuickSand-Medium',
             color: !!multi
               ? !!selected?.find(d => d === item)
                 ? Colors.primary

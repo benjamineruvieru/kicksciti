@@ -1,10 +1,4 @@
-import {
-  Animated,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  UIManager,
-} from 'react-native';
+import {Animated, Platform, StatusBar, StyleSheet} from 'react-native';
 import React, {useRef} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import StackNav from './source/navigation/StackNav';
@@ -13,6 +7,7 @@ import Notification from './source/components/Notification';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Modal from './source/features/modal';
 import {NavigationContainer} from '@react-navigation/native';
+import BootSplash from 'react-native-bootsplash';
 
 Platform.OS === 'android' && StatusBar.setTranslucent(true);
 Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
@@ -48,11 +43,14 @@ const App = () => {
               flex: 1,
               transform: [{translateY: transY}],
             }}>
-            <NavigationContainer>
+            <NavigationContainer
+              onReady={() => {
+                BootSplash.hide();
+              }}>
               <StackNav />
+              <Modal />
             </NavigationContainer>
           </Animated.View>
-          <Modal />
         </SafeAreaProvider>
       </GestureHandlerRootView>
     </QueryClientProvider>
