@@ -1,16 +1,18 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {RegularText, RegularTextB} from '../../../../components/Text';
+import {RegularText} from '../../../../components/Text';
 import Colors from '../../../../constants/Colors';
 import {useNavigation} from '@react-navigation/native';
 
-const ListItem = ({title, screen, Svg}) => {
+const ListItem = ({title, screen, Svg, size = 23, onPress}) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       onPress={() => {
         if (screen) {
           navigation.navigate(screen);
+        } else {
+          onPress();
         }
       }}
       style={{
@@ -35,8 +37,8 @@ const ListItem = ({title, screen, Svg}) => {
         {Svg && (
           <Svg
             // style={{backgroundColor: 'red'}}
-            width={23}
-            height={23}
+            width={size}
+            height={size}
             color="white"
           />
         )}

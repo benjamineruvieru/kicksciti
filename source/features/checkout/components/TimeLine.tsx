@@ -14,18 +14,12 @@ const TimeLine = ({progress = []}) => {
   const opacity = useSharedValue(1);
   useEffect(() => {
     opacity.value = withRepeat(withTiming(0, {duration: 1000}), 0, true);
-  }, [progress]);
+  }, [progress[0]]);
 
   const animatedStyles = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
-  const prkogress = [
-    {text: 'Confirming payment'},
-    {text: 'Processing order'},
-    {text: 'Order shipped'},
-    {text: 'Out for delivery'},
-    {text: 'Order delivered'},
-  ];
+
   return (
     <View>
       {progress.length > 0 && (
@@ -40,7 +34,7 @@ const TimeLine = ({progress = []}) => {
             borderRadius: 10,
             paddingVertical: 15,
           }}>
-          {progress.reverse().map((data, i) => {
+          {progress.map((data, i) => {
             const {text} = data ?? {};
             return (
               <View key={i}>

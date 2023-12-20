@@ -66,7 +66,6 @@ export const NotificationButton = () => {
           navigation,
           alt: () => {
             navigation.navigate('NotificationsScreen');
-            setunreadNotification('false');
           },
         });
       }}

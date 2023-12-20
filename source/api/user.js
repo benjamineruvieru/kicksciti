@@ -93,3 +93,10 @@ export const getAppVersion = async () => {
   const res = axios.get(`${BASEURL}/getapp-version`);
   return res;
 };
+
+export const updateFcmtoken = async ({token}) => {
+  const axiosInstance = axiosBase();
+
+  const res = axiosInstance.post(`${BASEURL}/update-fcmtoken`, {token});
+  return res;
+};

@@ -12,7 +12,7 @@ import BootSplash from 'react-native-bootsplash';
 Platform.OS === 'android' && StatusBar.setTranslucent(true);
 Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
 StatusBar.setBarStyle('light-content');
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 const App = () => {
   const transY = useRef(new Animated.Value(0)).current;

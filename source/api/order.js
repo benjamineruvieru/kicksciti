@@ -4,7 +4,6 @@ export const getOrder = async ({queryKey}) => {
   const order_id = queryKey[1];
 
   const axiosInstance = axiosBase();
-
   const res = await axiosInstance.get(
     `${BASEURL}/get-order?order_id=${order_id}`,
   );

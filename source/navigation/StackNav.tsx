@@ -12,6 +12,7 @@ import AffilateEarnings from '../features/bottomtabs/profile/AffilateEarnings';
 import UpdateScreen from '../features/updateapp/UpdateScreen';
 import DeviceInfo from 'react-native-device-info';
 import {getAppVersion} from '../api/user';
+import DeleteAccount from '../features/bottomtabs/profile/DeleteAccount';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,7 +68,16 @@ const StackNav = () => {
 
     return paramsObject;
   }
+  function extractOrderId(url) {
+    // Define a regular expression to match the order ID in the URL
+    const regex = /(?:www\.)?kicksciti\.com\/order\/(\w+)/;
 
+    // Use the regular expression to match and extract the order ID
+    const match = url.match(regex);
+
+    // Check if a match is found and return the order ID, or null if no match
+    return match ? match[1] : null;
+  }
   const handleDeepLink = prop => {
     const {url} = prop ?? {};
     if (url) {
@@ -85,7 +95,7 @@ const StackNav = () => {
             },
           },
         });
-      } else {
+      } else if (url.includes('product')) {
         const result = parseLink(url);
         console.log('result1', result);
         if (getItem('token') && result?.product_id) {
@@ -93,13 +103,21 @@ const StackNav = () => {
         } else {
           setItem('affilateRefer', result, true);
         }
+      } else if (url.includes('order') && getItem('token')) {
+        console.log('order id', extractOrderId(url));
+        navigation.navigate('OrderDetails', {order_id: extractOrderId(url)});
+      } else if (url.includes('delete-account') && getItem('token')) {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'DeleteAccount'}],
+        });
       }
     }
   };
 
   useEffect(() => {
     let version = parseFloat(DeviceInfo.getVersion());
-    console.log('version', version);
+    console.log('device version', Platform.OS, version);
     getAppVersion().then(data => {
       console.log('api app ver', data.data);
       const {android, ios} = data?.data ?? {};
@@ -135,6 +153,7 @@ const StackNav = () => {
       <Stack.Screen name="LoadProduct" component={LoadProduct} />
       <Stack.Screen name="AffilateEarnings" component={AffilateEarnings} />
       <Stack.Screen name="UpdateScreen" component={UpdateScreen} />
+      <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
     </Stack.Navigator>
   );
 };

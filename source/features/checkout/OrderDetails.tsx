@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
+  Image,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import Mainbackground from '../../components/Mainbackground';
@@ -19,11 +20,17 @@ import {
   SmallText,
   SmallTextB,
 } from '../../components/Text';
-import {formatNumberWithCommas, showNotification} from '../../utilis/Functions';
+import {
+  formatNumberWithCommas,
+  getPercentWidth,
+  showNotification,
+} from '../../utilis/Functions';
 import {formatTimestamp} from '../bottomtabs/profile/OrderHistory';
 import TimeLine from './components/TimeLine';
 import PaymentModal from './components/PaymentModal';
 import useRefetchOnRemount from '../../hooks/useRefetchOnRemount';
+import LayoutAnimationComponent from '../../components/LayoutAnimationComponent';
+import Button from '../../components/Button';
 
 const PaymentPending = ({order_id, modalRef, setLink}) => {
   return (
@@ -91,7 +98,11 @@ const OrderInfo = ({order}) => {
     createdAt,
     progress,
   } = order ?? {};
-  console.log('products', products);
+  console.log('order', order);
+
+  const sortedProgress = progress
+    .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+    .reverse();
   return (
     <View>
       <RegularTextB style={{marginBottom: 10}}>Order details</RegularTextB>
@@ -266,14 +277,59 @@ const OrderInfo = ({order}) => {
           <SmallText dim>{phone}</SmallText>
         </View>
       </View>
-      <TimeLine {...{progress}} />
+      <TimeLine {...{progress: sortedProgress}} />
+    </View>
+  );
+};
+const OrderNotFound = ({navigation}) => {
+  return (
+    <View style={{flex: 1, paddingVertical: 20, alignItems: 'center'}}>
+      <View style={{flex: 1}} />
+      <LayoutAnimationComponent delay={300}>
+        <Image
+          resizeMode="contain"
+          style={{
+            width: getPercentWidth(80),
+            height: getPercentWidth(75),
+          }}
+          source={require('../../assets/images/illustrations/notfound.png')}
+        />
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={400}>
+        <RegularTextB style={{marginBottom: 5}}>Order Not Found!</RegularTextB>
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={500}>
+        <SmallText style={{textAlign: 'center'}}>
+          Oops! It looks like the order you're trying to find is not available.
+          Please double-check the link or create a new order now.
+        </SmallText>
+      </LayoutAnimationComponent>
+
+      <View style={{flex: 1}} />
+      <LayoutAnimationComponent delay={600}>
+        <Button
+          onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'AniStackNav',
+                  params: {screen: 'BottomNav'},
+                },
+              ],
+            });
+          }}
+          top={15}
+          title="Go Home"
+        />
+      </LayoutAnimationComponent>
     </View>
   );
 };
 
-const OrderDetails = ({route}) => {
+const OrderDetails = ({route, navigation}) => {
   const {order_id} = route?.params ?? {};
-  const {data, isLoading, refetch} = useApi({
+  const {data, isLoading, refetch, isError} = useApi({
     queryFn: getOrder,
     queryKey: ['getOrder', order_id],
   });
@@ -282,7 +338,6 @@ const OrderDetails = ({route}) => {
 
   const modalRef = useRef();
 
-  console.log('da', data?.order);
   useRefetchOnRemount(refetch);
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -301,6 +356,8 @@ const OrderDetails = ({route}) => {
           <View style={{flex: 1, justifyContent: 'center', paddingBottom: 50}}>
             <ActivityIndicator color={Colors.primary} />
           </View>
+        ) : isError ? (
+          <OrderNotFound {...{navigation}} />
         ) : order?.active ? (
           <ScrollView
             refreshControl={

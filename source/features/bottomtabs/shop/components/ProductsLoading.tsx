@@ -28,13 +28,6 @@ const Product = () => {
           marginBottom: 10,
         }}
       />
-      {/* <Shimmer
-        style={{
-          width: PRODUCTIMGWIDTH / 4,
-          borderRadius: 5,
-          marginBottom: 12,
-        }}
-      /> */}
     </View>
   );
 };

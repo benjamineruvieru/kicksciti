@@ -15,6 +15,7 @@ import {createSharedElementStackNavigator} from 'react-navigation-shared-element
 import messaging from '@react-native-firebase/messaging';
 import {getItem, setItem} from '../utilis/storage';
 import {useNavigation} from '@react-navigation/native';
+import {updateFcmtoken} from '../api/user';
 
 const Tab = createBottomTabNavigator();
 const Stack = createSharedElementStackNavigator({name: 'BottomNav'});
@@ -64,13 +65,20 @@ export default function BottomNav() {
       console.log(err);
     }
   }
-  const getToken = () => {
-    messaging().subscribeToTopic('newproduct');
+  const getToken = async () => {
     messaging()
       .getToken()
       .then(token => {
         console.log('token', token);
+        updateFcmtoken({token})
+          .then(d => {
+            console.log('up token suces', d.data);
+          })
+          .catch(e => {
+            console.log('err', e.response.data);
+          });
       });
+    await messaging().subscribeToTopic('newproduct');
   };
 
   useEffect(() => {
@@ -80,7 +88,7 @@ export default function BottomNav() {
       } else {
         await requestUserPermission();
       }
-      getToken();
+      await getToken();
     };
     init();
   }, []);
@@ -93,7 +101,8 @@ export default function BottomNav() {
 
   useEffect(() => {
     messaging().onNotificationOpenedApp(remoteMessage => {
-      const {action, product, order_id} = remoteMessage.data ?? {};
+      console.log('remoteMessage.data', remoteMessage.data);
+      const {action, product, order_id, data} = remoteMessage.data ?? {};
       switch (action) {
         case 'open-product': {
           console.log(product);
@@ -109,9 +118,22 @@ export default function BottomNav() {
           if (order_id) {
             navigation.navigate('OrderDetails', {order_id});
           } else {
-            navigation.navigate('NotificationsScreen');
+            try {
+              let {order_id} = JSON.parse(data);
+              if (order_id) {
+                navigation.navigate('OrderDetails', {order_id});
+              } else {
+                navigation.navigate('NotificationsScreen');
+              }
+            } catch (error) {
+              console.error('Error parsing JSON:', error);
+              navigation.navigate('NotificationsScreen');
+            }
           }
           break;
+        }
+        default: {
+          navigation.navigate('NotificationsScreen');
         }
       }
       console.log('remoteMessage', remoteMessage.data);

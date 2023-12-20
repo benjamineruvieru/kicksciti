@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   BackHandler,
   Image,
   Keyboard,
@@ -16,7 +17,13 @@ import LayoutAnimationComponent from '../../components/LayoutAnimationComponent'
 import {Easing, FadeOutLeft} from 'react-native-reanimated';
 import Input, {OtpInput} from '../../components/Input';
 import {showNotification, validateEmail} from '../../utilis/Functions';
-import {createUser, findEmail, login, verifyEmail} from '../../api/auth';
+import {
+  createUser,
+  findEmail,
+  login,
+  resetPassword,
+  verifyEmail,
+} from '../../api/auth';
 import {getItem, setItem} from '../../utilis/storage';
 import {useMMKVObject} from 'react-native-mmkv';
 
@@ -213,6 +220,8 @@ const CollectPassword = ({
   setPos,
   setToken,
 }) => {
+  const [loadForgot, setLoadForgot] = useState(false);
+
   const [load, setLoad] = useState(false);
   const [cart, setCart] = useMMKVObject('cart');
   const [favourites, setFavourites] = useMMKVObject('favourites');
@@ -225,12 +234,17 @@ const CollectPassword = ({
         .then(data => {
           console.log('coll pass', data.data);
           console.log('coll pass', data.status);
+
           if (data.status === 202) {
             // Email not verified
             setToken(data?.data?.token);
             setPos(4);
           } else {
-            // showNotification({msg: 'Login successful'});
+            if (!data.data?.user?.username) {
+              setToken(data.data?.token);
+              setPos(3);
+              return;
+            }
             setItem('token', data.data?.token);
             setItem('userdetails', data.data?.user, true);
             setCart(data.data?.user?.cart);
@@ -275,7 +289,39 @@ const CollectPassword = ({
           setText={setPassword}
         />
       </LayoutAnimationComponent>
-      <Button title="Login" load={load} onPress={action} />
+      <LayoutAnimationComponent delay={1200} exit={null}>
+        <Button title="Login" load={load} onPress={action} />
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent
+        delay={1400}
+        style={{alignSelf: 'center', bottom: -15}}>
+        <TouchableOpacity
+          disabled={loadForgot}
+          onPress={() => {
+            setLoadForgot(true);
+            resetPassword({email})
+              .then(data => {
+                console.log('da', data.data);
+                setPos(6);
+              })
+              .catch(err => {
+                console.log('err', err);
+                showNotification({
+                  error: true,
+                  msg: err?.response?.data?.error,
+                });
+              })
+              .finally(() => {
+                setLoadForgot(false);
+              });
+          }}>
+          {loadForgot ? (
+            <ActivityIndicator color={'white'} />
+          ) : (
+            <SmallText>Forgot Password?</SmallText>
+          )}
+        </TouchableOpacity>
+      </LayoutAnimationComponent>
     </>
   );
 };
@@ -312,6 +358,116 @@ const VerifyEmail = ({setPos, token}) => {
       <OtpInput {...{otp, setOtp}} />
       <Button load={load} title="Verify" onPress={action} />
     </View>
+  );
+};
+
+const VerifyEmailReset = ({setPos, email, resetotp, setResetOtp}) => {
+  const [load, setLoad] = useState(false);
+
+  const action = () => {
+    if (resetotp && resetotp.length > 5) {
+      Keyboard.dismiss();
+      setLoad(true);
+      resetPassword({otp: resetotp, email})
+        .then(() => {
+          setPos(7);
+        })
+        .catch(err => {
+          console.log('err', err?.response?.data);
+          showNotification({error: true, msg: err?.response?.data?.error});
+        })
+        .finally(() => {
+          setLoad(false);
+        });
+    }
+  };
+  return (
+    <View>
+      <LayoutAnimationComponent
+        delay={1000}
+        leftInOut
+        style={{marginBottom: 10}}>
+        <BigText style={{marginBottom: 10}}>Enter reset otp</BigText>
+      </LayoutAnimationComponent>
+      <OtpInput {...{otp: resetotp, setOtp: setResetOtp}} />
+      <Button load={load} title="Verify" onPress={action} />
+    </View>
+  );
+};
+
+const CreateResetPassword = ({
+  setPos,
+
+  email,
+  resetotp,
+}) => {
+  const [load, setLoad] = useState(false);
+  const [password, setPassword] = useState();
+  const [repassword, setRepassword] = useState();
+  const action = () => {
+    if (password) {
+      if (password.length < 6) {
+        showNotification({
+          msg: 'Password must be at least 6 characters long',
+          error: true,
+        });
+        return;
+      }
+      if (password !== repassword) {
+        showNotification({
+          msg: 'Passwords provided do not match',
+          error: true,
+        });
+        return;
+      }
+      Keyboard.dismiss();
+      setLoad(true);
+      resetPassword({email, password, otp: resetotp})
+        .then(data => {
+          console.log(data.data);
+          showNotification({
+            msg: 'Passowrd changed successfully! Proceed to login.',
+          });
+          setPos(1);
+        })
+        .catch(err => {
+          console.log('err', err?.response?.data);
+          showNotification({error: true, msg: err?.response?.data?.error});
+        })
+        .finally(() => {
+          setLoad(false);
+        });
+    } else {
+      showNotification({
+        msg: 'Please input a password for your new account',
+        error: true,
+      });
+    }
+  };
+  return (
+    <>
+      <LayoutAnimationComponent delay={800} leftInOut>
+        <BigText style={{marginBottom: 10}}>Enter new password</BigText>
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={900} exitDelay={300} leftInOut>
+        <Input
+          placeholder={'Password'}
+          password
+          text={password}
+          setText={setPassword}
+        />
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent delay={1100} exitDelay={500} leftInOut>
+        <Input
+          placeholder={'Retype Password'}
+          password
+          text={repassword}
+          setText={setRepassword}
+        />
+      </LayoutAnimationComponent>
+
+      <Button title="Next" load={load} onPress={action} />
+    </>
   );
 };
 
@@ -388,7 +544,7 @@ const OnboardingScreen = ({navigation}) => {
   const [name, setName] = useState();
   const [username, setUsername] = useState();
   const [token, setToken] = useState();
-
+  const [resetotp, setResetOtp] = useState('');
   useEffect(() => {
     const backAction = () => {
       if (pos > 0) {
@@ -405,6 +561,9 @@ const OnboardingScreen = ({navigation}) => {
           setPos(2);
         }
         if (pos === 5) {
+          setPos(1);
+        }
+        if (pos === 7) {
           setPos(1);
         }
         return true;
@@ -461,6 +620,23 @@ const OnboardingScreen = ({navigation}) => {
         {pos === 5 && (
           <CollectPassword
             {...{email, setPos, setPassword, password, navigation, setToken}}
+          />
+        )}
+        {pos === 6 && (
+          <VerifyEmailReset {...{setPos, email, resetotp, setResetOtp}} />
+        )}
+        {pos === 7 && (
+          <CreateResetPassword
+            {...{
+              setPos,
+              password,
+              setPassword,
+              repassword,
+              setRepassword,
+              email,
+              setToken,
+              resetotp,
+            }}
           />
         )}
       </View>

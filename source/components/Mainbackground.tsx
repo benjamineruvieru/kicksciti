@@ -63,7 +63,7 @@ const Mainbackground: React.FC<MainBackgroundProps> = ({
       }}>
       <KeyboardAvoidingView
         keyboardVerticalOffset={-insets.bottom}
-        behavior={avoid && Platform.OS === 'ios' ? 'pading' : androidAvoid}
+        behavior={avoid && Platform.OS === 'ios' ? 'padding' : androidAvoid}
         style={{
           flex: 1,
 
