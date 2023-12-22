@@ -11,13 +11,25 @@ import {getProducts} from '../../../api/products';
 import ProductsLoading from './components/ProductsLoading';
 import {getItem} from '../../../utilis/storage';
 import useDebounce from '../../../hooks/useDebounce';
-import {SmallText} from '../../../components/Text';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const ShopScreen = ({route}) => {
   const [category, setCategory] = useState('hottest products');
   const [search, setSearch] = useState();
   const [query, setQuery] = useState();
   const {searchPassed} = route?.params ?? {};
+  const {name: rawName, email, username} = getItem('userdetails', true);
+
+  useEffect(() => {
+    crashlytics().log('App mounted.');
+    if (email) {
+      crashlytics().setAttributes({
+        email,
+        name: rawName,
+        username,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     console.log('searchPassed', searchPassed);
@@ -41,7 +53,6 @@ const ShopScreen = ({route}) => {
     [search],
     600,
   );
-  const {name: rawName} = getItem('userdetails', true);
   const name = rawName?.split(' ')[0] ?? 'User';
   const sequence = [
     {text: `Welcome, ${name} 👋`},

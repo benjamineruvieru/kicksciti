@@ -51,8 +51,8 @@ export const QuantityCounter = ({
         }}
         style={{
           backgroundColor: Colors.primary,
-          height: 20,
-          width: 20,
+          height: 25,
+          width: 25,
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 5,
@@ -89,8 +89,8 @@ export const QuantityCounter = ({
         }}
         style={{
           backgroundColor: Colors.primary,
-          height: 20,
-          width: 20,
+          height: 25,
+          width: 25,
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 5,
