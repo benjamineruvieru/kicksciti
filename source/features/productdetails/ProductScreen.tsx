@@ -188,8 +188,9 @@ const ProductScreen = ({route, navigation}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
               marginBottom: 20,
+              flex: 1,
             }}>
-            <SharedElement id={`name${_id}`}>
+            <SharedElement style={{flex: 1}} id={`name${_id}`}>
               <MediumText>{name}</MediumText>
             </SharedElement>
             <View

@@ -43,23 +43,24 @@ export function formatTimestamp(timestamp) {
   ];
 
   const formattedDate = `${get12HourTime(dateObj)} ${getAMPM(dateObj)}, ${
-    daysOfWeek[dateObj.getDay()] // Use getDay() instead of getUTCDay()
+    daysOfWeek[dateObj.getDay()]
   } ${dateObj.getDate()} ${
-    // Use getDate() instead of getUTCDate()
-    months[dateObj.getMonth()] // Use getMonth() instead of getUTCMonth()
+    months[dateObj.getMonth()]
   } ${dateObj.getFullYear()}`;
 
   return formattedDate;
 }
 
+// Use getHours() and getMinutes() for local time
 function get12HourTime(date) {
-  const hours = date.getUTCHours() % 12 || 12;
-  const minutes = padZero(date.getUTCMinutes());
+  const hours = date.getHours() % 12 || 12; // Use getHours() for local time
+  const minutes = padZero(date.getMinutes()); // Use getMinutes() for local time
   return `${hours}:${minutes}`;
 }
 
+// Use getHours() for local time
 function getAMPM(date) {
-  return date.getUTCHours() < 12 ? 'AM' : 'PM';
+  return date.getHours() < 12 ? 'AM' : 'PM'; // Use getHours() for local time
 }
 
 function padZero(num) {
@@ -135,7 +136,7 @@ const OrderItem = ({item, index}) => {
         source={{uri: pictures[0]}}
         style={{height: 100, width: 100, borderRadius: 10}}
       />
-      <View style={{marginLeft: 15, justifyContent: 'space-around'}}>
+      <View style={{marginLeft: 15, justifyContent: 'space-around', flex: 1}}>
         <RegularTextB>
           {name} - {lga}, {state}
         </RegularTextB>

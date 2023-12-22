@@ -84,6 +84,7 @@ const useCart = ({item}) => {
   const editQuantity = quantity => {
     if (parseInt(quantity) > 0) {
       queueUpdate(() => {
+        setUpdating(true);
         updateServerCart({_id: item._id, quantity})
           .then(data => {
             console.log('added', data.data);
@@ -91,6 +92,9 @@ const useCart = ({item}) => {
           .catch(err => {
             console.log('err', err);
             console.log('err2', err?.response?.data);
+          })
+          .finally(() => {
+            setUpdating(false);
           });
       });
     }

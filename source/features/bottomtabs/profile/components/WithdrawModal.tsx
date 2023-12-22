@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Modalize} from 'react-native-modalize';
 import Colors from '../../../../constants/Colors';
@@ -6,30 +6,28 @@ import {RegularTextB, SmallText} from '../../../../components/Text';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Input, {ModalSelector} from '../../../../components/Input';
 import Button from '../../../../components/Button';
-import {ListDialog} from '../../../../components/Dialog';
-import {useApi} from '../../../../hooks/useApi';
-import {
-  getBanks,
-  getWithdrawFee,
-  verifyBankDetails,
-  withdraw,
-} from '../../../../api/user';
+import {getWithdrawFee, verifyBankDetails} from '../../../../api/user';
 import useDebounce from '../../../../hooks/useDebounce';
-import {showNotification} from '../../../../utilis/Functions';
 
-const WithdrawModal = ({modalRef, refetch}) => {
+const WithdrawModal = ({
+  modalRef,
+  account_bank,
+  pinmodalRef,
+  account_number,
+  setaccount_number,
+  fee,
+  setFee,
+  amount,
+  setAmount,
+  bank,
+  setBank,
+  bankData,
+  name,
+  setName,
+}) => {
   const insets = useSafeAreaInsets();
-  const [bank, setBank] = useState();
-  const [account_number, setaccount_number] = useState('');
-  const [name, setName] = useState();
-  const [fee, setFee] = useState();
-  const [amount, setAmount] = useState();
+
   const [load, setLoad] = useState();
-
-  const {data} = useApi({queryFn: getBanks, queryKey: ['getBanks']});
-
-  const account_bank = data?.data?.find(item => item.name === bank);
-  console.log('account_bank', account_bank);
   useEffect(() => {
     if (account_number?.length === 10 && bank) {
       setLoad(true);
@@ -56,8 +54,7 @@ const WithdrawModal = ({modalRef, refetch}) => {
         getWithdrawFee({amount})
           .then(data => {
             console.log('datsss rr', data.data);
-            // const item = data.data.data.find(item => item?.currency === 'NGN');
-            // console.log('datsss rr', item);
+
             setFee(data.data.fee);
           })
           .catch(() => {
@@ -74,22 +71,15 @@ const WithdrawModal = ({modalRef, refetch}) => {
   );
 
   const withdrawFun = () => {
-    if (fee && amount && parseFloat(amount) > 0) {
-      setLoad(true);
-      withdraw({account_number, amount, fee, account_bank: account_bank.code})
-        .then(data => {
-          console.log('datsss rr', data.data);
+    // pinmodalRef.current.open();
 
-          refetch();
-          modalRef.current.close();
-          showNotification({msg: 'Withdrawal successful'});
-        })
-        .catch(err => {
-          Alert.alert(err.response.data.error);
-        })
-        .finally(() => {
-          setLoad(false);
-        });
+    if (fee && amount && parseFloat(amount) > 0) {
+      if (parseFloat(amount) > 200) {
+        pinmodalRef.current.open();
+        modalRef.current.close();
+      } else {
+        Alert.alert('Amount cannot be less than ₦200');
+      }
     }
   };
 
@@ -100,6 +90,8 @@ const WithdrawModal = ({modalRef, refetch}) => {
         backgroundColor: Colors.bg,
         padding: 20,
         paddingBottom: 20,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
       }}
       ref={modalRef}>
       <View style={{paddingBottom: insets.bottom}}>
@@ -108,7 +100,7 @@ const WithdrawModal = ({modalRef, refetch}) => {
           search
           text={bank}
           setText={setBank}
-          data={data?.data.map(item => item?.name).sort()}
+          data={bankData?.data.map(item => item?.name).sort()}
           placeholderText={'Select Bank'}
         />
         <Input
