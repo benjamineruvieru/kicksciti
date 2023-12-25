@@ -60,6 +60,14 @@ export const verifyEmail = ({otp, token}) => {
   return res;
 };
 
+export const resendOtp = ({token}) => {
+  console.log('to', token);
+  const res = axios.post(`${BASEURL}/resend-otp`, null, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
+  return res;
+};
+
 export const resetPassword = ({otp, password, email}) => {
   const res = axios.post(`${BASEURL}/reset-password`, {
     otp,

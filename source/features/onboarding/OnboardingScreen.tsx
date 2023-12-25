@@ -21,6 +21,7 @@ import {
   createUser,
   findEmail,
   login,
+  resendOtp,
   resetPassword,
   verifyEmail,
 } from '../../api/auth';
@@ -28,6 +29,19 @@ import {getItem, setItem} from '../../utilis/storage';
 import {useMMKVObject} from 'react-native-mmkv';
 
 const bg = require('../../assets/images/onboarding/bg.webp');
+
+function secondsToMMSS(seconds) {
+  // Calculate minutes and remaining seconds
+  let minutes = Math.floor(seconds / 60);
+  let remainingSeconds = seconds % 60;
+
+  // Format the time as MM:SS
+  let timeFormat = `${String(minutes).padStart(2, '0')}:${String(
+    remainingSeconds,
+  ).padStart(2, '0')}`;
+
+  return timeFormat;
+}
 
 const Welcome = ({setPos, navigation}) => {
   return (
@@ -326,10 +340,25 @@ const CollectPassword = ({
   );
 };
 
-const VerifyEmail = ({setPos, token}) => {
+const VerifyEmail = ({setPos, token, email}) => {
   const [otp, setOtp] = useState('');
   const [load, setLoad] = useState(false);
-
+  const [seconds, setSeconds] = useState(120);
+  const countdown = () => {
+    const timer = setInterval(() => {
+      setSeconds(num => {
+        if (num - 1 < 1) {
+          clearInterval(timer);
+          return 0;
+        } else {
+          return num - 1;
+        }
+      });
+    }, 1000);
+  };
+  useEffect(() => {
+    countdown();
+  }, []);
   const action = () => {
     if (otp && otp.length > 5) {
       Keyboard.dismiss();
@@ -353,10 +382,42 @@ const VerifyEmail = ({setPos, token}) => {
         delay={1000}
         leftInOut
         style={{marginBottom: 10}}>
-        <BigText style={{marginBottom: 10}}>Enter otp</BigText>
+        <BigText>Enter otp</BigText>
+      </LayoutAnimationComponent>
+
+      <LayoutAnimationComponent leftInOut delay={1200}>
+        <RegularText style={{marginBottom: 25}}>
+          Please enter the OTP sent to {email?.toLowerCase()?.trim()}
+        </RegularText>
       </LayoutAnimationComponent>
       <OtpInput {...{otp, setOtp}} />
-      <Button load={load} title="Verify" onPress={action} />
+      <LayoutAnimationComponent exit={null} delay={1400}>
+        <Button load={load} title="Verify" onPress={action} />
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent
+        delay={1400}
+        style={{alignSelf: 'center', bottom: -15}}>
+        <TouchableOpacity
+          style={{
+            opacity: seconds > 0 ? 0.5 : 1,
+          }}
+          disabled={seconds > 0}
+          onPress={() => {
+            setSeconds(120);
+            countdown();
+            resendOtp({token})
+              .then(d => {
+                console.log(d.data);
+              })
+              .catch(err => {
+                console.log('err', err?.response?.data);
+                // showNotification({error: true, msg: err?.response?.data?.error});
+              });
+            return;
+          }}>
+          <SmallText>Resend OTP ({secondsToMMSS(seconds)})</SmallText>
+        </TouchableOpacity>
+      </LayoutAnimationComponent>
     </View>
   );
 };
@@ -387,7 +448,12 @@ const VerifyEmailReset = ({setPos, email, resetotp, setResetOtp}) => {
         delay={1000}
         leftInOut
         style={{marginBottom: 10}}>
-        <BigText style={{marginBottom: 10}}>Enter reset otp</BigText>
+        <BigText>Enter reset otp</BigText>
+      </LayoutAnimationComponent>
+      <LayoutAnimationComponent leftInOut delay={1200}>
+        <RegularText style={{marginBottom: 25}}>
+          Please enter the OTP sent to {email?.toLowerCase()?.trim()}
+        </RegularText>
       </LayoutAnimationComponent>
       <OtpInput {...{otp: resetotp, setOtp: setResetOtp}} />
       <Button load={load} title="Verify" onPress={action} />
@@ -616,7 +682,7 @@ const OnboardingScreen = ({navigation}) => {
             }}
           />
         )}
-        {pos === 4 && <VerifyEmail {...{setPos, token}} />}
+        {pos === 4 && <VerifyEmail {...{setPos, token, email}} />}
         {pos === 5 && (
           <CollectPassword
             {...{email, setPos, setPassword, password, navigation, setToken}}

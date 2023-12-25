@@ -180,7 +180,7 @@ export const OtpInput = ({setOtp, otp, num = 6}) => {
         value={otp}
         onChangeText={setOtp}
         cellCount={6}
-        rootStyle={{marginBottom: 50, justifyContent: 'space-between'}}
+        rootStyle={{marginBottom: 30, justifyContent: 'space-between'}}
         keyboardType="number-pad"
         textContentType="oneTimeCode"
         renderCell={({index, symbol, isFocused}) => (

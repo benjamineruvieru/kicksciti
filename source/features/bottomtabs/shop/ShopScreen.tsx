@@ -118,7 +118,7 @@ export default ShopScreen;
 const styles = StyleSheet.create({
   typeAni: {
     fontFamily: 'Gilroy-Bold',
-    fontSize: 27,
+    fontSize: 25,
     color: 'white',
     includeFontPadding: false,
   },

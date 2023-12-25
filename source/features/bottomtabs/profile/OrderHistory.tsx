@@ -129,7 +129,6 @@ const OrderItem = ({item, index}) => {
     status_color,
   } = item ?? {};
   const {name, pictures} = products[0].item;
-  console.log(products[0].item);
   return (
     <Wrapper {...{order_id, index}}>
       <FastImage
@@ -177,7 +176,16 @@ const OrderHistory = () => {
   });
   useRefetchOnRemount(refetch);
   const orders = data?.orders;
-  console.log('data', data);
+  console.log('orders', orders);
+
+  const sortedOrders =
+    orders
+      ?.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      )
+      .reverse() ?? [];
+
   return (
     <Mainbackground padding={20}>
       <PageHeader title={'Order History'} />
@@ -188,7 +196,7 @@ const OrderHistory = () => {
       ) : !orders || orders.length === 0 ? (
         <EmptyHistory />
       ) : (
-        <HistoryList refetch={refetch} orders={orders.reverse()} />
+        <HistoryList refetch={refetch} orders={sortedOrders} />
       )}
     </Mainbackground>
   );
