@@ -2,7 +2,10 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Shimmer from '../../../../components/Shimmer';
 import {PRODUCTIMGWIDTH} from './Products';
-
+import {NativeModules} from 'react-native';
+const {PlatformConstants} = NativeModules;
+const deviceType = PlatformConstants.interfaceIdiom;
+const isPhone = deviceType === 'phone';
 const Product = () => {
   return (
     <View style={{marginBottom: 15, width: PRODUCTIMGWIDTH}}>
@@ -38,19 +41,21 @@ const ProductsLoading = () => {
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Product />
         <Product />
+
+        {!isPhone && <Product />}
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Product />
         <Product />
+        {!isPhone && <Product />}
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Product />
         <Product />
+        {!isPhone && <Product />}
       </View>
     </ScrollView>
   );
 };
 
 export default ProductsLoading;
-
-const styles = StyleSheet.create({});

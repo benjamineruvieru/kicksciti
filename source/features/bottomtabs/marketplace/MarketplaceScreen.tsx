@@ -33,7 +33,12 @@ const MarketplaceScreen = () => {
         <LayoutAnimationComponent delay={300}>
           <Image
             resizeMode="contain"
-            style={{width: getPercentWidth(80), height: getPercentWidth(80)}}
+            style={{
+              width: getPercentWidth(80),
+              height: getPercentWidth(80),
+              maxWidth: 400,
+              maxHeight: 400,
+            }}
             source={require('../../../assets/images/illustrations/marketplace.png')}
           />
         </LayoutAnimationComponent>

@@ -83,6 +83,8 @@ const EmptyHistory = () => {
             width: getPercentWidth(75),
             height: getPercentWidth(75),
             top: -10,
+            maxWidth: 400,
+            maxHeight: 400,
           }}
           source={require('../../../assets/images/illustrations/emptyorders.png')}
         />

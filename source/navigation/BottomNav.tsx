@@ -70,13 +70,15 @@ export default function BottomNav() {
       .getToken()
       .then(token => {
         console.log('token', token);
-        updateFcmtoken({token})
-          .then(d => {
-            console.log('up token suces', d.data);
-          })
-          .catch(e => {
-            console.log('err', e.response.data);
-          });
+        if (getItem('token')) {
+          updateFcmtoken({token})
+            .then(d => {
+              console.log('up token suces', d.data);
+            })
+            .catch(e => {
+              console.log('err', e.response.data);
+            });
+        }
       });
     await messaging().subscribeToTopic('newproduct');
   };
@@ -96,48 +98,73 @@ export default function BottomNav() {
   useEffect(() => {
     return messaging().onTokenRefresh(token => {
       console.log('token changed', token);
+      if (getItem('token')) {
+        updateFcmtoken({token})
+          .then(d => {
+            console.log('up token suces', d.data);
+          })
+          .catch(e => {
+            console.log('err', e.response.data);
+          });
+      }
     });
   }, []);
 
-  useEffect(() => {
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log('remoteMessage.data', remoteMessage.data);
-      const {action, product, order_id, data} = remoteMessage.data ?? {};
-      switch (action) {
-        case 'open-product': {
-          console.log(product);
-          if (product) {
-            navigation.navigate('ProductScreen', JSON.parse(product));
-          } else {
-            navigation.navigate('NotificationsScreen');
-          }
-          break;
-        }
-        case 'open-order': {
-          console.log(order_id);
-          if (order_id) {
-            navigation.navigate('OrderDetails', {order_id});
-          } else {
-            try {
-              let {order_id} = JSON.parse(data);
-              if (order_id) {
-                navigation.navigate('OrderDetails', {order_id});
-              } else {
-                navigation.navigate('NotificationsScreen');
-              }
-            } catch (error) {
-              console.error('Error parsing JSON:', error);
-              navigation.navigate('NotificationsScreen');
-            }
-          }
-          break;
-        }
-        default: {
+  const handleNotificationOpen = ({remoteMessage}) => {
+    console.log('remoteMessage', remoteMessage.data);
+
+    const {action, product, order_id, data} = remoteMessage.data ?? {};
+    switch (action) {
+      case 'open-product': {
+        console.log(product);
+        if (product) {
+          navigation.navigate('ProductScreen', JSON.parse(product));
+        } else {
           navigation.navigate('NotificationsScreen');
         }
+        break;
       }
-      console.log('remoteMessage', remoteMessage.data);
+      case 'open-order': {
+        console.log(order_id);
+        if (order_id) {
+          navigation.navigate('OrderDetails', {order_id});
+        } else {
+          try {
+            let {order_id} = JSON.parse(data);
+            if (order_id) {
+              navigation.navigate('OrderDetails', {order_id});
+            } else {
+              navigation.navigate('NotificationsScreen');
+            }
+          } catch (error) {
+            console.error('Error parsing JSON:', error);
+            navigation.navigate('NotificationsScreen');
+          }
+        }
+        break;
+      }
+      default: {
+        navigation.navigate('NotificationsScreen');
+      }
+    }
+  };
+
+  useEffect(() => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log('onNotificationOpenedApp');
+      if (remoteMessage) {
+        handleNotificationOpen({remoteMessage});
+      }
     });
+
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        console.log('getInitialNotification');
+        if (remoteMessage) {
+          handleNotificationOpen({remoteMessage});
+        }
+      });
   }, []);
 
   useEffect(() => {
@@ -172,44 +199,29 @@ export default function BottomNav() {
       <Tab.Screen
         options={{
           tabBarIcon: ({color, size}) => (
-            <ShopSvg
-              width={23}
-              height={23}
-              style={{
-                color: color,
-              }}
-            />
+            <ShopSvg width={23} height={23} color={color} />
           ),
         }}
         name="Shop"
         component={StackShopScreen}
       />
 
+      {Platform.OS !== 'ios' && (
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({color, size}) => (
+              <MarketSvg width={21} height={21} color={color} />
+            ),
+          }}
+          name="Marketplace"
+          component={MarketplaceScreen}
+        />
+      )}
+
       <Tab.Screen
         options={{
           tabBarIcon: ({color, size}) => (
-            <MarketSvg
-              width={21}
-              height={21}
-              style={{
-                color: color,
-              }}
-            />
-          ),
-        }}
-        name="Marketplace"
-        component={MarketplaceScreen}
-      />
-      <Tab.Screen
-        options={{
-          tabBarIcon: ({color, size}) => (
-            <LoveSvg
-              width={22}
-              height={22}
-              style={{
-                color: color,
-              }}
-            />
+            <LoveSvg width={22} height={22} color={color} />
           ),
         }}
         name="Favourites"

@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   DeviceEventEmitter,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -25,8 +24,14 @@ import LayoutAnimationComponent from '../../../../components/LayoutAnimationComp
 import {FavButton} from '../../../../components/IconButton';
 import useCart from '../../../../hooks/useCart';
 import LottieView from 'lottie-react-native';
+import {NativeModules} from 'react-native';
+const {PlatformConstants} = NativeModules;
+const deviceType = PlatformConstants.interfaceIdiom;
+const isPhone = deviceType === 'phone';
+console.log({deviceType});
 
-export const PRODUCTIMGWIDTH = (SCREEN_WIDTH - 40 - 10) / 2;
+export const PRODUCTIMGWIDTH =
+  (SCREEN_WIDTH - 40 - (isPhone ? 10 : 20)) / (isPhone ? 2 : 3);
 
 const EmptyComp = () => {
   return (
@@ -45,6 +50,8 @@ const EmptyComp = () => {
           style={{
             width: getPercentWidth(55),
             height: getPercentWidth(55),
+            maxWidth: 400,
+            maxHeight: 400,
           }}
         />
       </LayoutAnimationComponent>
@@ -73,7 +80,11 @@ const Wrapper = ({item, index, children}) => {
         style={{
           marginBottom: 15,
           width: '100%',
-          alignItems: index % 2 === 1 ? 'flex-end' : 'flex-start',
+          alignItems: isPhone
+            ? index % 2 === 1
+              ? 'flex-end'
+              : 'flex-start'
+            : null,
         }}
         onPress={() => {
           navigation.navigate('ProductScreen', item);
@@ -104,7 +115,7 @@ const AddToCart = ({item}) => {
           borderWidth: isInCart ? 1 : 0,
         }}
         title={isInCart ? 'Remove from cart' : 'Add to cart'}
-        width={32}
+        width={isPhone ? 32 : 25}
         small
       />
     </SharedElement>
@@ -189,7 +200,7 @@ const Products = ({
         refreshing={refreshing}
         onRefresh={onRefresh}
         showsVerticalScrollIndicator={false}
-        numColumns={2}
+        numColumns={deviceType === 'phone' ? 2 : 3}
         data={results}
         renderItem={ProductItem}
         estimatedItemSize={257}

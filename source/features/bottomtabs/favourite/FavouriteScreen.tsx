@@ -68,6 +68,8 @@ const EmptyFave = () => {
             width: getPercentWidth(70),
             height: getPercentWidth(70),
             top: -5,
+            maxWidth: 400,
+            maxHeight: 400,
           }}
           source={require('../../../assets/images/illustrations/emptyfave.png')}
         />

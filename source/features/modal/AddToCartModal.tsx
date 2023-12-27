@@ -1,4 +1,11 @@
-import {Alert, DeviceEventEmitter, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  DeviceEventEmitter,
+  NativeModules,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {Modalize} from 'react-native-modalize';
 import SizeSelector from '../productdetails/components/SizeSelector';
@@ -7,6 +14,9 @@ import Colors from '../../constants/Colors';
 import Button from '../../components/Button';
 import Quantity from '../productdetails/components/Quantity';
 import {RegularTextB} from '../../components/Text';
+const {PlatformConstants} = NativeModules;
+const deviceType = PlatformConstants.interfaceIdiom;
+const isPhone = deviceType === 'phone';
 
 const AddToCartModal = () => {
   const modalRef = useRef();
@@ -77,7 +87,6 @@ const AddToCartModal = () => {
         title={isInCart ? 'Proceed to checkout' : 'Add to  cart'}
         bottom={30}
         top={20}
-        width={90}
         onPress={add}
         style={{
           borderColor: Colors.primary,
