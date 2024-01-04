@@ -23,7 +23,7 @@ interface MainBackgroundProps {
   padding?: number;
   paddingBottom?: number;
   insetsBottom?: number;
-  androidAvoid?: string;
+  androidAvoid?: 'padding' | 'height' | 'position';
 }
 
 const Mainbackground: React.FC<MainBackgroundProps> = ({

@@ -2,13 +2,13 @@ import {MMKV} from 'react-native-mmkv';
 
 const storage = new MMKV();
 
-export const setItem = (key, value, shouldStringify) => {
+export const setItem = (key: string, value: any, shouldStringify?: boolean) => {
   console.log('SAVING', value);
   const mainvalue = shouldStringify ? JSON.stringify(value) : value;
   storage.set(key, mainvalue);
 };
 
-export const getItem = (key, shouldParse) => {
+export const getItem = (key: string, shouldParse?: boolean) => {
   const value = storage.getString(key);
   if (value) {
     return shouldParse ? JSON.parse(value) : value;
@@ -17,6 +17,6 @@ export const getItem = (key, shouldParse) => {
   }
 };
 
-export const deleteItem = key => {
+export const deleteItem = (key: string) => {
   storage.delete(key);
 };

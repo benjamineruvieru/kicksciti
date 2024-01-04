@@ -1,6 +1,6 @@
 import {
   KeyboardTypeOptions,
-  NativeModules,
+  NativeSyntheticEvent,
   ReturnKeyTypeOptions,
   StyleSheet,
   TextInput,
@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import React, {FC, useState} from 'react';
 import {MediumText, RegularText, SmallText} from './Text';
-import {SCREEN_WIDTH} from '../constants/Variables';
+import {SCREEN_WIDTH, isPhone} from '../constants/Variables';
 import Colors from '../constants/Colors';
 import Down from '../assets/svg/down.svg';
 import Eyeopen from '../assets/svg/eyeopen.svg';
@@ -25,11 +25,21 @@ import {
 } from 'react-native-confirmation-code-field';
 import LayoutAnimationComponent from './LayoutAnimationComponent';
 import {ListDialog} from './Dialog';
-const {PlatformConstants} = NativeModules;
-const deviceType = PlatformConstants.interfaceIdiom;
-const isPhone = deviceType === 'phone';
 
-export const ModalSelector = ({
+interface ModalSelectorProps {
+  style?: ViewStyle;
+  bottom?: number;
+  placeholder?: string;
+  placeholderText?: string;
+  inputStyle?: TextStyle;
+  text: string | undefined;
+  setText: (text: string) => void;
+  search: boolean;
+  height: number;
+  data: any[];
+}
+
+export const ModalSelector: FC<ModalSelectorProps> = ({
   style,
   bottom = 20,
   placeholder,
@@ -44,6 +54,25 @@ export const ModalSelector = ({
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
+  const styles = StyleSheet.create({
+    mainView: {
+      borderBottomWidth: 3,
+      borderColor: Colors.primary,
+      marginBottom: bottom,
+      flexDirection: 'row',
+      alignItems: 'center',
+      height: 50,
+      ...style,
+    },
+    textStyle: {
+      fontSize: 17,
+      fontFamily: 'Gilroy-Bold',
+      color: 'white',
+      flex: 1,
+      ...inputStyle,
+    },
+  });
+
   return (
     <>
       <TouchableOpacity
@@ -53,26 +82,8 @@ export const ModalSelector = ({
         {placeholderText && (
           <RegularText style={{marginBottom: 8}}>{placeholderText}</RegularText>
         )}
-        <View
-          style={{
-            borderBottomWidth: 3,
-            borderColor: Colors.primary,
-            marginBottom: bottom,
-            flexDirection: 'row',
-            alignItems: 'center',
-            height: 50,
-            ...style,
-          }}>
-          <SmallText
-            style={{
-              fontSize: 17,
-              fontFamily: 'Gilroy-Bold',
-              color: 'white',
-              flex: 1,
-              ...inputStyle,
-            }}>
-            {text ?? placeholder}
-          </SmallText>
+        <View style={styles.mainView}>
+          <SmallText style={styles.textStyle}>{text ?? placeholder}</SmallText>
 
           <Down color={Colors.primary} />
         </View>
@@ -83,7 +94,7 @@ export const ModalSelector = ({
         data={data}
         closeModal={() => setModalVisible(false)}
         open={modalVisible}
-        onPress={data => {
+        onPress={(data: string) => {
           setModalVisible(false);
           setText(data);
         }}
@@ -92,7 +103,13 @@ export const ModalSelector = ({
   );
 };
 
-export const OtpInput = ({setOtp, otp, num = 6}) => {
+interface OtpInputProps {
+  setOtp: (otp: string) => void;
+  otp: string | undefined;
+  num?: number;
+}
+
+export const OtpInput: FC<OtpInputProps> = ({setOtp, otp, num = 6}) => {
   const ref = useBlurOnFulfill({value: otp, cellCount: 6});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value: otp,
@@ -154,126 +171,17 @@ interface InputProps {
   inputStyle?: TextStyle;
   password?: boolean;
   keyboard?: KeyboardTypeOptions;
-  handleKeyPress?: (e: TextInputKeyPressEventData) => void;
+  handleKeyPress?: (
+    e: NativeSyntheticEvent<TextInputKeyPressEventData>,
+  ) => void | undefined;
   multiline?: boolean;
   returnKeyType?: ReturnKeyTypeOptions;
   onSubmitEditing?: () => void;
   text: string;
   setText: (text: string) => void;
+  maxLength?: number;
+  editable?: boolean;
 }
-
-export const DescriptionInput = ({
-  style,
-  bottom = 20,
-  placeholder,
-  placeholderText,
-  inputStyle,
-  password,
-  keyboard = 'default',
-  text,
-  setText,
-}) => {
-  return (
-    <>
-      <RegularText style={{marginBottom: 8, marginLeft: 4}}>
-        {placeholderText}
-      </RegularText>
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: '#0000004D',
-          borderRadius: 10,
-          paddingHorizontal: 10,
-          marginBottom: bottom,
-          backgroundColor: 'white',
-          ...style,
-        }}>
-        <TextInput
-          value={text}
-          onChangeText={setText}
-          keyboardType={keyboard}
-          secureTextEntry={password}
-          placeholder={placeholder}
-          placeholderTextColor={'#0000004D'}
-          multiline
-          style={{
-            height: 130,
-            fontFamily: 'Quicksand-Medium',
-            color: 'black',
-            textAlignVertical: 'top',
-            ...inputStyle,
-          }}
-        />
-      </View>
-    </>
-  );
-};
-
-export const PhoneInput = ({
-  style,
-  bottom = 20,
-  placeholder,
-  inputStyle,
-  setCode,
-  code,
-  text,
-  setText,
-}) => {
-  return (
-    <>
-      <RegularText style={{marginBottom: 8, marginLeft: 4}}>
-        Telefonnummer
-      </RegularText>
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: '#0000004D',
-          borderRadius: 10,
-          paddingHorizontal: 10,
-          marginBottom: bottom,
-          backgroundColor: 'white',
-          flexDirection: 'row',
-          ...style,
-        }}>
-        <TextInput
-          keyboardType={'numeric'}
-          placeholderTextColor={'#0000004D'}
-          value={code}
-          onChangeText={setCode}
-          style={{
-            height: 50,
-            fontFamily: 'Quicksand-Medium',
-            color: 'black',
-            paddingLeft: 8,
-            ...inputStyle,
-          }}
-        />
-        <View
-          style={{
-            backgroundColor: Colors.grey,
-            width: 1,
-            marginVertical: 10,
-            marginLeft: 10,
-            marginRight: 10,
-          }}
-        />
-        <TextInput
-          keyboardType={'numeric'}
-          placeholder={placeholder}
-          placeholderTextColor={'#0000004D'}
-          value={text}
-          onChangeText={setText}
-          style={{
-            height: 50,
-            fontFamily: 'Quicksand-Medium',
-            color: 'black',
-            ...inputStyle,
-          }}
-        />
-      </View>
-    </>
-  );
-};
 
 const Input: FC<InputProps> = ({
   style,
@@ -293,20 +201,32 @@ const Input: FC<InputProps> = ({
   editable,
 }) => {
   const [hide, setHide] = useState(password);
+
+  const styles = StyleSheet.create({
+    mainView: {
+      borderBottomWidth: 3,
+      borderColor: Colors.primary,
+      marginBottom: bottom,
+      flexDirection: 'row',
+      alignItems: 'center',
+      ...style,
+    },
+    input: {
+      height: 50,
+      fontSize: 17,
+      fontFamily: 'Gilroy-Bold',
+      color: 'white',
+      flex: 1,
+      ...inputStyle,
+    },
+  });
+
   return (
     <>
       {placeholderText && (
         <RegularText style={{marginBottom: 8}}>{placeholderText}</RegularText>
       )}
-      <View
-        style={{
-          borderBottomWidth: 3,
-          borderColor: Colors.primary,
-          marginBottom: bottom,
-          flexDirection: 'row',
-          alignItems: 'center',
-          ...style,
-        }}>
+      <View style={styles.mainView}>
         <TextInput
           editable={editable}
           maxLength={maxLength}
@@ -320,14 +240,7 @@ const Input: FC<InputProps> = ({
           secureTextEntry={hide}
           placeholder={placeholder}
           placeholderTextColor={'#FFFFFF50'}
-          style={{
-            height: 50,
-            fontSize: 17,
-            fontFamily: 'Gilroy-Bold',
-            color: 'white',
-            flex: 1,
-            ...inputStyle,
-          }}
+          style={styles.input}
           onKeyPress={handleKeyPress}
           onSubmitEditing={onSubmitEditing}
         />

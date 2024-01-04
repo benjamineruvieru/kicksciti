@@ -1,4 +1,4 @@
-import {StyleSheet, ViewStyle} from 'react-native';
+import {ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
 import Animated, {
   Easing,
@@ -60,5 +60,3 @@ const LayoutAnimationComponent: React.FC<LayoutAnimationComponentProps> = ({
 };
 
 export default LayoutAnimationComponent;
-
-const styles = StyleSheet.create({});

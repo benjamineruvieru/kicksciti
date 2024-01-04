@@ -499,7 +499,6 @@ const VerifyEmailReset: React.FC<ComponentsProps> = ({
 
 const CreateResetPassword: React.FC<ComponentsProps> = ({
   setPos = () => {},
-
   email = '',
   resetotp = '',
 }) => {

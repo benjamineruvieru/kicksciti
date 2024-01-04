@@ -8,6 +8,28 @@ import CartScreen from '../features/checkout/CartScreen';
 const Stack = createSharedElementStackNavigator();
 
 const AniStackNav = () => {
+  const sharedElements = (route: {params: any}) => {
+    const {pictures, _id} = route.params;
+    return [
+      pictures[0],
+      {
+        id: `cartbutton${_id}`,
+        animation: 'fade',
+        resize: 'clip',
+      },
+      `favbutton${_id}`,
+      {
+        id: `name${_id}`,
+        animation: 'fade',
+        resize: 'clip',
+      },
+      {
+        id: `price${_id}`,
+        animation: 'fade',
+        resize: 'clip',
+      },
+    ];
+  };
   return (
     <Stack.Navigator
       screenOptions={{
@@ -22,28 +44,7 @@ const AniStackNav = () => {
       <Stack.Screen
         name="ProductScreen"
         component={ProductScreen}
-        sharedElements={route => {
-          const {pictures, _id} = route.params;
-          return [
-            pictures[0],
-            {
-              id: `cartbutton${_id}`,
-              animation: 'fade',
-              resize: 'clip',
-            },
-            `favbutton${_id}`,
-            {
-              id: `name${_id}`,
-              animation: 'fade',
-              resize: 'clip',
-            },
-            {
-              id: `price${_id}`,
-              animation: 'fade',
-              resize: 'clip',
-            },
-          ];
-        }}
+        sharedElements={sharedElements}
       />
       <Stack.Screen
         name="NotificationsScreen"

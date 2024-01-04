@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   Image,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -10,12 +9,7 @@ import React, {useEffect, useState} from 'react';
 import Mainbackground from '../../components/Mainbackground';
 import PageHeader from '../../components/PageHeader';
 import {getPercentWidth, insertDateItems} from '../../utilis/Functions';
-import {
-  RegularText,
-  RegularTextB,
-  SmallText,
-  SmallTextB,
-} from '../../components/Text';
+import {RegularTextB, SmallText} from '../../components/Text';
 import LayoutAnimationComponent from '../../components/LayoutAnimationComponent';
 import {useInfiniteApi} from '../../hooks/useApi';
 import {getNotifications} from '../../api/user';

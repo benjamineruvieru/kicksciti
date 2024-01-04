@@ -8,6 +8,8 @@ import {
   TextInput,
   Dimensions,
   Text,
+  DimensionValue,
+  ListRenderItem,
 } from 'react-native';
 import React, {useState} from 'react';
 import {FlashList} from '@shopify/flash-list';
@@ -15,7 +17,18 @@ import Colors from '../constants/Colors';
 import {RegularText, SmallText} from './Text';
 import Down from '../assets/svg/down.svg';
 import {capitalizeFirstLetter} from '../utilis/Functions';
-export const Dialog = props => {
+
+interface DialogProps {
+  color?: string;
+  radius?: number;
+  style?: any;
+  open: boolean;
+  notclosable?: boolean;
+  closeModal: () => void;
+  children: React.ReactNode;
+}
+
+export const Dialog: React.FC<DialogProps> = props => {
   const {color = Colors.bg, radius = 20} = props;
 
   const styles = StyleSheet.create({
@@ -28,37 +41,49 @@ export const Dialog = props => {
       maxHeight: '50%',
       ...props.style,
     },
+    pressable: {
+      backgroundColor: 'rgba(0,0,0,0.7)',
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });
 
+  const onRequestClose = () => {
+    props.closeModal();
+  };
+
+  const onPress = () => {
+    if (!props.notclosable) {
+      props.closeModal();
+    }
+  };
   return (
     <Modal
-      useNativeDriver={true}
       statusBarTranslucent
       visible={props.open}
       transparent={true}
       animationType="fade"
-      onRequestClose={() => {
-        props.closeModal();
-      }}>
-      <Pressable
-        onPress={() => {
-          if (!props.notclosable) {
-            props.closeModal();
-          }
-        }}
-        style={{
-          backgroundColor: 'rgba(0,0,0,0.7)',
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+      onRequestClose={onRequestClose}>
+      <Pressable onPress={onPress} style={styles.pressable}>
         <Pressable style={styles.view}>{props.children}</Pressable>
       </Pressable>
     </Modal>
   );
 };
 
-export const ListDialog = ({
+interface ListDialogProps {
+  open: boolean;
+  closeModal: () => void;
+  onPress: (item: string) => void;
+  data: string[];
+  searchShow: boolean | undefined;
+  height?: DimensionValue | number;
+  multi?: boolean;
+  selected?: string | string[];
+}
+
+export const ListDialog: React.FC<ListDialogProps> = ({
   open,
   closeModal,
   onPress,
@@ -89,13 +114,21 @@ export const ListDialog = ({
       fontFamily: 'Gilroy-Regular',
       color: 'white',
     },
+    mainView: {width: '100%', height},
+    searchView: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: Colors.tabColor,
+      paddingHorizontal: 10,
+      marginVertical: 10,
+    },
   });
 
-  const RenderList = ({item}) => {
+  const RenderList = ({item}: {item: string}) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          setSearch();
+          setSearch('');
           onPress(item);
           if (!multi) {
             closeModal();
@@ -115,18 +148,31 @@ export const ListDialog = ({
       </TouchableOpacity>
     );
   };
+
+  const ItemSeparatorComponent = () => (
+    <View
+      style={{
+        backgroundColor: Colors.tabColor,
+        height: 1,
+        width: '100%',
+      }}
+    />
+  );
+
+  const ListEmptyComponent = () => (
+    <View
+      style={{
+        height: Dimensions.get('window').height * 0.5,
+        justifyContent: 'center',
+      }}>
+      <ActivityIndicator />
+    </View>
+  );
   return (
     <Dialog open={open} closeModal={closeModal} style={{alignItems: 'center'}}>
-      <View style={{width: '100%', height: height}}>
+      <View style={styles.mainView}>
         {searchShow && (
-          <View
-            style={{
-              borderRadius: 10,
-              borderWidth: 1,
-              borderColor: Colors.tabColor,
-              paddingHorizontal: 10,
-              marginVertical: 10,
-            }}>
+          <View style={styles.searchView}>
             <TextInput
               onChangeText={setSearch}
               placeholder="Search..."
@@ -141,31 +187,27 @@ export const ListDialog = ({
           estimatedItemSize={30}
           data={search ? searchFun() : data}
           renderItem={RenderList}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                backgroundColor: Colors.tabColor,
-                height: 1,
-                width: '100%',
-              }}
-            />
-          )}
-          ListEmptyComponent={() => (
-            <View
-              style={{
-                height: Dimensions.get('window').height * 0.5,
-                justifyContent: 'center',
-              }}>
-              <ActivityIndicator />
-            </View>
-          )}
+          ItemSeparatorComponent={ItemSeparatorComponent}
+          ListEmptyComponent={ListEmptyComponent}
         />
       </View>
     </Dialog>
   );
 };
 
-export const DropDown = ({
+interface DropDownProps {
+  selected: string | null;
+  setSelected: (data: string | null) => void;
+  placeholder: string;
+  data: string[];
+  bottom?: number;
+  size?: number;
+  height?: DimensionValue;
+  disabled?: boolean;
+  search?: boolean;
+}
+
+export const DropDown: React.FC<DropDownProps> = ({
   selected,
   setSelected,
   placeholder,
@@ -177,22 +219,24 @@ export const DropDown = ({
   search,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
-
+  const styles = StyleSheet.create({
+    touchable: {
+      height: 55,
+      backgroundColor: '#F0F0F0',
+      justifyContent: 'space-between',
+      borderRadius: 10,
+      marginVertical: 4,
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 15,
+    },
+  });
   return (
     <View style={{marginTop: 2, marginBottom: bottom}}>
       <TouchableOpacity
         disabled={disabled}
         onPress={() => setModalVisible(true)}
-        style={{
-          height: 55,
-          backgroundColor: '#F0F0F0',
-          justifyContent: 'space-between',
-          borderRadius: 10,
-          marginVertical: 4,
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: 15,
-        }}>
+        style={styles.touchable}>
         <Text
           style={{
             color: '#979797',
@@ -201,7 +245,6 @@ export const DropDown = ({
           }}>
           {selected ? selected : placeholder}
         </Text>
-        {/* <MaterialIcon name={'expand-more'} size={25} color="#000" style={{}} /> */}
       </TouchableOpacity>
       <ListDialog
         searchShow={search}
@@ -218,7 +261,20 @@ export const DropDown = ({
   );
 };
 
-export const DropDownSelector = ({
+interface DropDownSelectorProps {
+  data: string[];
+  setSelected: (prev: string | string[]) => string[];
+  placeholdertext?: string;
+  selected: string | string[];
+  placeholder: string;
+  search?: boolean;
+  bottom?: number;
+  height?: DimensionValue;
+  multi?: boolean;
+  disabled?: boolean;
+}
+
+export const DropDownSelector: React.FC<DropDownSelectorProps> = ({
   data = [],
   setSelected,
 
@@ -233,6 +289,23 @@ export const DropDownSelector = ({
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
+  const onPress = data => {
+    if (multi) {
+      setSelected((prev: string | string[]) => {
+        const i = prev.findIndex(d => d === data);
+        console.log(prev, data, i);
+        if (i > -1) {
+          prev.splice(i, 1);
+          console.log(prev);
+          return [...prev];
+        } else {
+          return [...prev, data];
+        }
+      });
+    } else {
+      setSelected(data);
+    }
+  };
   return (
     <View style={{marginBottom: bottom, flex: 1}}>
       {placeholdertext && (
@@ -264,10 +337,10 @@ export const DropDownSelector = ({
             fontSize: 14.5,
           }}>
           {multi
-            ? selected.length > 0
+            ? Array.isArray(selected) && selected.length > 0
               ? selected.map(d => d).join(', ')
               : placeholder
-            : selected
+            : selected && typeof selected === 'string'
             ? capitalizeFirstLetter(selected)
             : placeholder}
         </SmallText>
@@ -276,23 +349,7 @@ export const DropDownSelector = ({
 
       <ListDialog
         open={modalVisible}
-        onPress={data => {
-          if (multi) {
-            setSelected(prev => {
-              const i = prev.findIndex(d => d === data);
-              console.log(prev, data, i);
-              if (i > -1) {
-                prev.splice(i, 1);
-                console.log(prev);
-                return [...prev];
-              } else {
-                return [...prev, data];
-              }
-            });
-          } else {
-            setSelected(data);
-          }
-        }}
+        onPress={onPress}
         closeModal={() => setModalVisible(false)}
         data={data}
         searchShow={search}
