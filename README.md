@@ -37,11 +37,15 @@ and many more...
 
 ### Find the Old Project Code:
 
-If you're interested in the code of the old project, you can find it in the "v1" branch of this repository.
+If you're interested in the code of the old project, you can find it in the "v1" branch of this repository.~~
 
 ### Note on Current Version:
 
-The current version available on the Play Store is based on the old app. We will continue to support this version until the new and improved app is ready for release.
+~~The current version available on the Play Store is based on the old app. We will continue to support this version until the new and improved app is ready for release.~~
+
+Edit: 🎊🎊The new version is currently complete and live on Play Store and Apple Appstore🎊🎊.
+
+You can download new the application [here](https://www.kicksciti.com)
 
 ### Get Involved!
 
