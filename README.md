@@ -1,5 +1,7 @@
 # 🎊🎊 Kicks Citi V2 🎊🎊
 
+![App Screens](doc/img/Cover.png)
+
 ## 🔊🔊 Important Announcement: Project Rewrite
 
 Hello Everyone,
