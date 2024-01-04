@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import OnboardingScreen from '../features/onboarding/OnboardingScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
 import AniStackNav from './AniStack';
 import {getItem, setItem} from '../utilis/storage';
 import OrderDetails from '../features/checkout/OrderDetails';
@@ -14,14 +17,19 @@ import DeviceInfo from 'react-native-device-info';
 import {getAppVersion} from '../api/user';
 import DeleteAccount from '../features/bottomtabs/profile/DeleteAccount';
 
+interface DeepLinkResult {
+  product_id: string;
+  username?: string;
+}
+
 const Stack = createNativeStackNavigator();
 
 const StackNav = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   useEffect(() => {
     const getUrlAsync = async () => {
       const initialUrl = await Linking.getInitialURL();
-      handleDeepLink(initialUrl);
+      handleDeepLink({url: initialUrl});
     };
 
     getUrlAsync();
@@ -31,15 +39,38 @@ const StackNav = () => {
       Linking.removeAllListeners('url');
     };
   }, []);
+  useEffect(() => {
+    let version = parseFloat(DeviceInfo.getVersion());
+    console.log('device version', Platform.OS, version);
+    getAppVersion().then(data => {
+      console.log('api app ver', data.data);
+      const {android, ios} = data?.data ?? {};
+      if (Platform.OS === 'android') {
+        if (parseFloat(android) > version) {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'UpdateScreen'}],
+          });
+        }
+      } else {
+        if (parseFloat(ios) > version) {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'UpdateScreen'}],
+          });
+        }
+      }
+    });
+  }, []);
 
-  function parseLink(link) {
+  function parseLink(link: string): DeepLinkResult | null {
     const pattern = /\/product\/(\d+)(?:\?id=([a-zA-Z0-9]+))?$/;
     const match = link.match(pattern);
     if (match) {
       const [, productId, username] = match;
 
       // Create an object with the extracted information
-      const result = {product_id: productId};
+      const result: DeepLinkResult = {product_id: productId};
 
       if (username) {
         result.username = username;
@@ -51,9 +82,9 @@ const StackNav = () => {
     return null;
   }
 
-  function getSearchParams(url) {
+  function getSearchParams(url: string): Record<string, string> {
     const queryString = url.split('?')[1];
-    const paramsObject = {};
+    const paramsObject: Record<string, string> = {};
 
     if (queryString) {
       const paramsArray = queryString.split('&');
@@ -68,7 +99,7 @@ const StackNav = () => {
 
     return paramsObject;
   }
-  function extractOrderId(url) {
+  function extractOrderId(url: string): string | null {
     // Define a regular expression to match the order ID in the URL
     const regex = /(?:www\.)?kicksciti\.com\/order\/(\w+)/;
 
@@ -78,7 +109,7 @@ const StackNav = () => {
     // Check if a match is found and return the order ID, or null if no match
     return match ? match[1] : null;
   }
-  const handleDeepLink = prop => {
+  const handleDeepLink = (prop: {url: string | null} | undefined) => {
     const {url} = prop ?? {};
     if (url) {
       console.log('initialUrl', url);
@@ -114,30 +145,6 @@ const StackNav = () => {
       }
     }
   };
-
-  useEffect(() => {
-    let version = parseFloat(DeviceInfo.getVersion());
-    console.log('device version', Platform.OS, version);
-    getAppVersion().then(data => {
-      console.log('api app ver', data.data);
-      const {android, ios} = data?.data ?? {};
-      if (Platform.OS === 'android') {
-        if (parseFloat(android) > version) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'UpdateScreen'}],
-          });
-        }
-      } else {
-        if (parseFloat(ios) > version) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'UpdateScreen'}],
-          });
-        }
-      }
-    });
-  }, []);
 
   return (
     <Stack.Navigator

@@ -50,6 +50,10 @@ const App = () => {
   useEffect(() => {
     initNotification();
   }, []);
+
+  const onReady = () => {
+    BootSplash.hide();
+  };
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView
@@ -63,10 +67,7 @@ const App = () => {
               flex: 1,
               transform: [{translateY: transY}],
             }}>
-            <NavigationContainer
-              onReady={() => {
-                BootSplash.hide();
-              }}>
+            <NavigationContainer onReady={onReady}>
               <StackNav />
               <Modal />
             </NavigationContainer>

@@ -187,12 +187,21 @@ const EarnItem = ({item}) => {
   );
 };
 
-const Earnings = ({rewards}) => {
+const Earnings = ({rewards, refetch}) => {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
   return (
     <FlashList
+      refreshing={refreshing}
+      onRefresh={onRefresh}
       estimatedItemSize={104}
       showsVerticalScrollIndicator={false}
-      data={rewards}
+      data={rewards?.reverse()}
       renderItem={EarnItem}
     />
   );
@@ -204,7 +213,7 @@ const AffilateEarnings = () => {
     queryFn: getEarnings,
     queryKey: ['getEarnings'],
   });
-  const rewards = data?.rewards?.reverse() ?? [];
+  const rewards = data?.rewards ?? [];
   const modalRef = useRef();
   const pinmodalRef = useRef();
 
@@ -254,7 +263,7 @@ const AffilateEarnings = () => {
               flex: 1,
               paddingTop: balanceHeight - remainingSpace + 40,
             }}>
-            <Earnings rewards={rewards} />
+            <Earnings rewards={rewards} {...{refetch}} />
           </View>
         ) : (
           <EmptyEarnings />

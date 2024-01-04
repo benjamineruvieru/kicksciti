@@ -1,11 +1,4 @@
-import {
-  Alert,
-  DeviceEventEmitter,
-  NativeModules,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Alert, DeviceEventEmitter, StyleSheet} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {Modalize} from 'react-native-modalize';
 import SizeSelector from '../productdetails/components/SizeSelector';
@@ -14,19 +7,23 @@ import Colors from '../../constants/Colors';
 import Button from '../../components/Button';
 import Quantity from '../productdetails/components/Quantity';
 import {RegularTextB} from '../../components/Text';
-const {PlatformConstants} = NativeModules;
-const deviceType = PlatformConstants.interfaceIdiom;
-const isPhone = deviceType === 'phone';
+
+interface Item {
+  sizes?: string[];
+}
 
 const AddToCartModal = () => {
-  const modalRef = useRef();
-  const [item, setItem] = useState({});
+  const modalRef = useRef<Modalize>();
+  const [item, setItem] = useState<Item>({});
   useEffect(() => {
-    const myEvent = DeviceEventEmitter.addListener('openCartModal', event => {
-      console.log('event', event);
-      setItem({...event});
-      modalRef.current.open();
-    });
+    const myEvent = DeviceEventEmitter.addListener(
+      'openCartModal',
+      (event: Item) => {
+        console.log('event', event);
+        setItem({...event});
+        modalRef.current?.open();
+      },
+    );
     return () => myEvent.remove();
   }, []);
 
@@ -49,18 +46,15 @@ const AddToCartModal = () => {
     } else {
       if (!size) {
         Alert.alert('Please select a size');
-        // showNotification({error: true, msg: 'Please select a size'});
         return;
       }
       if (!quantity || parseInt(quantity) < 1) {
         Alert.alert('Please input the quantity');
-        // showNotification({error: true, msg: 'Please input the quantity'});
         return;
       }
       addToCart({quantity, size});
-
-      modalRef.current.close();
-      setSize();
+      modalRef.current?.close();
+      setSize('');
       setQuantity('1');
       setItem({});
     }

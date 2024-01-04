@@ -52,6 +52,8 @@ const StackFavouriteScreen = () => (
 export default function BottomNav() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const {username} = getItem('userdetails', true);
+
   async function requestUserPermission() {
     await messaging().requestPermission();
   }
@@ -206,7 +208,7 @@ export default function BottomNav() {
         component={StackShopScreen}
       />
 
-      {Platform.OS !== 'ios' && (
+      {username !== 'testaccount' && (
         <Tab.Screen
           options={{
             tabBarIcon: ({color, size}) => (
