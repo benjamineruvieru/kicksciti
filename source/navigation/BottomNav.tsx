@@ -143,7 +143,7 @@ export default function BottomNav() {
           navigation.navigate('OrderDetails', {order_id});
         } else {
           try {
-            let {order_id} = JSON.parse(typeof data === 'string' ? data : '');
+            const {order_id} = JSON.parse(typeof data === 'string' ? data : '');
             if (order_id) {
               navigation.navigate('OrderDetails', {order_id});
             } else {

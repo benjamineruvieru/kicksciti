@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import Mainbackground from '../../../components/Mainbackground';
 import {MediumText, RegularTextB, SmallText} from '../../../components/Text';

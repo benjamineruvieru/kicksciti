@@ -25,7 +25,7 @@ const Catergoies = ({category, setCategory}) => {
     queryFn: getCategories,
     queryKey: ['getCategories'],
   });
-  let flatListRef = useRef(null);
+  const flatListRef = useRef(null);
   const goToIndex = i => {
     // @ts-ignore
     flatListRef.current.scrollToIndex({

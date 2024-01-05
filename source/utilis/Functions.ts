@@ -97,12 +97,12 @@ export const formatDate = (date: string) => {
 };
 
 export function generateRandomString(length: number) {
-  var characters =
+  const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var result = '';
-  var charactersLength = characters.length;
+  let result = '';
+  const charactersLength = characters.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
 
@@ -118,7 +118,7 @@ export function formatProfit(number: number) {
 }
 
 export function formatAmount(number: number) {
-  let formatted_num = Math.abs(number)
+  const formatted_num = Math.abs(number)
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   if (parseFloat(number.toString()) > 0) {
@@ -231,7 +231,7 @@ export function insertDateItems(arrayQ: any[]) {
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
   let currDate;
-  let arr = [];
+  const arr = [];
   for (let i = 0; i < arrayQ.length; i++) {
     const {createdAt} = arrayQ[i];
     const createdAtDate = new Date(createdAt);

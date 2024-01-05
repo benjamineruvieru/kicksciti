@@ -33,11 +33,11 @@ const bg = require('../../assets/images/onboarding/bg.webp');
 
 function secondsToMMSS(seconds: number) {
   // Calculate minutes and remaining seconds
-  let minutes = Math.floor(seconds / 60);
-  let remainingSeconds = seconds % 60;
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
 
   // Format the time as MM:SS
-  let timeFormat = `${String(minutes).padStart(2, '0')}:${String(
+  const timeFormat = `${String(minutes).padStart(2, '0')}:${String(
     remainingSeconds,
   ).padStart(2, '0')}`;
 
@@ -752,21 +752,21 @@ const OnboardingScreen: React.FC<ScreenProps> = ({navigation}) => {
 export default OnboardingScreen;
 
 const styles = StyleSheet.create({
-  dimBg: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-  },
   bgImg: {
+    bottom: 0,
+    height: SCREEN_HEIGHT + (StatusBar.currentHeight ?? 0),
+    left: 0,
     position: 'absolute',
+    right: 0,
     top: 0,
+    width: SCREEN_WIDTH,
+  },
+  dimBg: {
+    backgroundColor: 'rgba(0,0,0,0.7)',
     bottom: 0,
     left: 0,
+    position: 'absolute',
     right: 0,
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT + (StatusBar.currentHeight ?? 0),
+    top: 0,
   },
 });

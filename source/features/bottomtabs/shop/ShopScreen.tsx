@@ -117,16 +117,16 @@ const ShopScreen: React.FC<ShopScreenProps> = ({route}) => {
 export default ShopScreen;
 
 const styles = StyleSheet.create({
-  typeAni: {
-    fontFamily: 'Gilroy-Bold',
-    fontSize: 25,
-    color: 'white',
-    includeFontPadding: false,
-  },
   mainView: {
-    marginBottom: 30,
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    marginBottom: 30,
+  },
+  typeAni: {
+    color: 'white',
+    fontFamily: 'Gilroy-Bold',
+    fontSize: 25,
+    includeFontPadding: false,
   },
 });

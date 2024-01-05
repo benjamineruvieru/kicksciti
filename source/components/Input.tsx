@@ -56,19 +56,19 @@ export const ModalSelector: FC<ModalSelectorProps> = ({
 
   const styles = StyleSheet.create({
     mainView: {
+      alignItems: 'center',
       borderBottomWidth: 3,
       borderColor: Colors.primary,
-      marginBottom: bottom,
       flexDirection: 'row',
-      alignItems: 'center',
       height: 50,
+      marginBottom: bottom,
       ...style,
     },
     textStyle: {
-      fontSize: 17,
-      fontFamily: 'Gilroy-Bold',
       color: 'white',
       flex: 1,
+      fontFamily: 'Gilroy-Bold',
+      fontSize: 17,
       ...inputStyle,
     },
   });
@@ -203,21 +203,21 @@ const Input: FC<InputProps> = ({
   const [hide, setHide] = useState(password);
 
   const styles = StyleSheet.create({
-    mainView: {
-      borderBottomWidth: 3,
-      borderColor: Colors.primary,
-      marginBottom: bottom,
-      flexDirection: 'row',
-      alignItems: 'center',
-      ...style,
-    },
     input: {
-      height: 50,
-      fontSize: 17,
-      fontFamily: 'Gilroy-Bold',
       color: 'white',
       flex: 1,
+      fontFamily: 'Gilroy-Bold',
+      fontSize: 17,
+      height: 50,
       ...inputStyle,
+    },
+    mainView: {
+      alignItems: 'center',
+      borderBottomWidth: 3,
+      borderColor: Colors.primary,
+      flexDirection: 'row',
+      marginBottom: bottom,
+      ...style,
     },
   });
 
