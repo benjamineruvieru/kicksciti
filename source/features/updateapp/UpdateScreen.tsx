@@ -8,38 +8,27 @@ import Button from '../../components/Button';
 
 const UpdateScreen = () => {
   return (
-    <Mainbackground
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <View style={{flex: 1}} />
+    <Mainbackground style={styles.container}>
+      <View style={styles.flexContainer} />
       <LayoutAnimationComponent delay={300}>
         <Image
           resizeMode="contain"
-          style={{
-            width: getPercentWidth(80),
-            height: getPercentWidth(50),
-            marginBottom: 10,
-            maxWidth: 400,
-            maxHeight: 400,
-          }}
+          style={styles.image}
           source={require('../../assets/images/illustrations/update.png')}
         />
       </LayoutAnimationComponent>
       <LayoutAnimationComponent delay={400}>
-        <RegularTextB style={{marginBottom: 5}}>
+        <RegularTextB style={styles.updateText}>
           A New Update Is Available
         </RegularTextB>
       </LayoutAnimationComponent>
       <LayoutAnimationComponent delay={500}>
-        <SmallText style={{textAlign: 'center'}}>
+        <SmallText style={styles.descriptionText}>
           Discover new features and improvements by updating your app{'\n'}
           today.
         </SmallText>
       </LayoutAnimationComponent>
-      <View style={{flex: 1}} />
+      <View style={styles.flexContainer} />
       <LayoutAnimationComponent delay={600}>
         <Button
           title="Update Now"
@@ -63,4 +52,28 @@ const UpdateScreen = () => {
 
 export default UpdateScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+
+    justifyContent: 'center',
+  },
+  flexContainer: {
+    flex: 1,
+  },
+  image: {
+    height: getPercentWidth(50),
+
+    width: getPercentWidth(80),
+    marginBottom: 10,
+    maxWidth: 400,
+    maxHeight: 400,
+  },
+  updateText: {
+    marginBottom: 5,
+  },
+  descriptionText: {
+    textAlign: 'center',
+  },
+});

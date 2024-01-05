@@ -1,19 +1,30 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import {useRef} from 'react';
 import {useMMKVObject} from 'react-native-mmkv';
 import {addToServerCart, updateServerCart} from '../api/user';
 import {restrictViewer} from '../utilis/Functions';
 import {useNavigation} from '@react-navigation/native';
 
-const useCart = ({item}) => {
+interface CartItem {
+  _id: string;
+  item: any;
+  quantity: number;
+  size: number;
+}
+
+interface CartHook {
+  item: CartItem;
+}
+
+const useCart = ({item}: CartHook) => {
   const navigation = useNavigation();
   const [updatingCart, setUpdating] = useMMKVObject('updatingCart');
-  const [cart, setCart] = useMMKVObject('cart');
+  const [cart, setCart] = useMMKVObject<CartItem[]>('cart');
   const index = cart?.findIndex(cart => cart?.item?._id === item._id) ?? -1;
   const isInCart = index !== -1;
   const data = cart?.[index] ?? {};
   const {quantity, size} = data;
-  function addToCart({size, quantity}) {
+
+  function addToCart({size, quantity}: {size: string; quantity: number}) {
     if (isInCart) {
     } else {
       const cartList = [...(cart ?? []), {item, size, quantity}];
@@ -81,7 +92,7 @@ const useCart = ({item}) => {
     timer.current = setTimeout(action, 1000);
   };
 
-  const editQuantity = quantity => {
+  const editQuantity = (quantity: number) => {
     if (parseInt(quantity) > 0) {
       queueUpdate(() => {
         setUpdating(true);

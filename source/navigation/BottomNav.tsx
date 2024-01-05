@@ -221,7 +221,7 @@ export default function BottomNav() {
       {username !== 'testaccount' && (
         <Tab.Screen
           options={{
-            tabBarIcon: ({color, size}) => (
+            tabBarIcon: ({color}) => (
               <MarketSvg width={21} height={21} color={color} />
             ),
           }}

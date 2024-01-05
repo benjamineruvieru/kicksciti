@@ -19,6 +19,15 @@ const VariantPicker = ({data, activeIndex, goToIndex}) => {
     <View style={{marginBottom: 15}}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {data.map((link, i) => {
+          const styles = StyleSheet.create({
+            touch: {marginRight: data.length === i + 1 ? 0 : 15},
+            img: {
+              height: ITEMSIZE,
+              width: ITEMSIZE,
+              borderWidth: activeIndex === i ? 3 : 0,
+              borderColor: Colors.primary,
+            },
+          });
           return (
             <LayoutAnimationComponent
               key={i}
@@ -28,16 +37,8 @@ const VariantPicker = ({data, activeIndex, goToIndex}) => {
                 onPress={() => {
                   goToIndex(i);
                 }}
-                style={{marginRight: data.length === i + 1 ? 0 : 15}}>
-                <FastImage
-                  source={{uri: link}}
-                  style={{
-                    height: ITEMSIZE,
-                    width: ITEMSIZE,
-                    borderWidth: activeIndex === i ? 3 : 0,
-                    borderColor: Colors.primary,
-                  }}
-                />
+                style={styles.touch}>
+                <FastImage source={{uri: link}} style={styles.img} />
               </TouchableOpacity>
             </LayoutAnimationComponent>
           );
@@ -48,5 +49,3 @@ const VariantPicker = ({data, activeIndex, goToIndex}) => {
 };
 
 export default VariantPicker;
-
-const styles = StyleSheet.create({});

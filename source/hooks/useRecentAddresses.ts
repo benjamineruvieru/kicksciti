@@ -1,11 +1,16 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
 import {useMMKVObject} from 'react-native-mmkv';
 import {addItemIfNotExists} from '../utilis/Functions';
 
+interface RecentAddress {
+  address: string;
+  lga: string;
+  phone: string;
+  state: string;
+}
 const useRecentAddresses = () => {
-  const [recentAddress, setrecentAddress] = useMMKVObject('recentAddress');
-  const addAddress = item => {
+  const [recentAddress, setrecentAddress] =
+    useMMKVObject<RecentAddress[]>('recentAddress');
+  const addAddress = (item: RecentAddress) => {
     if (!recentAddress || recentAddress?.length === 0) {
       setrecentAddress([item]);
     } else {
