@@ -54,10 +54,13 @@ export default UpdateScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
+    flex: 1,
 
     justifyContent: 'center',
+  },
+  descriptionText: {
+    textAlign: 'center',
   },
   flexContainer: {
     flex: 1,
@@ -65,15 +68,12 @@ const styles = StyleSheet.create({
   image: {
     height: getPercentWidth(50),
 
-    width: getPercentWidth(80),
     marginBottom: 10,
-    maxWidth: 400,
     maxHeight: 400,
+    maxWidth: 400,
+    width: getPercentWidth(80),
   },
   updateText: {
     marginBottom: 5,
-  },
-  descriptionText: {
-    textAlign: 'center',
   },
 });

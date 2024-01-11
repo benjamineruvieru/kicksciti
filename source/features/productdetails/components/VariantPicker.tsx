@@ -20,13 +20,13 @@ const VariantPicker = ({data, activeIndex, goToIndex}) => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {data.map((link, i) => {
           const styles = StyleSheet.create({
-            touch: {marginRight: data.length === i + 1 ? 0 : 15},
             img: {
+              borderColor: Colors.primary,
+              borderWidth: activeIndex === i ? 3 : 0,
               height: ITEMSIZE,
               width: ITEMSIZE,
-              borderWidth: activeIndex === i ? 3 : 0,
-              borderColor: Colors.primary,
             },
+            touch: {marginRight: data.length === i + 1 ? 0 : 15},
           });
           return (
             <LayoutAnimationComponent

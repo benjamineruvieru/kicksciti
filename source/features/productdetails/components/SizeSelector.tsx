@@ -14,12 +14,12 @@ const SizeSelector = ({sizes, size, setSize, editSize, isInCart}) => {
         {sizes?.map(data => {
           const styles = StyleSheet.create({
             touch: {
-              borderWidth: 2,
+              backgroundColor: size === data ? Colors.primary : 'transparent',
               borderColor: size === data ? Colors.primary : Colors.highlight,
+              borderRadius: 8,
+              borderWidth: 2,
               marginRight: 10,
               padding: 12,
-              borderRadius: 8,
-              backgroundColor: size === data ? Colors.primary : 'transparent',
             },
           });
 
