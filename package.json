@@ -8,8 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "codepush:ios": "appcenter CodePush release-react -a benjamin-eruvieru/Kicks-Citi-iOS -m -d Production",
-    "codepush:android": "appcenter CodePush release-react -a benjamin-eruvieru/KicksCiti-Android -m -d Production"
+    "codepush:ios": "appcenter CodePush release-react -a benjamin-eruvieru/Kicks-Citi-iOS -d Production",
+    "codepush:android": "appcenter CodePush release-react -a benjamin-eruvieru/KicksCiti-Android -d Production"
   },
   "dependencies": {
     "@notifee/react-native": "^7.8.2",

@@ -237,7 +237,7 @@ const CartScreen = ({navigation}) => {
       });
       return;
     }
-    if (!phone) {
+    if (!phone && phone.length < 10) {
       showNotification({
         error: true,
         msg: 'Please enter contact phone number',
@@ -306,6 +306,13 @@ const CartScreen = ({navigation}) => {
     <>
       <Mainbackground avoid keyboard padding={20}>
         <PageHeader
+          onPress={() => {
+            if (pos > 0) {
+              setPos(p => p - 1);
+            } else {
+              navigation.goBack();
+            }
+          }}
           title={
             pos === 0
               ? 'Cart'

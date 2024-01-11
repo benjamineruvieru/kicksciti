@@ -3,7 +3,7 @@ import React from 'react';
 import {MediumText, RegularText} from './Text';
 import {BackButton} from './IconButton';
 
-const PageHeader = ({title}) => {
+const PageHeader = ({title, onPress}) => {
   return (
     <View
       style={{
@@ -13,7 +13,7 @@ const PageHeader = ({title}) => {
         marginBottom: 30,
         alignItems: 'center',
       }}>
-      <BackButton />
+      <BackButton onPress={onPress} />
       <MediumText>{title}</MediumText>
       <View style={{width: 20}} />
     </View>
