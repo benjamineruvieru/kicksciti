@@ -1,11 +1,9 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import React from 'react';
 import Shimmer from '../../../../components/Shimmer';
 import {PRODUCTIMGWIDTH} from './Products';
-import {NativeModules} from 'react-native';
-const {PlatformConstants} = NativeModules;
-const deviceType = PlatformConstants.interfaceIdiom;
-const isPhone = deviceType === 'phone';
+import {isPhone} from '../../../../constants/Variables';
+
 const Product = () => {
   return (
     <View style={{marginBottom: 15, width: PRODUCTIMGWIDTH}}>

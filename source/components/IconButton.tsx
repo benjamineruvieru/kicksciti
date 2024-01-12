@@ -13,7 +13,8 @@ import {SmallText, SmallTextB} from './Text';
 import ShareSvg from '../assets/svg/icons/share.svg';
 import {getItem} from '../utilis/storage';
 import {updateFaveProduct} from '../api/products';
-import {restrictViewer} from '../utilis/Functions';
+import {restrictViewer, showRate} from '../utilis/Functions';
+import analytics from '@react-native-firebase/analytics';
 
 export const ShareButton = ({id}) => {
   const isLoggedIn = !!getItem('token');
@@ -29,6 +30,7 @@ export const ShareButton = ({id}) => {
         await Share.share({
           message: link,
         });
+        await analytics().logShare({item_id: link});
       }}
       style={{marginRight: 15}}>
       <ShareSvg color={'white'} height={25} width={25} />
@@ -97,7 +99,7 @@ export const FavButton = ({color = Colors.primary, item, size = 23}) => {
   const index = favourites?.findIndex(fav => fav?._id === item._id) ?? -1;
   const isFav = index !== -1;
 
-  function toggleFavorite() {
+  async function toggleFavorite() {
     // Check if the item exists in the favorites array
     console.log('index', index);
     if (isFav) {
@@ -108,10 +110,11 @@ export const FavButton = ({color = Colors.primary, item, size = 23}) => {
       updateFaveProduct({isIncrease: false, product_id: item._id}).then(d => {
         console.log('updated fav', d.data);
       });
+      await analytics().logEvent('removeFromFavourites', {...item});
     } else {
       restrictViewer({
         navigation,
-        alt: () => {
+        alt: async () => {
           const fav = [...(favourites ?? []), item];
 
           console.log(`Added ${item._id} to favorites`);
@@ -122,6 +125,8 @@ export const FavButton = ({color = Colors.primary, item, size = 23}) => {
               console.log('updated fav', d.data);
             },
           );
+          await analytics().logEvent('addToFavourites', {...item});
+          showRate();
         },
       });
     }

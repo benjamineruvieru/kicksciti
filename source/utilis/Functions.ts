@@ -2,7 +2,8 @@ import {PixelRatio, DeviceEventEmitter} from 'react-native';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../constants/Variables';
 import countryData from './output.json';
 import citiesData from './lgas.json';
-import {getItem} from './storage';
+import {getItem, setItem} from './storage';
+import InAppReview from 'react-native-in-app-review';
 
 const scale = SCREEN_WIDTH / 390;
 
@@ -250,3 +251,18 @@ export function insertDateItems(arrayQ: any[]) {
 
   return arr;
 }
+
+export const showRate = () => {
+  var date1 = new Date(getItem('dateFirstOpened', true));
+  var date2 = new Date();
+  var timeDifference = date2.getTime() - date1.getTime();
+  var daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+  console.log('Days between the two dates:', daysDifference);
+
+  if (getItem('hasShownRequestInAppReview') !== 'true' && daysDifference > 1) {
+    InAppReview.RequestInAppReview().then(hasFlowFinishedSuccessfully => {
+      console.log('hasFlowFinishedSuccessfully', hasFlowFinishedSuccessfully);
+      setItem('hasShownRequestInAppReview', 'true');
+    });
+  }
+};
