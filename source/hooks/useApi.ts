@@ -13,7 +13,9 @@ export const useApi = <TData, TError>({
   queryKey,
   queryFn,
   onSuccess,
+  ...rest
 }: UseApiProps<TData, TError>) => {
+  console.log('rest', rest);
   const navigation = useNavigation();
   const data = useQuery({
     queryKey,
@@ -39,6 +41,7 @@ export const useApi = <TData, TError>({
       }
     },
     onSuccess,
+    ...rest,
   });
 
   return data;

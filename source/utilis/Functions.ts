@@ -253,12 +253,15 @@ export function insertDateItems(arrayQ: any[]) {
 }
 
 export const showRate = () => {
-  var date1 = new Date(getItem('dateFirstOpened', true));
+  const dateFirstOpened = getItem('dateFirstOpened', true);
+  if (!dateFirstOpened) {
+    setItem('dateFirstOpened', Date.now(), true);
+  }
+  var date1 = new Date();
   var date2 = new Date();
   var timeDifference = date2.getTime() - date1.getTime();
   var daysDifference = timeDifference / (1000 * 60 * 60 * 24);
   console.log('Days between the two dates:', daysDifference);
-
   if (getItem('hasShownRequestInAppReview') !== 'true' && daysDifference > 1) {
     InAppReview.RequestInAppReview().then(hasFlowFinishedSuccessfully => {
       console.log('hasFlowFinishedSuccessfully', hasFlowFinishedSuccessfully);

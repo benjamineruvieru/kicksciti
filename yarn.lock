@@ -1839,10 +1839,10 @@
     prompts "^2.4.0"
     semver "^6.3.0"
 
-"@react-native-firebase/analytics@^18.7.3":
-  version "18.7.3"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-18.7.3.tgz#2329c3ca1430cc342378ecabc052c8301effbe3a"
-  integrity sha512-bUofJYQvU93QSQAo2wob15vZ2ywWoqlHkOzVlU4F0ussgbwWzuJYBc0rLKbTg4+Q+nIhxKxyX5M68R3nxK8VjQ==
+"@react-native-firebase/analytics@18.7.1":
+  version "18.7.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-18.7.1.tgz#92546343c8d5d8516492ab1e8ceb63ceec724341"
+  integrity sha512-OAtbj7nT44CiQo6Tq6YJW7EGI4dgTbdnxeeGzDG26D6+icm/V7o5MyA1Zspv/WWIOXzLwibRhHASMfflC8pPGQ==
 
 "@react-native-firebase/app@^18.7.1":
   version "18.7.1"
