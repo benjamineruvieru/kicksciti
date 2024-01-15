@@ -24,6 +24,7 @@ interface ButtonProps {
   grey?: boolean;
   isSec?: boolean;
   Icon?: React.ElementType;
+  testID?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -40,6 +41,7 @@ const Button: React.FC<ButtonProps> = ({
   grey,
   isSec,
   Icon,
+  testID,
 }) => {
   const styles = StyleSheet.create({
     bg: {
@@ -62,6 +64,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <TouchableOpacity
+      testID={testID}
       disabled={load || disable}
       style={styles.bg}
       onPress={onPress}>

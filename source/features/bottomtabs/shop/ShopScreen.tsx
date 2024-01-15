@@ -85,7 +85,7 @@ const ShopScreen: React.FC<ShopScreenProps> = ({route}) => {
   return (
     <Mainbackground padding={20} paddingBottom={0} insetsBottom={-1}>
       <View style={styles.mainView}>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1}} testID="welcome_text">
           <TypeAnimation
             preRenderText={`Welcome, ${name} 👋`}
             sequence={sequence}

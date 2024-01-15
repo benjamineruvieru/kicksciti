@@ -181,6 +181,7 @@ interface InputProps {
   setText: (text: string) => void;
   maxLength?: number;
   editable?: boolean;
+  testID?: string;
 }
 
 const Input: FC<InputProps> = ({
@@ -199,6 +200,7 @@ const Input: FC<InputProps> = ({
   setText,
   maxLength,
   editable,
+  testID,
 }) => {
   const [hide, setHide] = useState(password);
 
@@ -228,6 +230,7 @@ const Input: FC<InputProps> = ({
       )}
       <View style={styles.mainView}>
         <TextInput
+          testID={testID}
           editable={editable}
           maxLength={maxLength}
           value={text}
