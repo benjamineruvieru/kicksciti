@@ -1,4 +1,3 @@
 <resources>
     <string name="app_name">Kicks Citi</string>
-     <string moduleConfig="true" name="CodePushDeploymentKey">7wqdUgSaAIkxDH9aMRt8ddmp5VO-VrxFiJyRQ</string>
 </resources>

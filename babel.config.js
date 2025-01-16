@@ -1,14 +1,6 @@
 module.exports = {
-  plugins: [
-    ['module:react-native-dotenv'],
-    [
-      'react-native-reanimated/plugin',
-      {
-        relativeSourceLocation: true,
-      },
-    ],
-  ],
-  presets: ['module:metro-react-native-babel-preset'],
+  presets: ['module:@react-native/babel-preset'],
+  plugins: ['react-native-reanimated/plugin'],
   env: {
     production: {
       plugins: ['transform-remove-console'],
