@@ -27,7 +27,7 @@
         <category android:name="android.intent.category.BROWSABLE" />
         <data android:scheme="http" />
         <data android:scheme="https"
-              android:host="www.kicksciti.com"
+              android:host="www.kicksciti.com.ng"
               android:pathPrefix="/product" />
               <data android:pathPrefix="/search"/>
               <data android:pathPrefix="/delete-account"/>
@@ -39,7 +39,7 @@
         <category android:name="android.intent.category.BROWSABLE" />
         <data android:scheme="http" />
         <data android:scheme="https"
-              android:host="kicksciti.com"
+              android:host="kicksciti.com.ng"
               android:pathPrefix="/product" />
                 <data android:pathPrefix="/search"/>
            <data android:pathPrefix="/delete-account"/>

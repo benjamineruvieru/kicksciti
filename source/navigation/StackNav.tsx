@@ -32,7 +32,6 @@ const StackNav = () => {
     queryFn: getAppVersion,
     queryKey: ['getAppVersion'],
     onSuccess: data => {
-      console.log('sucesn use api', data.data);
       const version = parseFloat(DeviceInfo.getVersion());
       const {android, ios} = data?.data ?? {};
       if (Platform.OS === 'android') {

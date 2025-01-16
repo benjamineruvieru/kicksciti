@@ -75,7 +75,7 @@ const ProfileScreen = ({navigation}) => {
         <ListItem
           title={'Privacy Policy'}
           onPress={() => {
-            Linking.openURL('https://www.kicksciti.com/privacy-policy');
+            Linking.openURL('https://www.kicksciti.com.ng/privacy-policy');
           }}
           Svg={PrivateSvg}
           size={20}

@@ -70,6 +70,8 @@ def enableProguardInReleaseBuilds = true
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
+    
+  
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -79,7 +81,7 @@ android {
         applicationId "com.kicksciti.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
+        versionCode 13
         versionName "2.4"
         testBuildType System.getProperty('testBuildType', 'debug')
     testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'

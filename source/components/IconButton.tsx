@@ -21,8 +21,8 @@ export const ShareButton = ({id}) => {
 
   const {username} = getItem('userdetails', true);
   const link = isLoggedIn
-    ? `https://www.kicksciti.com/product/${id}?id=${username}`
-    : `https://www.kicksciti.com/product/${id}`;
+    ? `https://www.kicksciti.com.ng/product/${id}?id=${username}`
+    : `https://www.kicksciti.com.ng/product/${id}`;
 
   return (
     <TouchableOpacity

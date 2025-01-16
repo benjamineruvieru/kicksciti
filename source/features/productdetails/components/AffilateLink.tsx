@@ -24,8 +24,8 @@ const AffilateLink: React.FC<AffiliateLinkProps> = ({
   const [open, setOpen] = useState(false);
   const {username} = getItem('userdetails', true);
   const link = isLoggedIn
-    ? `https://www.kicksciti.com/product/${id}?id=${username}`
-    : `https://www.kicksciti.com/product/${id}`;
+    ? `https://www.kicksciti.com.ng/product/${id}?id=${username}`
+    : `https://www.kicksciti.com.ng/product/${id}`;
   return (
     <View style={styles.container}>
       <View style={styles.rowContainer}>

@@ -6,8 +6,8 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:www.kicksciti.com</string>
-		<string>applinks:kicksciti.com</string>
+		<string>applinks:www.kicksciti.com.ng</string>
+		<string>applinks:kicksciti.com.ng</string>
 	</array>
 </dict>
 </plist>

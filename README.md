@@ -4,7 +4,7 @@
 
 ## Edit: The New Version is Currently Live
 
-You can download new the application [here](https://www.kicksciti.com)
+You can download new the application [here](https://www.kicksciti.com.ng)
 
 ## 🔊🔊 Important Announcement: Project Rewrite
 
@@ -49,7 +49,7 @@ If you're interested in the code of the old project, you can find it in the "v1"
 
 Edit: 🎊🎊The new version is currently complete and live on Play Store and Apple Appstore🎊🎊.
 
-You can download new the application [here](https://www.kicksciti.com)
+You can download new the application [here](https://www.kicksciti.com.ng)
 
 ### Get Involved!
 
