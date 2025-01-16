@@ -8,7 +8,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Modal from './source/features/modal';
 import {NavigationContainer} from '@react-navigation/native';
 import BootSplash from 'react-native-bootsplash';
-import codePush from 'react-native-code-push';
+// import codePush from 'react-native-code-push';
 import notifee, {
   AndroidImportance,
   AndroidVisibility,
@@ -19,7 +19,7 @@ Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
 StatusBar.setBarStyle('light-content');
 
 export const queryClient = new QueryClient();
-const codePushOptions = {checkFrequency: codePush.CheckFrequency.ON_APP_RESUME};
+// const codePushOptions = {checkFrequency: codePush.CheckFrequency.ON_APP_RESUME};
 
 const App = () => {
   const transY = useRef(new Animated.Value(0)).current;
@@ -78,4 +78,4 @@ const App = () => {
   );
 };
 
-export default codePush(codePushOptions)(App);
+export default App;

@@ -12,15 +12,17 @@ module.exports = {
   apps: {
     'ios.debug': {
       type: 'ios.app',
-      binaryPath: 'ios/build/Build/Products/Debug-iphonesimulator/App.app',
+      binaryPath:
+        'ios/build/Build/Products/Debug-iphonesimulator/kicksciti.app',
       build:
-        'xcodebuild -workspace ios/App.xcworkspace -scheme App -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
+        'xcodebuild -workspace ios/kicksciti.xcworkspace -scheme kicksciti -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
     },
     'ios.release': {
       type: 'ios.app',
-      binaryPath: 'ios/build/Build/Products/Release-iphonesimulator/App.app',
+      binaryPath:
+        'ios/build/Build/Products/Release-iphonesimulator/kicksciti.app',
       build:
-        'xcodebuild -workspace ios/App.xcworkspace -scheme App -configuration Release -sdk iphonesimulator -derivedDataPath ios/build',
+        'xcodebuild -workspace ios/kicksciti.xcworkspace -scheme kicksciti -configuration Release -sdk iphonesimulator -derivedDataPath ios/build',
     },
     'android.debug': {
       type: 'android.apk',
