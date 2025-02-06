@@ -1,6 +1,6 @@
 # 🎊🎊 Kicks Citi V2 🎊🎊
 
-![App Screens](doc/img/Cover.png)
+![App Screens](https://www.benjamineruvieru.com/images/projects/kicksciti/longmockup.png)
 
 ## Edit: The New Version is Currently Live
 
