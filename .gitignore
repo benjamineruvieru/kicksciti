@@ -67,7 +67,6 @@ Thumbs.db
 build/
 .navigation
 captures/
-output.json 
     
 #NDK
 obj/
