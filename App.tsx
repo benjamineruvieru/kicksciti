@@ -9,6 +9,7 @@ import Modal from './source/features/modal';
 import {NavigationContainer} from '@react-navigation/native';
 import BootSplash from 'react-native-bootsplash';
 // import codePush from 'react-native-code-push';
+
 import notifee, {
   AndroidImportance,
   AndroidVisibility,
